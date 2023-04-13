@@ -21,7 +21,7 @@ using namespace std;
 float Gravity = -20.0;
 float Jumpheight = 150.0f;
 float deltatime = 0;
-int index = 0;
+int playerindex = 0;
 float timer = 0.0;
 float delay = 0.15;
 int attackindex = 0;
@@ -494,9 +494,9 @@ void game(int win1, int win2, RenderWindow& window)
             player1.grounded = true;
             player1.sprite.setTexture(Idle);
             if (timer < 0) {
-                index++;
-                index = index % 10;
-                player1.sprite.setTextureRect(IntRect((index * 120), 0, 120, 80));
+                playerindex++;
+                playerindex = playerindex % 10;
+                player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
                 timer = delay;
             }
             else
@@ -538,9 +538,9 @@ void game(int win1, int win2, RenderWindow& window)
         if (player1.velocity.y >= 0 && !player1.grounded) {
             player1.sprite.setTexture(Fall);
             if (timer < 0) {
-                index++;
-                index = index % 3;
-                player1.sprite.setTextureRect(IntRect((index * 120), 0, 120, 80));
+                playerindex++;
+                playerindex = playerindex % 3;
+                player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
                 timer = delay + 0.15;
             }
             else
@@ -551,9 +551,9 @@ void game(int win1, int win2, RenderWindow& window)
         if (player1.velocity.y < 0) {
             player1.sprite.setTexture(Jumping);
             if (timer < 0) {
-                index++;
-                index = index % 3;
-                player1.sprite.setTextureRect(IntRect((index * 120), 0, 120, 80));
+                playerindex++;
+                playerindex = playerindex % 3;
+                player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
                 timer = delay + 0.15;
             }
             else
@@ -697,9 +697,9 @@ void game(int win1, int win2, RenderWindow& window)
                         player1.sprite.setTexture(Running);
                         if (timer < 0)
                         {
-                            index++;
-                            index = index % 10;
-                            player1.sprite.setTextureRect(IntRect((index * 120), 0, 120, 80));
+                            playerindex++;
+                            playerindex = playerindex % 10;
+                            player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
                             timer = delay - 0.05f;
                         }
                         else
@@ -715,9 +715,9 @@ void game(int win1, int win2, RenderWindow& window)
                         player1.sprite.setTexture(Running);
                         if (timer < 0)
                         {
-                            index++;
-                            index = index % 10;
-                            player1.sprite.setTextureRect(IntRect((index * 120), 0, 120, 80));
+                            playerindex++;
+                            playerindex = playerindex % 10;
+                            player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
                             timer = delay - 0.05f;
                         }
                         else
