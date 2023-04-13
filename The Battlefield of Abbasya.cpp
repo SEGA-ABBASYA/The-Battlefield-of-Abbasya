@@ -245,7 +245,7 @@ struct plates {
         sh_1.setScale(x5, x6);
     }
 
-}plt1, plt2, plt3, plt4;
+}plt1, plt2, plt3, plt4,plt5,plt6;
 
 //function for defining health bar textures
 void init_health_bar();
@@ -429,12 +429,11 @@ void game(int win1, int win2, RenderWindow& window)
         plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
         plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 1, 1);
     }
-
-    ////invisible ground definition
-    //RectangleShape ground;
-    //ground.setSize(Vector2f(1280.f, 150.f));
-    //ground.setPosition(0, 650);
-    //ground.setTexture(&Floor);
+    if (win1 + win2 == 2) {
+        plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 500, 450, 1, 1);
+        plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 300, 400, 1, 1);
+        plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 50, 450, 1, 1);
+    }
 
     //Player 1 health bar prop
     RectangleShape p1_healthBar(Vector2f(305.f, 100.f));
@@ -667,6 +666,7 @@ void game(int win1, int win2, RenderWindow& window)
             else
                 timer -= deltatime;
         }
+        //I put everything in else so it cannot be done at the same time
         else
         {
             //Player 1 Attack & Movement
@@ -679,10 +679,8 @@ void game(int win1, int win2, RenderWindow& window)
                     attackindex = attackindex % 4;
                     player1.sprite.setTextureRect(IntRect((attackindex * 120), 0, 120, 80));
                     attacktimer = attackdelay;
-                    if (attackindex == 0) {
+                    if (attackindex == 0)
                         player1.attackbool = false;
-                    }
-
                 }
                 else {
                     attacktimer -= deltatime;
