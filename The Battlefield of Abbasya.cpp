@@ -251,7 +251,9 @@ void Volume(RenderWindow& volumewindow)
 
     for (int i = 0; i < 9; i++) {
         vol_arr[i].setScale(7, 7);
-        vol_arr[i].setPosition(500, volumewindow.getSize().y / 2);
+        vol_arr[i].setOrigin(vol10.getSize().x / 2, vol10.getSize().y / 2);
+        vol_arr[i].setPosition(volumewindow.getSize().x / 2, volumewindow.getSize().y / 2);
+
     }
 
     while (volumewindow.isOpen())
