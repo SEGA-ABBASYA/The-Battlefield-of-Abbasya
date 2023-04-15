@@ -440,7 +440,6 @@ void Controlls(RenderWindow& controllswindow)
     }
 }
 
-
 void Options(RenderWindow& optionwindow)
 {
     Font optionfont;
