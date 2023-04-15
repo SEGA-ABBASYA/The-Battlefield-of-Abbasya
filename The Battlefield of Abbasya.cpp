@@ -192,6 +192,98 @@ void MainMenu(RenderWindow& mainwindow)
 }
 
 
+void Credits(RenderWindow& creditswindow) {
+    Font Credits;
+    Credits.loadFromFile("ArcadeClassic.ttf");
+
+    Text select[8];
+    select[0].setFont(Credits);
+    select[0].setFillColor(Color::White);
+    select[0].setString("Main Menu");
+    select[0].setCharacterSize(60);
+    select[0].setPosition(100, 620);
+
+    select[1].setFont(Credits);
+    select[1].setString("Abd ElRahman Mustafa");
+    select[1].setCharacterSize(40);
+    select[1].setFillColor(Color::White);
+    select[1].setPosition(20, 20);
+
+    select[2].setFont(Credits);
+    select[2].setFillColor(Color::White);
+    select[2].setString("Abd ElRahman Osama");
+    select[2].setCharacterSize(40);
+    select[2].setPosition(20, 100);
+
+    select[3].setFont(Credits);
+    select[3].setFillColor(Color::White);
+    select[3].setString("Mahmoud Emad");
+    select[3].setCharacterSize(40);
+    select[3].setPosition(20, 180);
+
+    select[4].setFont(Credits);
+    select[4].setFillColor(Color::White);
+    select[4].setString("Yousef Ashraf");
+    select[4].setCharacterSize(40);
+    select[4].setPosition(20, 260);
+
+    select[5].setFont(Credits);
+    select[5].setFillColor(Color::White);
+    select[5].setString("Yousef Ahmed");
+    select[5].setCharacterSize(40);
+    select[5].setPosition(20, 340);
+
+    select[6].setFont(Credits);
+    select[6].setFillColor(Color::White);
+    select[6].setString("Yousef Khataan");
+    select[6].setCharacterSize(40);
+    select[6].setPosition(20, 420);
+
+    select[7].setFont(Credits);
+    select[7].setFillColor(Color::White);
+    select[7].setString("Ziad Khaled ");
+    select[7].setCharacterSize(40);
+    select[7].setPosition(20, 520);
+
+    while (creditswindow.isOpen())
+    {
+        sf::Event event2;
+        while (creditswindow.pollEvent(event2))
+        {
+            if (event2.type == sf::Event::Closed)
+            {
+                creditswindow.close();
+            }
+        }
+        RectangleShape backtomain;
+        backtomain.setSize(Vector2f(300.f, 100.f));
+        backtomain.setPosition(110, 620);
+        backtomain.setFillColor(Color::Transparent);
+
+        Mouse mouse;
+        if (backtomain.getGlobalBounds().contains(mouse.getPosition(creditswindow).x, mouse.getPosition(creditswindow).y))
+        {
+            if (Mouse::isButtonPressed(Mouse::Left))
+            {
+                return;
+            }
+        }
+        creditswindow.clear();
+        pagenum = cursor_select(select, creditswindow);
+
+
+        for (int i = 0; i < 8; i++) {
+            creditswindow.draw(select[i]);
+        }
+
+
+        cur.draw(creditswindow);
+        creditswindow.draw(backtomain);
+        creditswindow.display();
+    }
+}
+
+
 void game(int win1, int win2, RenderWindow& window);
 
 
@@ -470,7 +562,6 @@ void PauseMenu(RenderWindow& pausewindow) {
     }
 }
 
-void Credits(RenderWindow& mainwindow) {}
 
 struct Hitbox
 {
@@ -536,9 +627,8 @@ int main()
         MainMenu(get_window);
         if (pagenum == 0) { MainMenu(get_window); }
         else if (pagenum == 1) { game(0, 0, get_window); }
-        else if (pagenum == 2) { Options(get_window); }
-        //else if (pagenum == ) { PauseMenu(get_window); }
-        //else if (pagenum == 3) { Credits(get_window); }
+        else if (pagenum == 2) { Volume(get_window); }
+        else if (pagenum == 3) { Credits(get_window); }
         else if (pagenum == 4) { get_window.close(); }
     }
     return 0;
