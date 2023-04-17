@@ -355,7 +355,7 @@ void Volume(RenderWindow& volumewindow)
     vol30.loadFromFile("Volume Bar/XP Bar Animated Yellow 6.png");
     vol20.loadFromFile("Volume Bar/XP Bar Animated Yellow 7.png");
     vol10.loadFromFile("Volume Bar/XP Bar Animated Yellow 8.png");
-    vol0.loadFromFile("Volume Bar/XP Bar Animated Yellow 9.png");
+     vol0.loadFromFile("Volume Bar/XP Bar Animated Yellow 9.png");
 
     vol_arr[8].setTexture(vol80);
     vol_arr[7].setTexture(vol70);
