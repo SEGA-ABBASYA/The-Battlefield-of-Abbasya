@@ -762,14 +762,18 @@ void game(int win1, int win2, RenderWindow& window)
     plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 1, 1);
     plt4.plat_set(plateform_2, plt4.platrec, 1280, 50, 0, 650, 1, 1);
     if (win1 + win2 == 1) {
-        plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
+        plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 500, 1, 1);
         plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
-        plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 1, 1);
+        plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 500, 1, 1);
+        plt4.plat_set(plateform_2, plt4.platrec, 150, 50, 100, 300, 1, 1);
+        plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 1, 1);
     }
     if (win1 + win2 == 2) {
-        plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 500, 450, 1, 1);
-        plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 300, 400, 1, 1);
-        plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 50, 450, 1, 1);
+        plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 0, 0);
+        plt2.plat_set(plateform_2, plt2.platrec, 750, 70, 250, 450, 1, 1);
+        plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 0, 0);
+        plt4.plat_set(plateform_2, plt4.platrec, 150, 50, 100, 300, 0, 0);
+        plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 0, 0);
     }
 
     //Player 1 health bar prop
@@ -791,8 +795,18 @@ void game(int win1, int win2, RenderWindow& window)
     player2.health = 100;
 
     //Players initial prop
-    setprop(player1.sprite, Idle, 3, 320, 480);
-    setprop(player2.sprite, Idle2, -3, 960, 480);
+    if (win1 + win2 == 0) {
+        setprop(player1.sprite, Idle, 3, 320, 480);
+        setprop(player2.sprite, Idle2, -3, 960, 480);
+    }
+    else if (win1 + win2 == 1) {
+        setprop(player1.sprite, Idle, 3, 180, 350);
+        setprop(player2.sprite, Idle2, -3, 1050, 350);
+    }
+    else {
+        setprop(player1.sprite, Idle, 3, 330, 150);
+        setprop(player2.sprite, Idle2, -3, 900, 150);
+    }
 
     //Hitboxes initial prop
     player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 140.f, 40.f, Color::Yellow);
@@ -821,10 +835,47 @@ void game(int win1, int win2, RenderWindow& window)
             player2.hitbox.player.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
             player2.hitbox.attack.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
 
+            //Death if Fell
+            if (player1.hitbox.player.getPosition().y > window.getSize().y)
+            {
+                player1.health = 0;
+                arr_index = update_healthbar(player1.health);
+                if (arr_index != -1)
+                {
+                    P1_HealthBar_Texture = hp_bar[arr_index];
+                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                }
+                if (player1.health == 0 && win1 < 2 && win2 < 2)
+                {
+                    cout << "p2 wins this round\n";
+                    win2++;
+                    game(win1, win2, window);
+                    player1.velocity.y = 0;
+                }
+            }
+            if (player2.hitbox.player.getPosition().y > window.getSize().y)
+            {
+                arr_index = update_healthbar(player2.health);
+                if (arr_index != -1)
+                {
+                    P2_HealthBar_Texture = hp_bar[arr_index];
+                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                }
+                if (player2.health == 0 && win2 < 2 && win1 < 2)
+                {
+                    cout << "p1 wins this round\n";
+                    win1++;
+                    game(win1, win2, window);
+                    player2.velocity.y = 0;
+                }
+                player2.health = 0;
+            }
+
             //Player 1 Gravity and Plates
             if (((platecoliode_1(player1.hitbox.player, plt1.platrec))
                 || (platecoliode_1(player1.hitbox.player, plt2.platrec))
                 || (platecoliode_1(player1.hitbox.player, plt3.platrec))
+                || (platecoliode_1(player1.hitbox.player, plt4.platrec))
                 || (platecoliode_1(player1.hitbox.player, plt4.platrec)))
                 && player1.velocity.y >= 0)
             {
@@ -849,7 +900,8 @@ void game(int win1, int win2, RenderWindow& window)
             if (((platecoliode_1(player2.hitbox.player, plt1.platrec))
                 || (platecoliode_1(player2.hitbox.player, plt2.platrec))
                 || (platecoliode_1(player2.hitbox.player, plt3.platrec))
-                || (platecoliode_1(player2.hitbox.player, plt4.platrec)))
+                || (platecoliode_1(player2.hitbox.player, plt4.platrec))
+                || (platecoliode_1(player2.hitbox.player, plt5.platrec)))
                 && player2.velocity.y >= 0)
             {
                 player2.velocity.y = 0;
@@ -930,24 +982,19 @@ void game(int win1, int win2, RenderWindow& window)
                     window.close();
                 }
 
-
-                if (e.type == Event::KeyPressed) {
-                    if (e.key.code == Keyboard::Escape) {
-                        PAUSE = true;
-                        if (!PauseMenu(window)) 
-                        {
-                           
-                            setprop(player1.sprite, Idle, 3, 320, 480);
-                            setprop(player2.sprite, Idle2, -3, 960, 480);
-                            pagenum = 0; 
-                            return; 
-                        }
-                    }
-
-                }
-
                 if (e.type == Event::KeyPressed)
                 {
+                    if (e.key.code == Keyboard::Escape) {
+                        PAUSE = true;
+                        if (!PauseMenu(window))
+                        {
+
+                            setprop(player1.sprite, Idle, 3, 320, 480);
+                            setprop(player2.sprite, Idle2, -3, 960, 480);
+                            pagenum = 0;
+                            return;
+                        }
+                    }
 
                     //player 1 Jumping button
                     if (e.key.code == Keyboard::W && player1.grounded == true && !player1.attackbool && !player1.hitbool) {
@@ -1092,6 +1139,7 @@ void game(int win1, int win2, RenderWindow& window)
                 else
                     timer2 -= deltatime;
             }
+            //I put everything in else so it cannot be done at the same time
             else
             {
                 //Player 2 Attack & Movement
@@ -1154,6 +1202,7 @@ void game(int win1, int win2, RenderWindow& window)
                     }
                 }
             }
+
             window.clear();
             window.draw(player1.hitbox.attack);
             window.draw(player2.hitbox.attack);
@@ -1164,6 +1213,7 @@ void game(int win1, int win2, RenderWindow& window)
             window.draw(plt2.platrec);
             window.draw(plt3.platrec);
             window.draw(plt4.platrec);
+            window.draw(plt5.platrec);
             window.draw(p1_healthBar);
             window.draw(p2_healthBar);
             window.draw(player1.sprite);
