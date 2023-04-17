@@ -783,7 +783,6 @@ void game(int win1, int win2, RenderWindow& window)
     p1_healthBar.setOrigin(p1_healthBar.getPosition().x / 2, p1_healthBar.getPosition().y / 2);
     P1_HealthBar_Texture = hp_bar[arr_index];
     p1_healthBar.setTexture(&P1_HealthBar_Texture);
-    player1.health = 100;
 
     //Player 2 health bar prop
     RectangleShape p2_healthBar(Vector2f(305.f, 100.f));
@@ -792,7 +791,6 @@ void game(int win1, int win2, RenderWindow& window)
     p2_healthBar.setOrigin(p2_healthBar.getPosition().x / 2, p2_healthBar.getPosition().y / 2);
     P2_HealthBar_Texture = hp_bar[arr_index];
     p2_healthBar.setTexture(&P2_HealthBar_Texture);
-    player2.health = 100;
 
     //Players initial prop
     if (win1 + win2 == 0) {
@@ -825,157 +823,6 @@ void game(int win1, int win2, RenderWindow& window)
         gameclock.restart();
 
         if (!PAUSE) {
-            //Gravity movement
-            player1.sprite.move(0, player1.velocity.y);
-            player2.sprite.move(0, player2.velocity.y);
-
-            //Hitboxes live positioning
-            player1.hitbox.player.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
-            player1.hitbox.attack.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
-            player2.hitbox.player.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
-            player2.hitbox.attack.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
-
-            //Death if Fell
-            if (player1.hitbox.player.getPosition().y > window.getSize().y)
-            {
-                player1.health = 0;
-                arr_index = update_healthbar(player1.health);
-                if (arr_index != -1)
-                {
-                    P1_HealthBar_Texture = hp_bar[arr_index];
-                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
-                }
-                if (player1.health == 0 && win1 < 2 && win2 < 2)
-                {
-                    cout << "p2 wins this round\n";
-                    win2++;
-                    game(win1, win2, window);
-                    player1.velocity.y = 0;
-                }
-            }
-            if (player2.hitbox.player.getPosition().y > window.getSize().y)
-            {
-                arr_index = update_healthbar(player2.health);
-                if (arr_index != -1)
-                {
-                    P2_HealthBar_Texture = hp_bar[arr_index];
-                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
-                }
-                if (player2.health == 0 && win2 < 2 && win1 < 2)
-                {
-                    cout << "p1 wins this round\n";
-                    win1++;
-                    game(win1, win2, window);
-                    player2.velocity.y = 0;
-                }
-                player2.health = 0;
-            }
-
-            //Player 1 Gravity and Plates
-            if (((platecoliode_1(player1.hitbox.player, plt1.platrec))
-                || (platecoliode_1(player1.hitbox.player, plt2.platrec))
-                || (platecoliode_1(player1.hitbox.player, plt3.platrec))
-                || (platecoliode_1(player1.hitbox.player, plt4.platrec))
-                || (platecoliode_1(player1.hitbox.player, plt4.platrec)))
-                && player1.velocity.y >= 0)
-            {
-                player1.velocity.y = 0;
-                player1.grounded = true;
-                player1.sprite.setTexture(Idle);
-                if (timer < 0) {
-                    playerindex++;
-                    playerindex = playerindex % 10;
-                    player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                    timer = delay;
-                }
-                else
-                    timer -= deltatime;
-            }
-            else if (!PAUSE) {
-                player1.grounded = false;
-                player1.velocity.y -= Gravity * deltatime;
-            }
-
-            //player 2 gravity and plates
-            if (((platecoliode_1(player2.hitbox.player, plt1.platrec))
-                || (platecoliode_1(player2.hitbox.player, plt2.platrec))
-                || (platecoliode_1(player2.hitbox.player, plt3.platrec))
-                || (platecoliode_1(player2.hitbox.player, plt4.platrec))
-                || (platecoliode_1(player2.hitbox.player, plt5.platrec)))
-                && player2.velocity.y >= 0)
-            {
-                player2.velocity.y = 0;
-                player2.grounded = true;
-                player2.sprite.setTexture(Idle2);
-                // animation breath player 2
-                if (timer2 < 0) {
-                    index2++;
-                    index2 = index2 % 10;
-                    player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
-                    timer2 = delay;
-                }
-                else
-                    timer2 -= deltatime;
-            }
-            else
-            {
-                player2.grounded = false;
-                player2.velocity.y -= Gravity * deltatime;
-            }
-
-            //Player 1 falling animation
-            if (player1.velocity.y >= 0 && !player1.grounded) {
-                player1.sprite.setTexture(Fall);
-                if (timer < 0) {
-                    playerindex++;
-                    playerindex = playerindex % 3;
-                    player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                    timer = delay + 0.15;
-                }
-                else
-                    timer -= deltatime;
-            }
-
-            //Player 1 jumping animation
-            if (player1.velocity.y < 0) {
-                player1.sprite.setTexture(Jumping);
-                if (timer < 0) {
-                    playerindex++;
-                    playerindex = playerindex % 3;
-                    player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                    timer = delay + 0.15;
-                }
-                else
-                    timer -= deltatime;
-            }
-
-            //Player 2 jumping animation
-            if (player2.velocity.y < 0) {
-                player2.sprite.setTexture(Jumping2);
-                if (timer2 < 0) {
-                    index2++;
-                    index2 = index2 % 3;
-                    player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
-                    timer2 = delay2 + 0.15;
-                }
-                else
-                    timer2 -= deltatime;
-            }
-
-            //Player 2 falling animation
-            if (player2.velocity.y >= 0 && !player2.grounded) {
-                player2.sprite.setTexture(Fall2);
-                if (timer2 < 0) {
-                    index2++;
-                    index2 = index2 % 3;
-                    player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
-                    timer2 = delay2 + 0.15;
-                }
-                else
-                    timer2 -= deltatime;
-            }
-
-
             while (window.pollEvent(e)) {
                 if (e.type == Event::Closed)
                 {
@@ -1057,6 +904,86 @@ void game(int win1, int win2, RenderWindow& window)
                 }
 
             }
+
+            //PLAYER 1
+
+            //Gravity movement
+            player1.sprite.move(0, player1.velocity.y);
+
+            //Hitboxes live positioning
+            player1.hitbox.player.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
+            player1.hitbox.attack.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
+            
+            //Death if Fell
+            if (player1.hitbox.player.getPosition().y > window.getSize().y)
+            {
+                player1.health = 0;
+                arr_index = update_healthbar(player1.health);
+                if (arr_index != -1)
+                {
+                    P1_HealthBar_Texture = hp_bar[arr_index];
+                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                }
+                if (player1.health == 0 && win1 < 2 && win2 < 2)
+                {
+                    cout << "p2 wins this round\n";
+                    win2++;
+                    game(win1, win2, window);
+                    player1.velocity.y = 0;
+                }
+            }
+
+            //Gravity and Plates
+            if (((platecoliode_1(player1.hitbox.player, plt1.platrec))
+                || (platecoliode_1(player1.hitbox.player, plt2.platrec))
+                || (platecoliode_1(player1.hitbox.player, plt3.platrec))
+                || (platecoliode_1(player1.hitbox.player, plt4.platrec))
+                || (platecoliode_1(player1.hitbox.player, plt5.platrec)))
+                && player1.velocity.y >= 0)
+            {
+                player1.velocity.y = 0;
+                player1.grounded = true;
+                player1.sprite.setTexture(Idle);
+                if (timer < 0) {
+                    playerindex++;
+                    playerindex = playerindex % 10;
+                    player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                    timer = delay;
+                }
+                else
+                    timer -= deltatime;
+            }
+            else if (!PAUSE) {
+                player1.grounded = false;
+                player1.velocity.y -= Gravity * deltatime;
+            }
+
+            //Jumping animation
+            if (player1.velocity.y < 0) {
+                player1.sprite.setTexture(Jumping);
+                if (timer < 0) {
+                    playerindex++;
+                    playerindex = playerindex % 3;
+                    player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                    timer = delay + 0.15;
+                }
+                else
+                    timer -= deltatime;
+            }
+
+            //Falling animation
+            if (player1.velocity.y >= 0 && !player1.grounded) {
+                player1.sprite.setTexture(Fall);
+                if (timer < 0) {
+                    playerindex++;
+                    playerindex = playerindex % 3;
+                    player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                    timer = delay + 0.15;
+                }
+                else
+                    timer -= deltatime;
+            }
+
             if (player1.hitbool == true) {
                 player1.sprite.setTexture(Hit);
                 player1.sprite.setTextureRect(IntRect(0, 0, 120, 80));
@@ -1070,11 +997,11 @@ void game(int win1, int win2, RenderWindow& window)
             //I put everything in else so it cannot be done at the same time
             else
             {
-                //Player 1 Attack & Movement
+                //Attack & Movement
                 if (player1.attackbool == true) {
                     player1.sprite.setTexture(Attacking);
 
-                    //Player 1 Attacking Animation
+                    //Attacking Animation
                     if (attacktimer < 0) {
                         attackindex++;
                         attackindex = attackindex % 4;
@@ -1090,7 +1017,7 @@ void game(int win1, int win2, RenderWindow& window)
                 //I put everything in else so it cannot be done at the same time
                 else
                 {
-                    //Player 1 moving right
+                    //Moving right
                     if (Keyboard::isKeyPressed(Keyboard::D) && player1.sprite.getPosition().x < (window.getSize().x - player1.sprite.getGlobalBounds().width / 100)) {
                         player1.sprite.setScale(3, 3);
                         player1.hitbox.attack.setScale(1, 1);
@@ -1108,7 +1035,7 @@ void game(int win1, int win2, RenderWindow& window)
                         }
                         player1.sprite.move(500 * deltatime, 0);
                     }
-                    //Player 1 moving left
+                    //Moving left
                     if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0) {
                         player1.sprite.setScale(-3, 3);
                         player1.hitbox.attack.setScale(-1, 1);
@@ -1129,6 +1056,90 @@ void game(int win1, int win2, RenderWindow& window)
                 }
             }
 
+
+
+
+            //PLAYER 2
+
+            //Gravity movement
+            player2.sprite.move(0, player2.velocity.y);
+
+            //Hitboxes live positioning
+            player2.hitbox.player.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
+            player2.hitbox.attack.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
+
+            //Death if Fell
+            if (player2.hitbox.player.getPosition().y > window.getSize().y)
+            {
+                arr_index = update_healthbar(player2.health);
+                if (arr_index != -1)
+                {
+                    P2_HealthBar_Texture = hp_bar[arr_index];
+                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                }
+                if (player2.health == 0 && win2 < 2 && win1 < 2)
+                {
+                    cout << "p1 wins this round\n";
+                    win1++;
+                    game(win1, win2, window);
+                    player2.velocity.y = 0;
+                }
+                player2.health = 0;
+            }
+
+            //player 2 gravity and plates
+            if (((platecoliode_1(player2.hitbox.player, plt1.platrec))
+                || (platecoliode_1(player2.hitbox.player, plt2.platrec))
+                || (platecoliode_1(player2.hitbox.player, plt3.platrec))
+                || (platecoliode_1(player2.hitbox.player, plt4.platrec))
+                || (platecoliode_1(player2.hitbox.player, plt5.platrec)))
+                && player2.velocity.y >= 0)
+            {
+                player2.velocity.y = 0;
+                player2.grounded = true;
+                player2.sprite.setTexture(Idle2);
+                // animation breath player 2
+                if (timer2 < 0) {
+                    index2++;
+                    index2 = index2 % 10;
+                    player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
+                    timer2 = delay;
+                }
+                else
+                    timer2 -= deltatime;
+            }
+            else
+            {
+                player2.grounded = false;
+                player2.velocity.y -= Gravity * deltatime;
+            }
+
+            //Jumping animation
+            if (player2.velocity.y < 0) {
+                player2.sprite.setTexture(Jumping2);
+                if (timer2 < 0) {
+                    index2++;
+                    index2 = index2 % 3;
+                    player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
+                    timer2 = delay2 + 0.15;
+                }
+                else
+                    timer2 -= deltatime;
+            }
+
+            //Falling animation
+            if (player2.velocity.y >= 0 && !player2.grounded) {
+                player2.sprite.setTexture(Fall2);
+                if (timer2 < 0) {
+                    index2++;
+                    index2 = index2 % 3;
+                    player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
+                    timer2 = delay2 + 0.15;
+                }
+                else
+                    timer2 -= deltatime;
+            }
+
             if (player2.hitbool == true) {
                 player2.sprite.setTexture(Hit2);
                 player2.sprite.setTextureRect(IntRect(0, 0, 120, 80));
@@ -1142,11 +1153,11 @@ void game(int win1, int win2, RenderWindow& window)
             //I put everything in else so it cannot be done at the same time
             else
             {
-                //Player 2 Attack & Movement
+                //Attack & Movement
                 if (player2.attackbool == true) {
                     player2.sprite.setTexture(Attacking2);
 
-                    //Player 2 Attacking Animation
+                    //Attacking Animation
                     if (attacktimer2 < 0) {
                         attackindex2++;
                         attackindex2 = attackindex2 % 4;
@@ -1164,7 +1175,7 @@ void game(int win1, int win2, RenderWindow& window)
                 //I put everything in else so it cannot be done at the same time
                 else
                 {
-                    //Player 2 moving right
+                    //Moving right
                     if (Keyboard::isKeyPressed(Keyboard::Right) && player2.sprite.getPosition().x < (window.getSize().x - player2.sprite.getGlobalBounds().width / 100)) {
                         player2.sprite.setScale(3, 3);
                         player2.hitbox.attack.setScale(1, 1);
@@ -1182,7 +1193,7 @@ void game(int win1, int win2, RenderWindow& window)
                         }
                         player2.sprite.move(500 * deltatime, 0);
                     }
-                    //Player 2 moving left
+                    //Moving left
                     if (Keyboard::isKeyPressed(Keyboard::Left) && player2.sprite.getPosition().x > 0) {
                         player2.sprite.setScale(-3, 3);
                         player2.hitbox.attack.setScale(-1, 1);
