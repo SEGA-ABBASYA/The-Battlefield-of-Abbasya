@@ -521,7 +521,7 @@ void Options(RenderWindow& optionwindow)
 
 //pause menu
 
-int PauseMenu(RenderWindow& pausewindow,float& v1,float& v2) {
+int PauseMenu(RenderWindow& pausewindow) {
     Clock Gclock;
     Font pausefont;
     pausefont.loadFromFile("ArcadeClassic.ttf");
@@ -556,7 +556,7 @@ int PauseMenu(RenderWindow& pausewindow,float& v1,float& v2) {
     Pause[4].setFillColor(Color{ 255,204,0 });
     Pause[4].setPosition(300, 350);
 
-    cout << player1.velocity.y << endl;
+
     while (pausewindow.isOpen())
     {
         Gclock.restart();
@@ -579,8 +579,8 @@ int PauseMenu(RenderWindow& pausewindow,float& v1,float& v2) {
         else if (page == 1) { Volume(pausewindow); }//volume
         else if (page == 2) {
             PAUSE = false;
-            player1.velocity.y = v1;
-            player2.velocity.y = v2;
+            player1.velocity.y = 0;
+            player2.velocity.y = 0;
             return 1;
         }
         else if (page == 3) { return 0; }//main menu
@@ -597,7 +597,7 @@ int PauseMenu(RenderWindow& pausewindow,float& v1,float& v2) {
         pausewindow.display();
         deltatime = Gclock.getElapsedTime().asSeconds();
         cout << player1.velocity.y << endl;
-        cout <<"delta ="<< deltatime << endl;
+        //cout <<"delta ="<< deltatime << endl;
     }
 }
 
@@ -958,7 +958,7 @@ void game(int win1, int win2, RenderWindow& window)
                 if (e.type == Event::KeyPressed) {
                     if (e.key.code == Keyboard::Escape) {
                         PAUSE = true;
-                        if (!PauseMenu(window, player1.velocity.y, player2.velocity.y))
+                        if (!PauseMenu(window)) 
                         {
                            
                             setprop(player1.sprite, Idle, 3, 320, 480);
