@@ -61,6 +61,40 @@ struct cursor {
         window.draw(sprite);
     }
 }cur;
+struct Hitbox
+{
+    RectangleShape attack;
+    RectangleShape player;
+
+    //function for setting the properties of a hitbox
+    void sethitbox(Sprite& w, RectangleShape& x, float y, float z, Color l) {
+        x.setSize(Vector2f(y, z));
+        x.setFillColor(l);
+        x.setPosition(w.getPosition().x, w.getPosition().y + 10);
+        x.setOrigin(y / 2, -6);
+    }
+};
+struct player {
+    string name;
+    int health = 100;
+    Vector2f velocity{ 0,0 };
+    Sprite sprite;
+    Hitbox hitbox;
+    bool grounded = false, attackbool = false, hitbool = false;
+
+}player1, player2;
+struct plates {
+    RectangleShape platrec;
+
+    //function for setting the properties of the plates
+    void plat_set(Texture& imag, RectangleShape& sh_1, float x1, float x2, int x3, int x4, int x5, int x6) {
+        sh_1.setSize(Vector2f(x1, x2));
+        sh_1.setPosition(x3, x4);
+        sh_1.setTexture(&imag);
+        sh_1.setScale(x5, x6);
+    }
+
+}plt1, plt2, plt3, plt4, plt5, plt6;
 
 int cursor_select(Text* arr, RenderWindow& mywindow)
 {
@@ -144,7 +178,7 @@ void MainMenu(RenderWindow& mainwindow)
     select[3].setFillColor(Color{ 255,204,0 });
     select[3].setString("Credits");
     select[3].setCharacterSize(60);
-    select[3].setPosition(300, 300);
+    select[3].setPosition(300, 600);
 
     select[4].setFont(menufont);
     select[4].setFillColor(Color{ 255,204,0 });
@@ -487,7 +521,8 @@ void Options(RenderWindow& optionwindow)
 
 //pause menu
 
-void PauseMenu(RenderWindow& pausewindow) {
+int PauseMenu(RenderWindow& pausewindow,float& v1,float& v2) {
+    Clock Gclock;
     Font pausefont;
     pausefont.loadFromFile("ArcadeClassic.ttf");
     Text Pause[5];
@@ -521,10 +556,10 @@ void PauseMenu(RenderWindow& pausewindow) {
     Pause[4].setFillColor(Color{ 255,204,0 });
     Pause[4].setPosition(300, 350);
 
-
+    cout << player1.velocity.y << endl;
     while (pausewindow.isOpen())
     {
-
+        Gclock.restart();
 
         sf::Event event;
         while (pausewindow.pollEvent(event))
@@ -539,14 +574,16 @@ void PauseMenu(RenderWindow& pausewindow) {
         //cout << PAUSE << endl;
         if (Keyboard::isKeyPressed(Keyboard::R)) {
             PAUSE = false;
-            return;
+            return 1;
         }
         else if (page == 1) { Volume(pausewindow); }//volume
         else if (page == 2) {
             PAUSE = false;
-            return;
+            player1.velocity.y = v1;
+            player2.velocity.y = v2;
+            return 1;
         }
-        else if (page == 3) { MainMenu(pausewindow); }//main menu
+        else if (page == 3) { return 0; }//main menu
         else if (page == 4) { pausewindow.close(); }//exit
 
 
@@ -558,44 +595,13 @@ void PauseMenu(RenderWindow& pausewindow) {
         cur.draw(pausewindow);
 
         pausewindow.display();
+        deltatime = Gclock.getElapsedTime().asSeconds();
+        cout << player1.velocity.y << endl;
+        cout <<"delta ="<< deltatime << endl;
     }
 }
 
 
-struct Hitbox
-{
-    RectangleShape attack;
-    RectangleShape player;
-
-    //function for setting the properties of a hitbox
-    void sethitbox(Sprite& w, RectangleShape& x, float y, float z, Color l) {
-        x.setSize(Vector2f(y, z));
-        x.setFillColor(l);
-        x.setPosition(w.getPosition().x, w.getPosition().y + 10);
-        x.setOrigin(y / 2, -6);
-    }
-};
-struct player {
-    string name;
-    int health = 100;
-    Vector2f velocity{ 0,0 };
-    Sprite sprite;
-    Hitbox hitbox;
-    bool grounded = false, attackbool = false, hitbool = false;
-
-}player1, player2;
-struct plates {
-    RectangleShape platrec;
-
-    //function for setting the properties of the plates
-    void plat_set(Texture& imag, RectangleShape& sh_1, float x1, float x2, int x3, int x4, int x5, int x6) {
-        sh_1.setSize(Vector2f(x1, x2));
-        sh_1.setPosition(x3, x4);
-        sh_1.setTexture(&imag);
-        sh_1.setScale(x5, x6);
-    }
-
-}plt1, plt2, plt3, plt4,plt5,plt6;
 
 //function for defining health bar textures
 void init_health_bar();
@@ -824,6 +830,7 @@ void game(int win1, int win2, RenderWindow& window)
 
         if (!PAUSE) {
             //Gravity movement
+            cout << "testing ..  " << endl;
             player1.sprite.move(0, player1.velocity.y);
             player2.sprite.move(0, player2.velocity.y);
 
@@ -852,8 +859,8 @@ void game(int win1, int win2, RenderWindow& window)
                 else
                     timer -= deltatime;
             }
-            else
-            {
+            else if (!PAUSE) {
+                cout << "pause = " << PAUSE << endl;
                 player1.grounded = false;
                 player1.velocity.y -= Gravity * deltatime;
             }
@@ -877,6 +884,9 @@ void game(int win1, int win2, RenderWindow& window)
                 }
                 else
                     timer2 -= deltatime;
+            }
+            else if (PAUSE) {
+
             }
             else
             {
@@ -922,6 +932,7 @@ void game(int win1, int win2, RenderWindow& window)
                 else
                     timer2 -= deltatime;
             }
+            cout << player1.velocity.y << endl;
 
             //Player 2 falling animation
             if (player2.velocity.y >= 0 && !player2.grounded) {
@@ -946,8 +957,14 @@ void game(int win1, int win2, RenderWindow& window)
 
                 if (e.type == Event::KeyPressed) {
                     if (e.key.code == Keyboard::Escape) {
-
-                        PauseMenu(window);
+                        PAUSE = true;
+                        if (!PauseMenu(window, player1.velocity.y, player2.velocity.y))
+                        {
+                           
+                            setprop(player1.sprite, Idle, 3, 320, 480);
+                            setprop(player2.sprite, Idle2, -3, 960, 480);
+                            pagenum = 0; return; 
+                        }
                     }
 
                 }
