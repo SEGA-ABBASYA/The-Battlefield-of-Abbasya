@@ -510,7 +510,6 @@ void Options(RenderWindow& optionwindow)
 }
 
 int PauseMenu(RenderWindow& pausewindow) {
-    Clock Gclock;
     Font pausefont;
     pausefont.loadFromFile("ArcadeClassic.ttf");
     Text Pause[5];
@@ -547,9 +546,7 @@ int PauseMenu(RenderWindow& pausewindow) {
 
     while (pausewindow.isOpen())
     {
-        Gclock.restart();
-
-        sf::Event event;
+        Event event;
         while (pausewindow.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -579,7 +576,6 @@ int PauseMenu(RenderWindow& pausewindow) {
         cur.draw(pausewindow);
 
         pausewindow.display();
-        deltatime = Gclock.getElapsedTime().asSeconds();
     }
 }
 
@@ -835,7 +831,7 @@ void game(int win1, int win2, RenderWindow& window)
                         PAUSE = true;
                         if (!PauseMenu(window))
                         {
-
+                            PauseMenu(window);
                             setprop(player1.sprite, Idle, 3, 320, 480);
                             setprop(player2.sprite, Idle2, -3, 960, 480);
                             pagenum = 0;
