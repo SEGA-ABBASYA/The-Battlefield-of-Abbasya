@@ -120,7 +120,6 @@ int cursor_select(Text* arr, RenderWindow& mywindow)
     return 0;
 }
 
-
 int cursor_select_pause(Text* arr, RenderWindow& mywindow)
 {
     Mouse mouse;
@@ -145,9 +144,7 @@ int cursor_select_pause(Text* arr, RenderWindow& mywindow)
     return 0;
 }
 
-
 Sprite vol_arr[9];
-
 
 void MainMenu(RenderWindow& mainwindow)
 {
@@ -224,7 +221,6 @@ void MainMenu(RenderWindow& mainwindow)
 
     }
 }
-
 
 void Credits(RenderWindow& creditswindow) {
     Font Credits;
@@ -317,9 +313,7 @@ void Credits(RenderWindow& creditswindow) {
     }
 }
 
-
 void game(int win1, int win2, RenderWindow& window);
-
 
 void Volume(RenderWindow& volumewindow)
 {
@@ -518,9 +512,7 @@ void Options(RenderWindow& optionwindow)
     }
 }
 
-
-//pause menu
-
+//Pause Menu
 int PauseMenu(RenderWindow& pausewindow) {
     Clock Gclock;
     Font pausefont;
@@ -571,7 +563,6 @@ int PauseMenu(RenderWindow& pausewindow) {
 
         }
         page = cursor_select_pause(Pause, pausewindow);
-        //cout << PAUSE << endl;
         if (Keyboard::isKeyPressed(Keyboard::R)) {
             PAUSE = false;
             return 1;
@@ -596,8 +587,6 @@ int PauseMenu(RenderWindow& pausewindow) {
 
         pausewindow.display();
         deltatime = Gclock.getElapsedTime().asSeconds();
-        cout << player1.velocity.y << endl;
-        //cout <<"delta ="<< deltatime << endl;
     }
 }
 
@@ -830,7 +819,6 @@ void game(int win1, int win2, RenderWindow& window)
 
         if (!PAUSE) {
             //Gravity movement
-            cout << "testing ..  " << endl;
             player1.sprite.move(0, player1.velocity.y);
             player2.sprite.move(0, player2.velocity.y);
 
@@ -860,7 +848,6 @@ void game(int win1, int win2, RenderWindow& window)
                     timer -= deltatime;
             }
             else if (!PAUSE) {
-                cout << "pause = " << PAUSE << endl;
                 player1.grounded = false;
                 player1.velocity.y -= Gravity * deltatime;
             }
