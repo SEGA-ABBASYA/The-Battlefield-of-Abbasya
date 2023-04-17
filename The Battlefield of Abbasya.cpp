@@ -93,7 +93,6 @@ struct plates {
         sh_1.setTexture(&imag);
         sh_1.setScale(x5, x6);
     }
-
 }plt1, plt2, plt3, plt4, plt5, plt6;
 
 int cursor_select(Text* arr, RenderWindow& mywindow)
@@ -940,14 +939,12 @@ void game(int win1, int win2, RenderWindow& window)
                            
                             setprop(player1.sprite, Idle, 3, 320, 480);
                             setprop(player2.sprite, Idle2, -3, 960, 480);
-                            pagenum = 0; return; 
+                            pagenum = 0; 
+                            return; 
                         }
                     }
 
                 }
-
-
-
 
                 if (e.type == Event::KeyPressed)
                 {
