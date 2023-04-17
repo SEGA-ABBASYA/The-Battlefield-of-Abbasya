@@ -347,15 +347,15 @@ void Volume(RenderWindow& volumewindow)
     Texture vol10;
     Texture vol0;
 
-    vol80.loadFromFile("XP Bar Animated Yellow 1.png");
-    vol70.loadFromFile("XP Bar Animated Yellow 2.png");
-    vol60.loadFromFile("XP Bar Animated Yellow 3.png");
-    vol50.loadFromFile("XP Bar Animated Yellow 4.png");
-    vol40.loadFromFile("XP Bar Animated Yellow 5.png");
-    vol30.loadFromFile("XP Bar Animated Yellow 6.png");
-    vol20.loadFromFile("XP Bar Animated Yellow 7.png");
-    vol10.loadFromFile("XP Bar Animated Yellow 8.png");
-    vol0.loadFromFile("XP Bar Animated Yellow 9.png");
+    vol80.loadFromFile("Volume Bar/XP Bar Animated Yellow 1.png");
+    vol70.loadFromFile("Volume Bar/XP Bar Animated Yellow 2.png");
+    vol60.loadFromFile("Volume Bar/XP Bar Animated Yellow 3.png");
+    vol50.loadFromFile("Volume Bar/XP Bar Animated Yellow 4.png");
+    vol40.loadFromFile("Volume Bar/XP Bar Animated Yellow 5.png");
+    vol30.loadFromFile("Volume Bar/XP Bar Animated Yellow 6.png");
+    vol20.loadFromFile("Volume Bar/XP Bar Animated Yellow 7.png");
+    vol10.loadFromFile("Volume Bar/XP Bar Animated Yellow 8.png");
+    vol0.loadFromFile("Volume Bar/XP Bar Animated Yellow 9.png");
 
     vol_arr[8].setTexture(vol80);
     vol_arr[7].setTexture(vol70);
@@ -736,22 +736,22 @@ void game(int win1, int win2, RenderWindow& window)
     Back[0].loadFromFile("Background.jpg");
     Back[1].loadFromFile("background2.jpg");
     Idle.loadFromFile("Player 1/_Idle.png");
-    Idle2.loadFromFile("Idle2.png");
-    Running2.loadFromFile("Run2.png");
+    Idle2.loadFromFile("Player 2/Idle2.png");
+    Running2.loadFromFile("Player 2/Run2.png");
     Running.loadFromFile("Player 1/Running Animation.png");
     Jumping.loadFromFile("Player 1/_Jump.png");
-    Jumping2.loadFromFile("Jump2.png");
+    Jumping2.loadFromFile("Player 2/Jump2.png");
     Fall.loadFromFile("Player 1/_Fall.png");
-    Fall2.loadFromFile("_Fall2.png");
+    Fall2.loadFromFile("Player 2/_Fall2.png");
     Hit.loadFromFile("Player 1/_Hit.png");
-    Hit2.loadFromFile("Hit2.png");
+    Hit2.loadFromFile("Player 2/Hit2.png");
     Floor.loadFromFile("Bricks_01.png");
     Floor.setRepeated(true);
     Attacking.loadFromFile("Player 1/_Attack.png");
-    Attacking2.loadFromFile("Attack2.png");
-    plateform_1.loadFromFile("firstplate.png");
-    plateform_2.loadFromFile("secondplate.png");
-    plateform_3.loadFromFile("thirdplate.png");
+    Attacking2.loadFromFile("Player 2/Attack2.png");
+    plateform_1.loadFromFile("Plates/firstplate.png");
+    plateform_2.loadFromFile("Plates/secondplate.png");
+    plateform_3.loadFromFile("Plates/thirdplate.png");
 
     Event e;
 
