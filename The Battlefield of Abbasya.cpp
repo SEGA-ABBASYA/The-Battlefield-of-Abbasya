@@ -186,8 +186,6 @@ void MainMenu(RenderWindow& mainwindow)
     while (mainwindow.isOpen())
     {
 
-        //cout << pagenum << "\n";
-
         // Handle events
         sf::Event event;
         while (mainwindow.pollEvent(event))
@@ -512,7 +510,6 @@ void Options(RenderWindow& optionwindow)
     }
 }
 
-//Pause Menu
 int PauseMenu(RenderWindow& pausewindow) {
     Clock Gclock;
     Font pausefont;
@@ -570,13 +567,10 @@ int PauseMenu(RenderWindow& pausewindow) {
         else if (page == 1) { Volume(pausewindow); }//volume
         else if (page == 2) {
             PAUSE = false;
-            player1.velocity.y = 0;
-            player2.velocity.y = 0;
             return 1;
         }
         else if (page == 3) { return 0; }//main menu
         else if (page == 4) { pausewindow.close(); }//exit
-
 
         pausewindow.clear();
 
@@ -741,19 +735,19 @@ void game(int win1, int win2, RenderWindow& window)
     ourFont.loadFromFile("ArcadeClassic.ttf");
     Back[0].loadFromFile("Background.jpg");
     Back[1].loadFromFile("background2.jpg");
-    Idle.loadFromFile("_Idle.png");
+    Idle.loadFromFile("Player 1/_Idle.png");
     Idle2.loadFromFile("Idle2.png");
     Running2.loadFromFile("Run2.png");
-    Running.loadFromFile("Running Animation.png");
-    Jumping.loadFromFile("_Jump.png");
+    Running.loadFromFile("Player 1/Running Animation.png");
+    Jumping.loadFromFile("Player 1/_Jump.png");
     Jumping2.loadFromFile("Jump2.png");
-    Fall.loadFromFile("_Fall.png");
+    Fall.loadFromFile("Player 1/_Fall.png");
     Fall2.loadFromFile("_Fall2.png");
-    Hit.loadFromFile("_Hit.png");
+    Hit.loadFromFile("Player 1/_Hit.png");
     Hit2.loadFromFile("Hit2.png");
     Floor.loadFromFile("Bricks_01.png");
     Floor.setRepeated(true);
-    Attacking.loadFromFile("_Attack.png");
+    Attacking.loadFromFile("Player 1/_Attack.png");
     Attacking2.loadFromFile("Attack2.png");
     plateform_1.loadFromFile("firstplate.png");
     plateform_2.loadFromFile("secondplate.png");
@@ -872,9 +866,6 @@ void game(int win1, int win2, RenderWindow& window)
                 else
                     timer2 -= deltatime;
             }
-            else if (PAUSE) {
-
-            }
             else
             {
                 player2.grounded = false;
@@ -919,7 +910,6 @@ void game(int win1, int win2, RenderWindow& window)
                 else
                     timer2 -= deltatime;
             }
-            cout << player1.velocity.y << endl;
 
             //Player 2 falling animation
             if (player2.velocity.y >= 0 && !player2.grounded) {
