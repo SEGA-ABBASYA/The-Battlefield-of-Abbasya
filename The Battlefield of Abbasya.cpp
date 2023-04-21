@@ -18,22 +18,23 @@ using namespace std;
 
 
 //Global Variables
-float Gravity = -20.0;
+float Gravity = -20.0f;
 float Jumpheight = 150.0f;
-float deltatime = 0;
+float deltatime = 0.0f;
 int playerindex = 0;
-float timer = 0.0;
-float delay = 0.15;
-float roundelay = 10.0;
+int Deathindex = 0;
+float timer = 0.0f;
+float delay = 0.15f;
+float roundelay = 10.0f;
 int attackindex = 0;
-float attacktimer = 0.0;
-float attackdelay = 0.1;
+float attacktimer = 0.0f;
+float attackdelay = 0.1f;
 int index2 = 0;
-float timer2 = 0.0;
-float delay2 = 0.15;
+float timer2 = 0.0f;
+float delay2 = 0.15f;
 int attackindex2 = 0;
-float attacktimer2 = 0.0;
-float attackdelay2 = 0.1;
+float attacktimer2 = 0.0f;
+float attackdelay2 = 0.1f;
 int pagenum = 0;
 int page = 0;
 bool PAUSE = false;
@@ -876,6 +877,7 @@ void game(int win1, int win2, RenderWindow& window)
                         Round_Trans = true;
                         if (roundelay < 0 && e.key.code == Keyboard::Enter)
                         {
+                            Deathindex = 0;
                             if (player2.health == 0) {
                                 cout << "p1 wins this round\n";
                                 win1++;
@@ -919,24 +921,37 @@ void game(int win1, int win2, RenderWindow& window)
 
             }
 
-            //PLAYER 1
-            cout << playerindex << endl;
-            //roundelay
+            //Round Transition & Death
             if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
             {
                 roundelay -= deltatime;
                 if (player1.health == 0) {
                     player1.sprite.setTexture(Death);
                     if (timer < 0) {
-                        playerindex++;
-                        playerindex = playerindex % 10;
-                        player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                        timer = delay + 0.15f;
+                        if (Deathindex != 9)
+                            Deathindex++;
+                        Deathindex = Deathindex % 10;
+                        player1.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
+                        timer = delay;
                     }
                     else
                         timer -= deltatime;
                 }
+                if (player2.health == 0) {
+                    player2.sprite.setTexture(Death2);
+                    if (timer2 < 0) {
+                        if (Deathindex != 9)
+                            Deathindex++;
+                        Deathindex = Deathindex % 10;
+                        player2.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
+                        timer2 = delay2;
+                    }
+                    else
+                        timer2 -= deltatime;
+                }
             }
+
+            //PLAYER 1
 
             //Gravity movement
             player1.sprite.move(0, player1.velocity.y);
@@ -1011,7 +1026,7 @@ void game(int win1, int win2, RenderWindow& window)
                     playerindex++;
                     playerindex = playerindex % 3;
                     player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                    timer = delay + 0.15;
+                    timer = delay + 0.15f;
                 }
                 else
                     timer -= deltatime;
@@ -1130,16 +1145,18 @@ void game(int win1, int win2, RenderWindow& window)
             {
                 player2.velocity.y = 0;
                 player2.grounded = true;
-                player2.sprite.setTexture(Idle2);
-                // animation breath player 2
-                if (timer2 < 0) {
-                    index2++;
-                    index2 = index2 % 10;
-                    player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
-                    timer2 = delay;
+                if (player2.health > 0) {
+                    player2.sprite.setTexture(Idle2);
+                    // animation breath player 2
+                    if (timer2 < 0) {
+                        index2++;
+                        index2 = index2 % 10;
+                        player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
+                        timer2 = delay;
+                    }
+                    else
+                        timer2 -= deltatime;
                 }
-                else
-                    timer2 -= deltatime;
             }
             else
             {
