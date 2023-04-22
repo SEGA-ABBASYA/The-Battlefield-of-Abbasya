@@ -623,7 +623,9 @@ int main()
             roundelay = 5.0f;
             Round_Trans = false;
             player1.health = 100;
-            player2.health = 100;
+            player2.health = 100;                            
+            player1.sprite.setColor(Color::White);
+            player2.sprite.setColor(Color::White);
             Deathindex = 0;
             game(win1, win2, get_window); 
         }
@@ -900,6 +902,8 @@ void game(int win1, int win2, RenderWindow& window)
                             Round_Trans = false;
                             player1.health = 100;
                             player2.health = 100;
+                            player1.sprite.setColor(Color::White);
+                            player2.sprite.setColor(Color::White);
                             game(win1, win2, window);
                             Round_Trans = false;
                             return;
@@ -939,6 +943,7 @@ void game(int win1, int win2, RenderWindow& window)
                 roundelay -= deltatime;
                 if (player1.health == 0) {
                     player1.sprite.setTexture(Death);
+                    player1.sprite.setColor(Color(128, 0, 0));
                     if (timer < 0) {
                         if (Deathindex != 9)
                             Deathindex++;
@@ -950,6 +955,7 @@ void game(int win1, int win2, RenderWindow& window)
                         timer -= deltatime;
                 }
                 if (player2.health == 0) {
+                    player2.sprite.setColor(Color(128, 0, 0));
                     player2.sprite.setTexture(Death2);
                     if (timer2 < 0) {
                         if (Deathindex != 9)
@@ -971,7 +977,11 @@ void game(int win1, int win2, RenderWindow& window)
             //Hitboxes live positioning
             player1.hitbox.player.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
             player1.hitbox.attack.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
-            
+
+            //Return deafult color
+            if(!player1.hitbool && player1.health > 0)
+                player1.sprite.setColor(Color::White);
+
             //Death if Fell
             if (player1.hitbox.player.getPosition().y > window.getSize().y)
             {
@@ -1040,6 +1050,7 @@ void game(int win1, int win2, RenderWindow& window)
 
             if (player1.hitbool == true) {
                 player1.sprite.setTexture(Hit);
+                player1.sprite.setColor(Color::Red);
                 player1.sprite.setTextureRect(IntRect(0, 0, 120, 80));
                 if (timer < 0)
                 {
@@ -1122,6 +1133,10 @@ void game(int win1, int win2, RenderWindow& window)
             player2.hitbox.player.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
             player2.hitbox.attack.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
 
+            //Return deafult color
+            if (!player2.hitbool && player2.health > 0)
+                player2.sprite.setColor(Color::White);
+
             //Death if Fell
             if (player2.hitbox.player.getPosition().y > window.getSize().y)
             {
@@ -1192,6 +1207,7 @@ void game(int win1, int win2, RenderWindow& window)
 
             if (player2.hitbool == true) {
                 player2.sprite.setTexture(Hit2);
+                player2.sprite.setColor(Color::Red);
                 player2.sprite.setTextureRect(IntRect(0, 0, 120, 80));
                 if (timer2 < 0)
                 {
