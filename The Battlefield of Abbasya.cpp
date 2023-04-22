@@ -18,24 +18,29 @@ using namespace std;
 
 
 //Global Variables
-float Gravity = -20.0;
+float Gravity = -20.0f;
 float Jumpheight = 150.0f;
-float deltatime = 0;
+float deltatime = 0.0f;
 int playerindex = 0;
-float timer = 0.0;
-float delay = 0.15;
+int Deathindex = 0;
+float timer = 0.0f;
+float delay = 0.15f;
+float roundelay = 5.0f;
 int attackindex = 0;
-float attacktimer = 0.0;
-float attackdelay = 0.1;
+float attacktimer = 0.0f;
+float attackdelay = 0.1f;
 int index2 = 0;
-float timer2 = 0.0;
-float delay2 = 0.15;
+float timer2 = 0.0f;
+float delay2 = 0.15f;
 int attackindex2 = 0;
-float attacktimer2 = 0.0;
-float attackdelay2 = 0.1;
+float attacktimer2 = 0.0f;
+float attackdelay2 = 0.1f;
 int pagenum = 0;
 int page = 0;
+int win1 = 0;
+int win2 = 0;
 bool PAUSE = false;
+bool Round_Trans = false;
 int volume_ = 90;
 
 struct cursor {
@@ -510,7 +515,6 @@ void Options(RenderWindow& optionwindow)
 }
 
 int PauseMenu(RenderWindow& pausewindow) {
-    Clock Gclock;
     Font pausefont;
     pausefont.loadFromFile("ArcadeClassic.ttf");
     Text Pause[5];
@@ -547,9 +551,7 @@ int PauseMenu(RenderWindow& pausewindow) {
 
     while (pausewindow.isOpen())
     {
-        Gclock.restart();
-
-        sf::Event event;
+        Event event;
         while (pausewindow.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -568,7 +570,13 @@ int PauseMenu(RenderWindow& pausewindow) {
             PAUSE = false;
             return 1;
         }
-        else if (page == 3) { return 0; }//main menu
+        else if (page == 3) {
+            Round_Trans = false;
+            win1 = 0;
+            win2 = 0;
+            PAUSE = false;
+            return 0;
+        }//main menu
         else if (page == 4) { pausewindow.close(); }//exit
 
         pausewindow.clear();
@@ -579,7 +587,6 @@ int PauseMenu(RenderWindow& pausewindow) {
         cur.draw(pausewindow);
 
         pausewindow.display();
-        deltatime = Gclock.getElapsedTime().asSeconds();
     }
 }
 
@@ -609,11 +616,17 @@ int main()
 
     while (get_window.isOpen())
     {
-        cout << pagenum << "\n\n";
 
         MainMenu(get_window);
         if (pagenum == 0) { MainMenu(get_window); }
-        else if (pagenum == 1) { game(0, 0, get_window); }
+        else if (pagenum == 1) {
+            roundelay = 5.0f;
+            Round_Trans = false;
+            player1.health = 100;
+            player2.health = 100;
+            Deathindex = 0;
+            game(win1, win2, get_window); 
+        }
         else if (pagenum == 2) { Volume(get_window); }
         else if (pagenum == 3) { Credits(get_window); }
         else if (pagenum == 4) { get_window.close(); }
@@ -722,6 +735,8 @@ void game(int win1, int win2, RenderWindow& window)
     Texture Attacking2;
     Texture Hit;
     Texture Hit2;
+    Texture Death;
+    Texture Death2;
     Texture P1_HealthBar_Texture;
     Texture P2_HealthBar_Texture;
     Font ourFont;
@@ -748,6 +763,8 @@ void game(int win1, int win2, RenderWindow& window)
     Floor.setRepeated(true);
     Attacking.loadFromFile("Player 1/_Attack.png");
     Attacking2.loadFromFile("Player 2/Attack2.png");
+    Death.loadFromFile("Player 1/_Death.png");
+    Death2.loadFromFile("Player 2/_Death.png");
     plateform_1.loadFromFile("Plates/firstplate.png");
     plateform_2.loadFromFile("Plates/secondplate.png");
     plateform_3.loadFromFile("Plates/thirdplate.png");
@@ -760,6 +777,7 @@ void game(int win1, int win2, RenderWindow& window)
     plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
     plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
     plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 1, 1);
+    plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 0, 0);
     plt4.plat_set(plateform_2, plt4.platrec, 1280, 50, 0, 650, 1, 1);
     if (win1 + win2 == 1) {
         plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 500, 1, 1);
@@ -821,37 +839,34 @@ void game(int win1, int win2, RenderWindow& window)
 
     while (window.isOpen()) {
         gameclock.restart();
-
         if (!PAUSE) {
             while (window.pollEvent(e)) {
                 if (e.type == Event::Closed)
                 {
                     window.close();
                 }
-
                 if (e.type == Event::KeyPressed)
                 {
                     if (e.key.code == Keyboard::Escape) {
                         PAUSE = true;
                         if (!PauseMenu(window))
                         {
-
+                            PauseMenu(window);
                             setprop(player1.sprite, Idle, 3, 320, 480);
                             setprop(player2.sprite, Idle2, -3, 960, 480);
-                            pagenum = 0;
                             return;
                         }
                     }
 
                     //player 1 Jumping button
-                    if (e.key.code == Keyboard::W && player1.grounded == true && !player1.attackbool && !player1.hitbool) {
+                    if (e.key.code == Keyboard::W && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans) {
 
                         player1.velocity.y = -10;
                         player1.sprite.move(0, player1.velocity.y - Jumpheight);
                     }
 
                     //Player 1 Attacking button
-                    if (e.key.code == Keyboard::X && player1.grounded == true && !player1.attackbool) {
+                    if (e.key.code == Keyboard::X && player1.grounded == true && !player1.attackbool && !Round_Trans) {
                         player1.attackbool = true;
                         //Attacksound.play();
                         if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool) {
@@ -864,23 +879,42 @@ void game(int win1, int win2, RenderWindow& window)
                                 P2_HealthBar_Texture = hp_bar[arr_index];
                                 p2_healthBar.setTexture(&P2_HealthBar_Texture);
                             }
-                            if (player2.health == 0 && win2 < 2 && win1 < 2)
-                            {
-                                cout << "p1 wins this round\n";
-                                win1++;
-                                game(win1, win2, window);
-                            }
                         }
                     }
+
+                    if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
+                    {
+                        Round_Trans = true;
+                        if (roundelay < 0 && e.key.code == Keyboard::Enter)
+                        {
+                            Deathindex = 0;
+                            if (player2.health == 0) {
+                                cout << "p1 wins this round\n";
+                                win1++;
+                            }
+                            else if (player1.health == 0) {
+                                cout << "p2 wins this round\n";
+                                win2++;
+                            }
+                            roundelay = 5.0f;
+                            Round_Trans = false;
+                            player1.health = 100;
+                            player2.health = 100;
+                            game(win1, win2, window);
+                            Round_Trans = false;
+                            return;
+                        }
+                    }
+
                     //player 2 Jumping button
-                    if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool) {
+                    if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans) {
 
                         player2.velocity.y = -10;
                         player2.sprite.move(0, player2.velocity.y - Jumpheight);
                     }
 
                     //Player 2 Attacking button
-                    if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool) {
+                    if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans) {
                         player2.attackbool = true;
                         //Attacksound.play();
                         if (intersection(player2.hitbox.attack, player1.hitbox.player) && player2.attackbool) {
@@ -893,16 +927,40 @@ void game(int win1, int win2, RenderWindow& window)
                                 P1_HealthBar_Texture = hp_bar[arr_index];
                                 p1_healthBar.setTexture(&P1_HealthBar_Texture);
                             }
-                            if (player1.health == 0 && win1 < 2 && win2 < 2)
-                            {
-                                cout << "p2 wins this round\n";
-                                win2++;
-                                game(win1, win2, window);
-                            }
                         }
                     }
                 }
 
+            }
+
+            //Round Transition & Death
+            if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
+            {
+                roundelay -= deltatime;
+                if (player1.health == 0) {
+                    player1.sprite.setTexture(Death);
+                    if (timer < 0) {
+                        if (Deathindex != 9)
+                            Deathindex++;
+                        Deathindex = Deathindex % 10;
+                        player1.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
+                        timer = delay;
+                    }
+                    else
+                        timer -= deltatime;
+                }
+                if (player2.health == 0) {
+                    player2.sprite.setTexture(Death2);
+                    if (timer2 < 0) {
+                        if (Deathindex != 9)
+                            Deathindex++;
+                        Deathindex = Deathindex % 10;
+                        player2.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
+                        timer2 = delay2;
+                    }
+                    else
+                        timer2 -= deltatime;
+                }
             }
 
             //PLAYER 1
@@ -924,13 +982,6 @@ void game(int win1, int win2, RenderWindow& window)
                     P1_HealthBar_Texture = hp_bar[arr_index];
                     p1_healthBar.setTexture(&P1_HealthBar_Texture);
                 }
-                if (player1.health == 0 && win1 < 2 && win2 < 2)
-                {
-                    cout << "p2 wins this round\n";
-                    win2++;
-                    game(win1, win2, window);
-                    player1.velocity.y = 0;
-                }
             }
 
             //Gravity and Plates
@@ -938,22 +989,25 @@ void game(int win1, int win2, RenderWindow& window)
                 || (platecoliode_1(player1.hitbox.player, plt2.platrec))
                 || (platecoliode_1(player1.hitbox.player, plt3.platrec))
                 || (platecoliode_1(player1.hitbox.player, plt4.platrec))
-                || (platecoliode_1(player1.hitbox.player, plt5.platrec)))
+                || (platecoliode_1(player1.hitbox.player, plt5.platrec))
+                || player1.hitbox.player.getPosition().y > window.getSize().y)
                 && player1.velocity.y >= 0)
             {
                 player1.velocity.y = 0;
                 player1.grounded = true;
-                player1.sprite.setTexture(Idle);
-                if (timer < 0) {
-                    playerindex++;
-                    playerindex = playerindex % 10;
-                    player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                    timer = delay;
+                if (player1.health > 0 && !player1.attackbool) {
+                    player1.sprite.setTexture(Idle);
+                    if (timer < 0) {
+                        playerindex++;
+                        playerindex = playerindex % 10;
+                        player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                        timer = delay;
+                    }
+                    else
+                        timer -= deltatime;
                 }
-                else
-                    timer -= deltatime;
             }
-            else if (!PAUSE) {
+            else if (!PAUSE && player1.hitbox.player.getPosition().y <= window.getSize().y) {
                 player1.grounded = false;
                 player1.velocity.y -= Gravity * deltatime;
             }
@@ -978,7 +1032,7 @@ void game(int win1, int win2, RenderWindow& window)
                     playerindex++;
                     playerindex = playerindex % 3;
                     player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                    timer = delay + 0.15;
+                    timer = delay + 0.15f;
                 }
                 else
                     timer -= deltatime;
@@ -998,7 +1052,7 @@ void game(int win1, int win2, RenderWindow& window)
             else
             {
                 //Attack & Movement
-                if (player1.attackbool == true) {
+                if (player1.attackbool == true ) {
                     player1.sprite.setTexture(Attacking);
 
                     //Attacking Animation
@@ -1018,7 +1072,7 @@ void game(int win1, int win2, RenderWindow& window)
                 else
                 {
                     //Moving right
-                    if (Keyboard::isKeyPressed(Keyboard::D) && player1.sprite.getPosition().x < (window.getSize().x - player1.sprite.getGlobalBounds().width / 100)) {
+                    if (Keyboard::isKeyPressed(Keyboard::D) && player1.sprite.getPosition().x < (window.getSize().x - player1.sprite.getGlobalBounds().width / 100) && !Round_Trans) {
                         player1.sprite.setScale(3, 3);
                         player1.hitbox.attack.setScale(1, 1);
                         if (player1.grounded == true) {
@@ -1036,7 +1090,7 @@ void game(int win1, int win2, RenderWindow& window)
                         player1.sprite.move(500 * deltatime, 0);
                     }
                     //Moving left
-                    if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0) {
+                    if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0 && !Round_Trans) {
                         player1.sprite.setScale(-3, 3);
                         player1.hitbox.attack.setScale(-1, 1);
                         if (player1.grounded == true) {
@@ -1071,20 +1125,13 @@ void game(int win1, int win2, RenderWindow& window)
             //Death if Fell
             if (player2.hitbox.player.getPosition().y > window.getSize().y)
             {
+                player2.health = 0;
                 arr_index = update_healthbar(player2.health);
                 if (arr_index != -1)
                 {
                     P2_HealthBar_Texture = hp_bar[arr_index];
                     p2_healthBar.setTexture(&P2_HealthBar_Texture);
                 }
-                if (player2.health == 0 && win2 < 2 && win1 < 2)
-                {
-                    cout << "p1 wins this round\n";
-                    win1++;
-                    game(win1, win2, window);
-                    player2.velocity.y = 0;
-                }
-                player2.health = 0;
             }
 
             //player 2 gravity and plates
@@ -1092,23 +1139,26 @@ void game(int win1, int win2, RenderWindow& window)
                 || (platecoliode_1(player2.hitbox.player, plt2.platrec))
                 || (platecoliode_1(player2.hitbox.player, plt3.platrec))
                 || (platecoliode_1(player2.hitbox.player, plt4.platrec))
-                || (platecoliode_1(player2.hitbox.player, plt5.platrec)))
+                || (platecoliode_1(player2.hitbox.player, plt5.platrec))
+                || player2.hitbox.player.getPosition().y > window.getSize().y)
                 && player2.velocity.y >= 0)
             {
                 player2.velocity.y = 0;
                 player2.grounded = true;
-                player2.sprite.setTexture(Idle2);
-                // animation breath player 2
-                if (timer2 < 0) {
-                    index2++;
-                    index2 = index2 % 10;
-                    player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
-                    timer2 = delay;
+                if (player2.health > 00 && !player2.attackbool) {
+                    player2.sprite.setTexture(Idle2);
+                    // animation breath player 2
+                    if (timer2 < 0) {
+                        index2++;
+                        index2 = index2 % 10;
+                        player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
+                        timer2 = delay;
+                    }
+                    else
+                        timer2 -= deltatime;
                 }
-                else
-                    timer2 -= deltatime;
             }
-            else
+            else if (!PAUSE && player2.hitbox.player.getPosition().y <= window.getSize().y)
             {
                 player2.grounded = false;
                 player2.velocity.y -= Gravity * deltatime;
@@ -1176,7 +1226,7 @@ void game(int win1, int win2, RenderWindow& window)
                 else
                 {
                     //Moving right
-                    if (Keyboard::isKeyPressed(Keyboard::Right) && player2.sprite.getPosition().x < (window.getSize().x - player2.sprite.getGlobalBounds().width / 100)) {
+                    if (Keyboard::isKeyPressed(Keyboard::Right) && player2.sprite.getPosition().x < (window.getSize().x - player2.sprite.getGlobalBounds().width / 100) && !Round_Trans) {
                         player2.sprite.setScale(3, 3);
                         player2.hitbox.attack.setScale(1, 1);
                         if (player2.grounded == true) {
@@ -1194,7 +1244,7 @@ void game(int win1, int win2, RenderWindow& window)
                         player2.sprite.move(500 * deltatime, 0);
                     }
                     //Moving left
-                    if (Keyboard::isKeyPressed(Keyboard::Left) && player2.sprite.getPosition().x > 0) {
+                    if (Keyboard::isKeyPressed(Keyboard::Left) && player2.sprite.getPosition().x > 0 && !Round_Trans) {
                         player2.sprite.setScale(-3, 3);
                         player2.hitbox.attack.setScale(-1, 1);
                         if (player2.grounded == true) {
