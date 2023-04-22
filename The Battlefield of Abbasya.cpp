@@ -25,7 +25,7 @@ int playerindex = 0;
 int Deathindex = 0;
 float timer = 0.0f;
 float delay = 0.15f;
-float roundelay = 10.0f;
+float roundelay = 5.0f;
 int attackindex = 0;
 float attacktimer = 0.0f;
 float attackdelay = 0.1f;
@@ -37,6 +37,8 @@ float attacktimer2 = 0.0f;
 float attackdelay2 = 0.1f;
 int pagenum = 0;
 int page = 0;
+int win1 = 0;
+int win2 = 0;
 bool PAUSE = false;
 bool Round_Trans = false;
 int volume_ = 90;
@@ -569,8 +571,11 @@ int PauseMenu(RenderWindow& pausewindow) {
             return 1;
         }
         else if (page == 3) {
+            Round_Trans = false;
+            win1 = 0;
+            win2 = 0;
             PAUSE = false;
-            return 0; 
+            return 0;
         }//main menu
         else if (page == 4) { pausewindow.close(); }//exit
 
@@ -611,11 +616,17 @@ int main()
 
     while (get_window.isOpen())
     {
-        cout << pagenum << "\n\n";
 
         MainMenu(get_window);
         if (pagenum == 0) { MainMenu(get_window); }
-        else if (pagenum == 1) { game(0, 0, get_window); }
+        else if (pagenum == 1) {
+            roundelay = 5.0f;
+            Round_Trans = false;
+            player1.health = 100;
+            player2.health = 100;
+            Deathindex = 0;
+            game(win1, win2, get_window); 
+        }
         else if (pagenum == 2) { Volume(get_window); }
         else if (pagenum == 3) { Credits(get_window); }
         else if (pagenum == 4) { get_window.close(); }
@@ -766,6 +777,7 @@ void game(int win1, int win2, RenderWindow& window)
     plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
     plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
     plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 1, 1);
+    plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 0, 0);
     plt4.plat_set(plateform_2, plt4.platrec, 1280, 50, 0, 650, 1, 1);
     if (win1 + win2 == 1) {
         plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 500, 1, 1);
@@ -827,7 +839,6 @@ void game(int win1, int win2, RenderWindow& window)
 
     while (window.isOpen()) {
         gameclock.restart();
-        //cout << roundelay << endl;
         if (!PAUSE) {
             while (window.pollEvent(e)) {
                 if (e.type == Event::Closed)
@@ -843,7 +854,6 @@ void game(int win1, int win2, RenderWindow& window)
                             PauseMenu(window);
                             setprop(player1.sprite, Idle, 3, 320, 480);
                             setprop(player2.sprite, Idle2, -3, 960, 480);
-                            //pagenum = 0;
                             return;
                         }
                     }
@@ -886,11 +896,13 @@ void game(int win1, int win2, RenderWindow& window)
                                 cout << "p2 wins this round\n";
                                 win2++;
                             }
-                            roundelay = 10.0;
+                            roundelay = 5.0f;
                             Round_Trans = false;
                             player1.health = 100;
                             player2.health = 100;
                             game(win1, win2, window);
+                            Round_Trans = false;
+                            return;
                         }
                     }
 
@@ -970,13 +982,6 @@ void game(int win1, int win2, RenderWindow& window)
                     P1_HealthBar_Texture = hp_bar[arr_index];
                     p1_healthBar.setTexture(&P1_HealthBar_Texture);
                 }
-                if (player1.health == 0 && win1 < 2 && win2 < 2)
-                {
-                    cout << "p2 wins this round\n";
-                    win2++;
-                    game(win1, win2, window);
-                    player1.velocity.y = 0;
-                }
             }
 
             //Gravity and Plates
@@ -984,12 +989,13 @@ void game(int win1, int win2, RenderWindow& window)
                 || (platecoliode_1(player1.hitbox.player, plt2.platrec))
                 || (platecoliode_1(player1.hitbox.player, plt3.platrec))
                 || (platecoliode_1(player1.hitbox.player, plt4.platrec))
-                || (platecoliode_1(player1.hitbox.player, plt5.platrec)))
+                || (platecoliode_1(player1.hitbox.player, plt5.platrec))
+                || player1.hitbox.player.getPosition().y > window.getSize().y)
                 && player1.velocity.y >= 0)
             {
                 player1.velocity.y = 0;
                 player1.grounded = true;
-                if (player1.health > 0) {
+                if (player1.health > 0 && !player1.attackbool) {
                     player1.sprite.setTexture(Idle);
                     if (timer < 0) {
                         playerindex++;
@@ -1001,7 +1007,7 @@ void game(int win1, int win2, RenderWindow& window)
                         timer -= deltatime;
                 }
             }
-            else if (!PAUSE) {
+            else if (!PAUSE && player1.hitbox.player.getPosition().y <= window.getSize().y) {
                 player1.grounded = false;
                 player1.velocity.y -= Gravity * deltatime;
             }
@@ -1119,20 +1125,13 @@ void game(int win1, int win2, RenderWindow& window)
             //Death if Fell
             if (player2.hitbox.player.getPosition().y > window.getSize().y)
             {
+                player2.health = 0;
                 arr_index = update_healthbar(player2.health);
                 if (arr_index != -1)
                 {
                     P2_HealthBar_Texture = hp_bar[arr_index];
                     p2_healthBar.setTexture(&P2_HealthBar_Texture);
                 }
-                if (player2.health == 0 && win2 < 2 && win1 < 2)
-                {
-                    cout << "p1 wins this round\n";
-                    win1++;
-                    game(win1, win2, window);
-                    player2.velocity.y = 0;
-                }
-                player2.health = 0;
             }
 
             //player 2 gravity and plates
@@ -1140,12 +1139,13 @@ void game(int win1, int win2, RenderWindow& window)
                 || (platecoliode_1(player2.hitbox.player, plt2.platrec))
                 || (platecoliode_1(player2.hitbox.player, plt3.platrec))
                 || (platecoliode_1(player2.hitbox.player, plt4.platrec))
-                || (platecoliode_1(player2.hitbox.player, plt5.platrec)))
+                || (platecoliode_1(player2.hitbox.player, plt5.platrec))
+                || player2.hitbox.player.getPosition().y > window.getSize().y)
                 && player2.velocity.y >= 0)
             {
                 player2.velocity.y = 0;
                 player2.grounded = true;
-                if (player2.health > 0) {
+                if (player2.health > 00 && !player2.attackbool) {
                     player2.sprite.setTexture(Idle2);
                     // animation breath player 2
                     if (timer2 < 0) {
@@ -1158,7 +1158,7 @@ void game(int win1, int win2, RenderWindow& window)
                         timer2 -= deltatime;
                 }
             }
-            else
+            else if (!PAUSE && player2.hitbox.player.getPosition().y <= window.getSize().y)
             {
                 player2.grounded = false;
                 player2.velocity.y -= Gravity * deltatime;
