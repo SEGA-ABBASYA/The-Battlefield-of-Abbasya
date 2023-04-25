@@ -118,12 +118,14 @@ int cursor_select(Text* arr,RectangleShape* Buttonarr, RenderWindow& mywindow)
 
             if (Mouse::isButtonPressed(Mouse::Left))
             {
+                Buttonarr[i - 1].setScale(1.f, 1.f);
                 arr[i].setFillColor(Color(187, 220, 244));
                 return i;
             }
         }
         else
         {
+            Buttonarr[i - 1].setScale(1.f, 1.f);
             arr[i].setFillColor(Color(187, 220, 244));
         }
     }
@@ -180,7 +182,7 @@ void MainMenu(RenderWindow& mainwindow)
 
     Text select[6];
 
-    RectangleShape buttons[3];
+    RectangleShape buttons[4];
 
     Sprite Border;
     Sprite Mainmenu_background;
@@ -189,7 +191,7 @@ void MainMenu(RenderWindow& mainwindow)
     Border.setPosition(mainwindow.getSize().x / 2,200);
     Border.setOrigin(151, 0);
 
-    for (int i = 0;i < 3;i++) {
+    for (int i = 0;i < 4;i++) {
         buttons[i].setTexture(&ButtonTexture);
         buttons[i].setSize(Vector2f(300.f, 81.f));    
         buttons[i].setOrigin(buttons[i].getSize() / 2.f);
@@ -197,28 +199,29 @@ void MainMenu(RenderWindow& mainwindow)
 
     buttons[0].setPosition(640, 319);
 
-    buttons[1].setPosition(640, 447);
+    buttons[1].setScale(0, 0);
 
-    buttons[2].setPosition(640, 575);
+    buttons[2].setPosition(640, 447);
+
+    buttons[3].setPosition(640, 575);
 
     select[5].setString("The Battlefield of\n     Abbasya");
-    select[5].setPosition(mainwindow.getSize().x/2 - 316, 100);
     select[5].setCharacterSize(96);
     select[5].setFillColor(Color(187, 220, 244));
     select[5].setFont(menufont);
     select[5].setOutlineColor(Color::Black);
     select[5].setOutlineThickness(2);
     select[5].setOrigin(select[5].getLocalBounds().left + select[5].getLocalBounds().width / 2, select[5].getLocalBounds().top + select[5].getLocalBounds().height / 2);
-    
+    select[5].setPosition(mainwindow.getSize().x / 2, 100);
 
     select[1].setString("Fight!");
     select[1].setPosition(buttons[0].getPosition().x, buttons[0].getPosition().y);
 
     select[3].setString("Credits");
-    select[3].setPosition(buttons[1].getPosition().x, buttons[1].getPosition().y);
+    select[3].setPosition(buttons[2].getPosition().x, buttons[2].getPosition().y);
 
     select[4].setString("Exit");
-    select[4].setPosition(buttons[2].getPosition().x, buttons[2].getPosition().y);
+    select[4].setPosition(buttons[3].getPosition().x, buttons[3].getPosition().y);
 
     for (int i = 0;i < 5;i++) {
         setTextprop(select[i]);
@@ -249,7 +252,7 @@ void MainMenu(RenderWindow& mainwindow)
         mainwindow.draw(Mainmenu_background);
 
         // Draw the buttons
-        for (int i = 0;i < 3;i++) {
+        for (int i = 0;i < 4;i++) {
             mainwindow.draw(buttons[i]);
         }
 
