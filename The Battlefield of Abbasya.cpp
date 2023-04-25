@@ -46,6 +46,8 @@ bool PAUSE = false;
 bool Round_Trans = false;
 int volume_ = 90;
 
+Font menufont;
+
 struct cursor {
     Texture texture;
     Sprite sprite;
@@ -103,28 +105,39 @@ struct plates {
     }
 }plt1, plt2, plt3, plt4, plt5, plt6;
 
-int cursor_select(Text* arr, RenderWindow& mywindow)
+int cursor_select(Text* arr,RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
     Mouse mouse;
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 5; i++)
     {
 
-        if (arr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
+        if (Buttonarr[i-1].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
         {
-            arr[i].setFillColor(Color::Red);
+            Buttonarr[i - 1].setScale(1.05f, 1.05f);
+            arr[i].setFillColor(Color::White);
 
             if (Mouse::isButtonPressed(Mouse::Left))
             {
-                arr[i].setFillColor(Color::White);
+                arr[i].setFillColor(Color(187, 220, 244));
                 return i;
             }
         }
         else
         {
-            arr[i].setFillColor(Color::White);
+            arr[i].setFillColor(Color(187, 220, 244));
         }
     }
     return 0;
+}
+
+void setTextprop(Text& text) {
+    menufont.loadFromFile("Canterbury.ttf");
+    text.setCharacterSize(48);
+    text.setFillColor(Color(187, 220, 244));
+    text.setFont(menufont);
+    text.setOutlineColor(Color::Black);
+    text.setOutlineThickness(1);
+    text.setOrigin(text.getLocalBounds().left + text.getLocalBounds().width / 2, text.getLocalBounds().top + text.getLocalBounds().height / 2);
 }
 
 int cursor_select_pause(Text* arr, RenderWindow& mywindow)
@@ -156,43 +169,63 @@ Sprite vol_arr[9];
 void MainMenu(RenderWindow& mainwindow)
 {
     // Create the menu items
-    Font menufont;
-    menufont.loadFromFile("ArcadeClassic.ttf");
+
+    Texture ButtonTexture;
+    Texture Menuback;
+    Texture BorderTex;
+
+    ButtonTexture.loadFromFile("Main Menu/silver_button.png");
+    BorderTex.loadFromFile("Main Menu/border.png");
+    Menuback.loadFromFile("Main Menu/background main menu.png");
 
     Text select[6];
-    select[0].setFont(menufont);
-    select[0].setString("The Battlefield of Abbasya");
-    select[0].setCharacterSize(60);
-    select[0].setFillColor(Color{ 255,204,0 });
-    select[0].setPosition(300, 100);
 
-    select[1].setFont(menufont);
-    select[1].setFillColor(Color{ 255,204,0 });
-    select[1].setString("FIGHT!");
-    select[1].setCharacterSize(60);
-    select[1].setPosition(300, 200);
+    RectangleShape buttons[3];
 
-    select[2].setFillColor(Color{ 255,204,0 });
-    select[2].setString("Options");
-    select[2].setCharacterSize(60);
-    select[2].setFont(menufont);
-    select[2].setPosition(300, 250);
+    Sprite Border;
+    Sprite Mainmenu_background;
+    Mainmenu_background.setTexture(Menuback);
+    Border.setTexture(BorderTex);
+    Border.setPosition(mainwindow.getSize().x / 2,200);
+    Border.setOrigin(151, 0);
 
-    select[3].setFont(menufont);
-    select[3].setFillColor(Color{ 255,204,0 });
+    for (int i = 0;i < 3;i++) {
+        buttons[i].setTexture(&ButtonTexture);
+        buttons[i].setSize(Vector2f(300.f, 81.f));    
+        buttons[i].setOrigin(buttons[i].getSize() / 2.f);
+    }
+
+    buttons[0].setPosition(640, 319);
+
+    buttons[1].setPosition(640, 447);
+
+    buttons[2].setPosition(640, 575);
+
+    select[5].setString("The Battlefield of\n     Abbasya");
+    select[5].setPosition(mainwindow.getSize().x/2 - 316, 100);
+    select[5].setCharacterSize(96);
+    select[5].setFillColor(Color(187, 220, 244));
+    select[5].setFont(menufont);
+    select[5].setOutlineColor(Color::Black);
+    select[5].setOutlineThickness(2);
+    select[5].setOrigin(select[5].getLocalBounds().left + select[5].getLocalBounds().width / 2, select[5].getLocalBounds().top + select[5].getLocalBounds().height / 2);
+    
+
+    select[1].setString("Fight!");
+    select[1].setPosition(buttons[0].getPosition().x, buttons[0].getPosition().y);
+
     select[3].setString("Credits");
-    select[3].setCharacterSize(60);
-    select[3].setPosition(300, 600);
+    select[3].setPosition(buttons[1].getPosition().x, buttons[1].getPosition().y);
 
-    select[4].setFont(menufont);
-    select[4].setFillColor(Color{ 255,204,0 });
     select[4].setString("Exit");
-    select[4].setCharacterSize(60);
-    select[4].setPosition(300, 350);
+    select[4].setPosition(buttons[2].getPosition().x, buttons[2].getPosition().y);
+
+    for (int i = 0;i < 5;i++) {
+        setTextprop(select[i]);
+    }
 
     while (mainwindow.isOpen())
     {
-
         // Handle events
         sf::Event event;
         while (mainwindow.pollEvent(event))
@@ -205,15 +238,26 @@ void MainMenu(RenderWindow& mainwindow)
         }
 
         // select which window
-        pagenum = cursor_select(select, mainwindow);
+        pagenum = cursor_select(select,buttons, mainwindow);
 
         if (pagenum != 0) { return; }
 
         // Clear the window
         mainwindow.clear();
 
+        //Draw Background Main Menu
+        mainwindow.draw(Mainmenu_background);
+
+        // Draw the buttons
+        for (int i = 0;i < 3;i++) {
+            mainwindow.draw(buttons[i]);
+        }
+
+        // Draw Border
+        mainwindow.draw(Border);
+
         // Draw the menu items
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
             mainwindow.draw(select[i]);
         }
@@ -304,7 +348,7 @@ void Credits(RenderWindow& creditswindow) {
             }
         }
         creditswindow.clear();
-        pagenum = cursor_select(select, creditswindow);
+        //pagenum = cursor_select(select, creditswindow);
 
 
         for (int i = 0; i < 8; i++) {
