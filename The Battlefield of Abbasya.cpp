@@ -47,6 +47,8 @@ bool Round_Trans = false;
 int volume_ = 90;
 
 Font menufont;
+Texture optionButton;
+Texture optionButton2;
 
 struct cursor {
     Texture texture;
@@ -105,27 +107,40 @@ struct plates {
     }
 }plt1, plt2, plt3, plt4, plt5, plt6;
 
-int cursor_select(Text* arr,RectangleShape* Buttonarr, RenderWindow& mywindow)
+int cursor_select(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
     Mouse mouse;
-    for (int i = 0; i < 5; i++)
+    for (int i = 1; i < 5; i++)
     {
 
-        if (Buttonarr[i-1].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
+        if (Buttonarr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
         {
-            Buttonarr[i - 1].setScale(1.05f, 1.05f);
+            if (i == 4)
+            {
+                Buttonarr[i].setScale(1.6f, 1.6f);
+                Buttonarr[i].setTexture(&optionButton);
+            }
+
+            else
+                Buttonarr[i].setScale(1.05f, 1.05f);
             arr[i].setFillColor(Color::White);
 
             if (Mouse::isButtonPressed(Mouse::Left))
             {
-                Buttonarr[i - 1].setScale(1.f, 1.f);
+                Buttonarr[i].setScale(1.f, 1.f);
                 arr[i].setFillColor(Color(187, 220, 244));
                 return i;
             }
         }
         else
         {
-            Buttonarr[i - 1].setScale(1.f, 1.f);
+            if (i == 4)
+            {
+                Buttonarr[i].setScale(1.5f, 1.5f);
+                Buttonarr[i].setTexture(&optionButton2);
+            }
+            else
+                Buttonarr[i].setScale(1.f, 1.f);
             arr[i].setFillColor(Color(187, 220, 244));
         }
     }
@@ -176,54 +191,61 @@ void MainMenu(RenderWindow& mainwindow)
     Texture Menuback;
     Texture BorderTex;
 
+
     ButtonTexture.loadFromFile("Main Menu/silver_button.png");
     BorderTex.loadFromFile("Main Menu/border.png");
     Menuback.loadFromFile("Main Menu/background main menu.png");
+    optionButton.loadFromFile("Main Menu/option1.png");
+    optionButton2.loadFromFile("Main Menu/option2.png");
 
     Text select[6];
 
-    RectangleShape buttons[4];
+    RectangleShape buttons[5];
 
     Sprite Border;
     Sprite Mainmenu_background;
     Mainmenu_background.setTexture(Menuback);
     Border.setTexture(BorderTex);
-    Border.setPosition(mainwindow.getSize().x / 2,200);
+    Border.setPosition(mainwindow.getSize().x / 2, 200);
     Border.setOrigin(151, 0);
 
-    for (int i = 0;i < 4;i++) {
+    for (int i = 1; i < 4; i++) {
         buttons[i].setTexture(&ButtonTexture);
-        buttons[i].setSize(Vector2f(300.f, 81.f));    
+        buttons[i].setSize(Vector2f(300.f, 81.f));
         buttons[i].setOrigin(buttons[i].getSize() / 2.f);
     }
 
-    buttons[0].setPosition(640, 319);
+    buttons[4].setTexture(&optionButton2);
+    buttons[4].setSize(Vector2f(50.f, 50.f));
+    buttons[4].setOrigin(buttons[4].getSize() / 2.f);
+    buttons[4].setPosition(mainwindow.getSize().x - 50.f, 50);
 
-    buttons[1].setScale(0, 0);
+
+    buttons[1].setPosition(640, 319);
 
     buttons[2].setPosition(640, 447);
 
     buttons[3].setPosition(640, 575);
 
-    select[5].setString("The Battlefield of\n     Abbasya");
-    select[5].setCharacterSize(96);
-    select[5].setFillColor(Color(187, 220, 244));
-    select[5].setFont(menufont);
-    select[5].setOutlineColor(Color::Black);
-    select[5].setOutlineThickness(2);
-    select[5].setOrigin(select[5].getLocalBounds().left + select[5].getLocalBounds().width / 2, select[5].getLocalBounds().top + select[5].getLocalBounds().height / 2);
-    select[5].setPosition(mainwindow.getSize().x / 2, 100);
+    select[0].setCharacterSize(96);
+    select[0].setString("The Battlefield of\n     Abbasya");
+    select[0].setFillColor(Color(187, 220, 244));
+    select[0].setFont(menufont);
+    select[0].setOutlineColor(Color::Black);
+    select[0].setOutlineThickness(2);
+    // select[5].setOrigin(select[5].getLocalBounds().left + select[5].getLocalBounds().width / 2, select[5].getLocalBounds().top + select[5].getLocalBounds().height / 2);
+    select[0].setPosition(mainwindow.getSize().x / 4, 10);
 
     select[1].setString("Fight!");
-    select[1].setPosition(buttons[0].getPosition().x, buttons[0].getPosition().y);
+    select[1].setPosition(buttons[1].getPosition().x, buttons[1].getPosition().y);
 
-    select[3].setString("Credits");
-    select[3].setPosition(buttons[2].getPosition().x, buttons[2].getPosition().y);
+    select[2].setString("Credits");
+    select[2].setPosition(buttons[2].getPosition().x, buttons[2].getPosition().y);
 
-    select[4].setString("Exit");
-    select[4].setPosition(buttons[3].getPosition().x, buttons[3].getPosition().y);
+    select[3].setString("Exit");
+    select[3].setPosition(buttons[3].getPosition().x, buttons[3].getPosition().y);
 
-    for (int i = 0;i < 5;i++) {
+    for (int i = 1;i < 5;i++) {
         setTextprop(select[i]);
     }
 
@@ -241,7 +263,7 @@ void MainMenu(RenderWindow& mainwindow)
         }
 
         // select which window
-        pagenum = cursor_select(select,buttons, mainwindow);
+        pagenum = cursor_select(select, buttons, mainwindow);
 
         if (pagenum != 0) { return; }
 
@@ -252,7 +274,7 @@ void MainMenu(RenderWindow& mainwindow)
         mainwindow.draw(Mainmenu_background);
 
         // Draw the buttons
-        for (int i = 0;i < 4;i++) {
+        for (int i = 1;i < 5;i++) {
             mainwindow.draw(buttons[i]);
         }
 
@@ -409,7 +431,7 @@ void Volume(RenderWindow& volumewindow)
     vol30.loadFromFile("Volume Bar/XP Bar Animated Yellow 6.png");
     vol20.loadFromFile("Volume Bar/XP Bar Animated Yellow 7.png");
     vol10.loadFromFile("Volume Bar/XP Bar Animated Yellow 8.png");
-     vol0.loadFromFile("Volume Bar/XP Bar Animated Yellow 9.png");
+    vol0.loadFromFile("Volume Bar/XP Bar Animated Yellow 9.png");
 
     vol_arr[8].setTexture(vol80);
     vol_arr[7].setTexture(vol70);
@@ -674,15 +696,15 @@ int main()
             roundelay = 5.0f;
             Round_Trans = false;
             player1.health = 100;
-            player2.health = 100;                            
+            player2.health = 100;
             player1.sprite.setColor(Color::White);
             player2.sprite.setColor(Color::White);
             Deathindex = 0;
-            game(win1, win2, get_window); 
+            game(win1, win2, get_window);
         }
-        else if (pagenum == 2) { Volume(get_window); }
-        else if (pagenum == 3) { Credits(get_window); }
-        else if (pagenum == 4) { get_window.close(); }
+        else if (pagenum == 4) { Volume(get_window); }
+        else if (pagenum == 2) { Credits(get_window); }
+        else if (pagenum == 3) { get_window.close(); }
     }
     return 0;
 }
@@ -754,7 +776,7 @@ bool intersection(RectangleShape& x, RectangleShape& y) {
         return false;
 }
 
-bool platecoliode_1(Sprite& player , RectangleShape& player_x , RectangleShape& plat_y1) {
+bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& plat_y1) {
     if (player_x.getGlobalBounds().intersects(plat_y1.getGlobalBounds()) &&
         player_x.getGlobalBounds().top + player_x.getGlobalBounds().height - 15 < plat_y1.getGlobalBounds().top)
     {
@@ -1038,7 +1060,7 @@ void game(int win1, int win2, RenderWindow& window)
             player1.hitbox.attack.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
 
             //Return deafult color
-            if(!player1.hitbool && player1.health > 0)
+            if (!player1.hitbool && player1.health > 0)
                 player1.sprite.setColor(Color::White);
 
             //Death if Fell
@@ -1054,7 +1076,7 @@ void game(int win1, int win2, RenderWindow& window)
             }
 
             //Gravity and Plates
-            if  (( (platecoliode_1(player1.sprite, player1.hitbox.player, plt1.platrec))
+            if (((platecoliode_1(player1.sprite, player1.hitbox.player, plt1.platrec))
                 || (platecoliode_1(player1.sprite, player1.hitbox.player, plt2.platrec))
                 || (platecoliode_1(player1.sprite, player1.hitbox.player, plt3.platrec))
                 || (platecoliode_1(player1.sprite, player1.hitbox.player, plt4.platrec))
@@ -1087,7 +1109,7 @@ void game(int win1, int win2, RenderWindow& window)
                 player1.velocity.y -= Gravity * deltatime;
             }
 
-            
+
 
             //Jumping animation
             if (player1.velocity.y < 0) {
@@ -1132,7 +1154,7 @@ void game(int win1, int win2, RenderWindow& window)
             else
             {
                 //Attack & Movement
-                if (player1.attackbool == true ) {
+                if (player1.attackbool == true) {
                     player1.sprite.setTexture(Attacking);
 
                     //Attacking Animation
@@ -1217,9 +1239,9 @@ void game(int win1, int win2, RenderWindow& window)
                     p2_healthBar.setTexture(&P2_HealthBar_Texture);
                 }
             }
-            
+
             //player 2 gravity and plates
-            if  (( (platecoliode_1(player2.sprite, player2.hitbox.player, plt1.platrec))
+            if (((platecoliode_1(player2.sprite, player2.hitbox.player, plt1.platrec))
                 || (platecoliode_1(player2.sprite, player2.hitbox.player, plt2.platrec))
                 || (platecoliode_1(player2.sprite, player2.hitbox.player, plt3.platrec))
                 || (platecoliode_1(player2.sprite, player2.hitbox.player, plt4.platrec))
