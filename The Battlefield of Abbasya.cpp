@@ -218,7 +218,7 @@ void MainMenu(RenderWindow& mainwindow)
     buttons[4].setTexture(&optionButton2);
     buttons[4].setSize(Vector2f(50.f, 50.f));
     buttons[4].setOrigin(buttons[4].getSize() / 2.f);
-    buttons[4].setPosition(mainwindow.getSize().x - 50.f, 50);
+    buttons[4].setPosition(mainwindow.getSize().x - 60.f, 650);
 
 
     buttons[1].setPosition(640, 319);
@@ -900,8 +900,8 @@ void game(int win1, int win2, RenderWindow& window)
     }
 
     //Hitboxes initial prop
-    player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 140.f, 40.f, Color::Yellow);
-    player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 140.f, 40.f, Color::Yellow);
+    player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
+    player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Yellow);
     player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 30.f, 115.f, Color::Blue);
     player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 30.f, 115.f, Color::Blue);
     player1.hitbox.attack.setOrigin(0, 0);
