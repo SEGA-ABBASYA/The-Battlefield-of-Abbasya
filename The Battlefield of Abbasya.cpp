@@ -45,6 +45,7 @@ int win2 = 0;
 bool PAUSE = false;
 bool Round_Trans = false;
 int volume_ = 90;
+bool name__ = false;
 
 struct cursor {
     Texture texture;
@@ -595,6 +596,113 @@ int PauseMenu(RenderWindow& pausewindow) {
 }
 
 
+void name(struct player, RenderWindow& namewindow) {
+
+    string name1,name2;
+
+    Font font;
+    font.loadFromFile("ArcadeClassic.ttf");
+    Text text1("", font);
+    Text text2("", font);
+    text2.setPosition(0, 200);
+    bool name_ = false;
+    Text text3;
+    text3.setFont(font);
+    text3.setFillColor(Color::White);
+    text3.setString("Start");
+    text3.setCharacterSize(60);
+    text3.setPosition(100, 620);
+
+    RectangleShape start;
+    start.setSize(Vector2f(300.f, 100.f));
+    start.setPosition(110, 620);
+    start.setFillColor(Color::Transparent);
+
+
+    Clock clock;
+
+    while (namewindow.isOpen())
+    {
+        gameclock.restart();
+        Event event;
+        while (namewindow.pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+                namewindow.close();
+            if (!name_) {
+                if (event.type == Event::TextEntered) {
+                    if (isprint(event.text.unicode))
+                        name1 += event.text.unicode;
+                }
+                else if (event.type == Event::KeyPressed) {
+                    if (event.key.code == Keyboard::BackSpace) {
+                        if (!name1.empty())
+                            name1.pop_back();
+                    }
+                    if (event.key.code == Keyboard::Down) {
+                        name_ = true;
+                    }
+
+                }
+            }
+            if (name_) {
+                if (event.type == Event::TextEntered) {
+                    if (isprint(event.text.unicode))
+                        name2 += event.text.unicode;
+                }
+                else if (event.type == Event::KeyPressed) {
+                    if (event.key.code == Keyboard::BackSpace) {
+                        if (!name2.empty())
+                            name2.pop_back();
+                    }
+                    if (event.key.code == Keyboard::Up) {
+                        name_ = false;
+                    }
+                    if (event.key.code == Keyboard::Return) {
+                        name__ = false;
+                        return;
+                    }
+                }
+
+                Mouse mouse;
+                if (start.getGlobalBounds().contains(mouse.getPosition(namewindow).x, mouse.getPosition(namewindow).y))
+                {
+                    if (Mouse::isButtonPressed(Mouse::Left))
+                    {
+                        name__ = false;
+                        return;
+                    }
+                }
+                
+            }
+        }
+
+        static Time text_effect_time;
+        static bool show_cursor;
+
+        text_effect_time += clock.restart();
+
+        if (text_effect_time >= seconds(0.5f))
+        {
+            show_cursor = !show_cursor;
+            text_effect_time = Time::Zero;
+        }
+        if(!name_)
+        text1.setString(name1 + (show_cursor ? '_' : ' '));
+        if(name_)
+        text2.setString(name2 + (show_cursor ? '_' : ' '));
+        cout << player1.name << endl << endl<<player2.name << endl;
+        player1.name = name1;
+        player2.name = name2;
+        namewindow.clear();
+        namewindow.draw(text1);
+        namewindow.draw(text2);
+        namewindow.draw(text3);
+        cur.draw(namewindow);
+        namewindow.display();
+    }
+}
+
 
 //function for defining health bar textures
 void init_health_bar();
@@ -624,6 +732,7 @@ int main()
         MainMenu(get_window);
         if (pagenum == 0) { MainMenu(get_window); }
         else if (pagenum == 1) {
+            name__ = true;
             roundelay = 5.0f;
             Round_Trans = false;
             player1.health = 100;
@@ -845,6 +954,10 @@ void game(int win1, int win2, RenderWindow& window)
 
     while (window.isOpen()) {
         gameclock.restart();
+        if (name__) {
+            name(player1, window);
+        }
+       
         if (!PAUSE) {
             while (window.pollEvent(e)) {
                 if (e.type == Event::Closed)
@@ -863,6 +976,7 @@ void game(int win1, int win2, RenderWindow& window)
                             return;
                         }
                     }
+                   
 
                     //player 1 Jumping button
                     if (e.key.code == Keyboard::W && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans) {
@@ -991,7 +1105,7 @@ void game(int win1, int win2, RenderWindow& window)
             player1.hitbox.attack.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
 
             //Return deafult color
-            if(!player1.hitbool && player1.health > 0)
+            if (!player1.hitbool && player1.health > 0)
                 player1.sprite.setColor(Color::White);
 
             //Death if Fell
@@ -1007,7 +1121,7 @@ void game(int win1, int win2, RenderWindow& window)
             }
 
             //Gravity and Plates
-            if  (( (platecoliode_1(player1.sprite, player1.hitbox.player, plt1.platrec))
+            if (((platecoliode_1(player1.sprite, player1.hitbox.player, plt1.platrec))
                 || (platecoliode_1(player1.sprite, player1.hitbox.player, plt2.platrec))
                 || (platecoliode_1(player1.sprite, player1.hitbox.player, plt3.platrec))
                 || (platecoliode_1(player1.sprite, player1.hitbox.player, plt4.platrec))
@@ -1040,7 +1154,7 @@ void game(int win1, int win2, RenderWindow& window)
                 player1.velocity.y -= Gravity * deltatime;
             }
 
-            
+
 
             //Jumping animation
             if (player1.velocity.y < 0) {
@@ -1085,7 +1199,7 @@ void game(int win1, int win2, RenderWindow& window)
             else
             {
                 //Attack & Movement
-                if (player1.attackbool == true ) {
+                if (player1.attackbool == true) {
                     player1.sprite.setTexture(Attacking);
 
                     //Attacking Animation
@@ -1170,9 +1284,9 @@ void game(int win1, int win2, RenderWindow& window)
                     p2_healthBar.setTexture(&P2_HealthBar_Texture);
                 }
             }
-            
+
             //player 2 gravity and plates
-            if  (( (platecoliode_1(player2.sprite, player2.hitbox.player, plt1.platrec))
+            if (((platecoliode_1(player2.sprite, player2.hitbox.player, plt1.platrec))
                 || (platecoliode_1(player2.sprite, player2.hitbox.player, plt2.platrec))
                 || (platecoliode_1(player2.sprite, player2.hitbox.player, plt3.platrec))
                 || (platecoliode_1(player2.sprite, player2.hitbox.player, plt4.platrec))
