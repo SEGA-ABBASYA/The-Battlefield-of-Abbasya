@@ -219,7 +219,7 @@ void MainMenu(RenderWindow& mainwindow)
     buttons[4].setSize(Vector2f(50.f, 50.f));
     buttons[4].setOrigin(buttons[4].getSize() / 2.f);
     buttons[4].setPosition(mainwindow.getSize().x - 60.f, 650);
-
+    
 
     buttons[1].setPosition(640, 319);
 
@@ -778,7 +778,7 @@ bool intersection(RectangleShape& x, RectangleShape& y) {
 
 bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& plat_y1) {
     if (player_x.getGlobalBounds().intersects(plat_y1.getGlobalBounds()) &&
-        player_x.getGlobalBounds().top + player_x.getGlobalBounds().height - 15 < plat_y1.getGlobalBounds().top)
+        player_x.getGlobalBounds().top + player_x.getGlobalBounds().height - 20 < plat_y1.getGlobalBounds().top)
     {
         //cout << plat_y1.getGlobalBounds().top << endl;
         player.setPosition(player.getPosition().x, plat_y1.getGlobalBounds().top - player.getGlobalBounds().height / 2);
