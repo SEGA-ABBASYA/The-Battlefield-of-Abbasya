@@ -1,12 +1,17 @@
-﻿#include <iostream>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/window.hpp>
 #include <vector>
 #include <time.h>
+#include "ResourcePath.hpp"
+
 using namespace sf;
 using namespace std;
+string path = "/Users/yoyo/#COLLEGE/The-Battlefield-of-Abbasya/";
+//string path = resourcePath();
+//string path = "";
 
 // 0 -> MainMenu
 // 1 -> Choose Your Hero 
@@ -56,7 +61,7 @@ struct cursor {
 
     cursor() {
         // Load the cursor texture
-        texture.loadFromFile("cursor.png");
+        texture.loadFromFile(path + "cursor.png");
 
         // Create the cursor sprite
         sprite.setTexture(texture);
@@ -148,7 +153,7 @@ int cursor_select(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 }
 
 void setTextprop(Text& text) {
-    menufont.loadFromFile("Canterbury.ttf");
+    menufont.loadFromFile(path + "Canterbury.ttf");
     text.setCharacterSize(48);
     text.setFillColor(Color(187, 220, 244));
     text.setFont(menufont);
@@ -192,11 +197,11 @@ void MainMenu(RenderWindow& mainwindow)
     Texture BorderTex;
 
 
-    ButtonTexture.loadFromFile("Main Menu/silver_button.png");
-    BorderTex.loadFromFile("Main Menu/border.png");
-    Menuback.loadFromFile("Main Menu/background main menu.png");
-    optionButton.loadFromFile("Main Menu/option1.png");
-    optionButton2.loadFromFile("Main Menu/option2.png");
+    ButtonTexture.loadFromFile(path + "Main Menu/silver_button.png");
+    BorderTex.loadFromFile(path + "Main Menu/border.png");
+    Menuback.loadFromFile(path + "Main Menu/background main menu.png");
+    optionButton.loadFromFile(path + "Main Menu/option1.png");
+    optionButton2.loadFromFile(path + "Main Menu/option2.png");
 
     Text select[6];
 
@@ -298,7 +303,7 @@ void MainMenu(RenderWindow& mainwindow)
 
 void Credits(RenderWindow& creditswindow) {
     Font Credits;
-    Credits.loadFromFile("ArcadeClassic.ttf");
+    Credits.loadFromFile(path + "ArcadeClassic.ttf");
 
     Text select[8];
     select[0].setFont(Credits);
@@ -392,7 +397,7 @@ void game(int win1, int win2, RenderWindow& window);
 void Volume(RenderWindow& volumewindow)
 {
     Font volumefont;
-    volumefont.loadFromFile("ArcadeClassic.ttf");
+    volumefont.loadFromFile(path + "ArcadeClassic.ttf");
     Text volume[3];
     volume[0].setFont(volumefont);
     volume[0].setString("The Battlefield of Abbasya");
@@ -423,15 +428,15 @@ void Volume(RenderWindow& volumewindow)
     Texture vol10;
     Texture vol0;
 
-    vol80.loadFromFile("Volume Bar/XP Bar Animated Yellow 1.png");
-    vol70.loadFromFile("Volume Bar/XP Bar Animated Yellow 2.png");
-    vol60.loadFromFile("Volume Bar/XP Bar Animated Yellow 3.png");
-    vol50.loadFromFile("Volume Bar/XP Bar Animated Yellow 4.png");
-    vol40.loadFromFile("Volume Bar/XP Bar Animated Yellow 5.png");
-    vol30.loadFromFile("Volume Bar/XP Bar Animated Yellow 6.png");
-    vol20.loadFromFile("Volume Bar/XP Bar Animated Yellow 7.png");
-    vol10.loadFromFile("Volume Bar/XP Bar Animated Yellow 8.png");
-    vol0.loadFromFile("Volume Bar/XP Bar Animated Yellow 9.png");
+    vol80.loadFromFile(path + "Volume Bar/XP Bar Animated Yellow 1.png");
+    vol70.loadFromFile(path + "Volume Bar/XP Bar Animated Yellow 2.png");
+    vol60.loadFromFile(path + "Volume Bar/XP Bar Animated Yellow 3.png");
+    vol50.loadFromFile(path + "Volume Bar/XP Bar Animated Yellow 4.png");
+    vol40.loadFromFile(path + "Volume Bar/XP Bar Animated Yellow 5.png");
+    vol30.loadFromFile(path + "Volume Bar/XP Bar Animated Yellow 6.png");
+    vol20.loadFromFile(path + "Volume Bar/XP Bar Animated Yellow 7.png");
+    vol10.loadFromFile(path + "Volume Bar/XP Bar Animated Yellow 8.png");
+    vol0.loadFromFile(path + "Volume Bar/XP Bar Animated Yellow 9.png");
 
     vol_arr[8].setTexture(vol80);
     vol_arr[7].setTexture(vol70);
@@ -510,7 +515,7 @@ void Volume(RenderWindow& volumewindow)
 void Controlls(RenderWindow& controllswindow)
 {
     Font controllsfont;
-    controllsfont.loadFromFile("ArcadeClassic.ttf");
+    controllsfont.loadFromFile(path + "ArcadeClassic.ttf");
     Text controlls[9];
     controlls[0].setFont(controllsfont);
     controlls[0].setString("The Battlefield of Abbasya");
@@ -545,7 +550,7 @@ void Controlls(RenderWindow& controllswindow)
 void Options(RenderWindow& optionwindow)
 {
     Font optionfont;
-    optionfont.loadFromFile("ArcadeClassic.ttf");
+    optionfont.loadFromFile(path + "ArcadeClassic.ttf");
     Text option;
     option.setFont(optionfont);
     option.setString("The Battlefield of Abbasya");
@@ -588,7 +593,7 @@ void Options(RenderWindow& optionwindow)
 
 int PauseMenu(RenderWindow& pausewindow) {
     Font pausefont;
-    pausefont.loadFromFile("ArcadeClassic.ttf");
+    pausefont.loadFromFile(path + "ArcadeClassic.ttf");
     Text Pause[5];
     Pause[0].setFont(pausefont);
     Pause[0].setString("The Battlefield of Abbasya");
@@ -720,12 +725,12 @@ void init_health_bar()
     Texture Hp20;
     Texture Hp00;
 
-    Hp100.loadFromFile("health_bar/health100.png");
-    Hp80.loadFromFile("health_bar/health80.png");
-    Hp60.loadFromFile("health_bar/health60.png");
-    Hp40.loadFromFile("health_bar/health40.png");
-    Hp20.loadFromFile("health_bar/health20.png");
-    Hp00.loadFromFile("health_bar/health00.png");
+    Hp100.loadFromFile(path + "health_bar/health100.png");
+    Hp80.loadFromFile(path + "health_bar/health80.png");
+    Hp60.loadFromFile(path + "health_bar/health60.png");
+    Hp40.loadFromFile(path + "health_bar/health40.png");
+    Hp20.loadFromFile(path + "health_bar/health20.png");
+    Hp00.loadFromFile(path + "health_bar/health00.png");
 
     hp_bar[0] = Hp00;
     hp_bar[1] = Hp20;
@@ -821,28 +826,28 @@ void game(int win1, int win2, RenderWindow& window)
 
     // call init_health_bar once in the beginning of the game
     init_health_bar();
-    ourFont.loadFromFile("ArcadeClassic.ttf");
-    Back[0].loadFromFile("Background.jpg");
-    Back[1].loadFromFile("background2.jpg");
-    Idle.loadFromFile("Player 1/_Idle.png");
-    Idle2.loadFromFile("Player 2/Idle2.png");
-    Running2.loadFromFile("Player 2/Run2.png");
-    Running.loadFromFile("Player 1/Running Animation.png");
-    Jumping.loadFromFile("Player 1/_Jump.png");
-    Jumping2.loadFromFile("Player 2/Jump2.png");
-    Fall.loadFromFile("Player 1/_Fall.png");
-    Fall2.loadFromFile("Player 2/_Fall2.png");
-    Hit.loadFromFile("Player 1/_Hit.png");
-    Hit2.loadFromFile("Player 2/Hit2.png");
-    Floor.loadFromFile("Bricks_01.png");
+    ourFont.loadFromFile(path + "ArcadeClassic.ttf");
+    Back[0].loadFromFile(path + "Background.jpg");
+    Back[1].loadFromFile(path + "background2.jpg");
+    Idle.loadFromFile(path + "Player 1/_Idle.png");
+    Idle2.loadFromFile(path + "Player 2/Idle2.png");
+    Running2.loadFromFile(path + "Player 2/Run2.png");
+    Running.loadFromFile(path + "Player 1/Running Animation.png");
+    Jumping.loadFromFile(path + "Player 1/_Jump.png");
+    Jumping2.loadFromFile(path + "Player 2/Jump2.png");
+    Fall.loadFromFile(path + "Player 1/_Fall.png");
+    Fall2.loadFromFile(path + "Player 2/_Fall2.png");
+    Hit.loadFromFile(path + "Player 1/_Hit.png");
+    Hit2.loadFromFile(path + "Player 2/Hit2.png");
+    Floor.loadFromFile(path + "Bricks_01.png");
     Floor.setRepeated(true);
-    Attacking.loadFromFile("Player 1/_Attack.png");
-    Attacking2.loadFromFile("Player 2/Attack2.png");
-    Death.loadFromFile("Player 1/_Death.png");
-    Death2.loadFromFile("Player 2/_Death.png");
-    plateform_1.loadFromFile("Plates/firstplate.png");
-    plateform_2.loadFromFile("Plates/secondplate.png");
-    plateform_3.loadFromFile("Plates/thirdplate.png");
+    Attacking.loadFromFile(path + "Player 1/_Attack.png");
+    Attacking2.loadFromFile(path + "Player 2/Attack2.png");
+    Death.loadFromFile(path + "Player 1/_Death.png");
+    Death2.loadFromFile(path + "Player 2/_Death.png");
+    plateform_1.loadFromFile(path + "Plates/firstplate.png");
+    plateform_2.loadFromFile(path + "Plates/secondplate.png");
+    plateform_3.loadFromFile(path + "Plates/thirdplate.png");
 
     Event e;
 
@@ -1049,7 +1054,7 @@ void game(int win1, int win2, RenderWindow& window)
                         timer2 -= deltatime;
                 }
             }
-
+            
             //PLAYER 1
 
             //Gravity movement

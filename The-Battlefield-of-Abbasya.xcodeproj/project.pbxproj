@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE3083A229FA62590002506B /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE3083A129FA62590002506B /* ResourcePath.mm */; };
 		BE48784229F9A72C00120917 /* ThreadLocalPtr.inl in Resources */ = {isa = PBXBuildFile; fileRef = BE48756129F9A72800120917 /* ThreadLocalPtr.inl */; };
 		BE48784329F9A72C00120917 /* Utf.inl in Resources */ = {isa = PBXBuildFile; fileRef = BE48756729F9A72800120917 /* Utf.inl */; };
 		BE48784429F9A72C00120917 /* Vector2.inl in Resources */ = {isa = PBXBuildFile; fileRef = BE48756A29F9A72800120917 /* Vector2.inl */; };
@@ -60,66 +61,12 @@
 		BE48787429F9A72C00120917 /* sfml-audio-d.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = BE4875EA29F9A72900120917 /* sfml-audio-d.lib */; };
 		BE48787529F9A72C00120917 /* Background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BE4875EB29F9A72900120917 /* Background.jpg */; };
 		BE48787629F9A72C00120917 /* ArcadeClassic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE4875EC29F9A72900120917 /* ArcadeClassic.ttf */; };
-		BE48787729F9A72C00120917 /* _Death.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4875EE29F9A72900120917 /* _Death.png */; };
 		BE48787829F9A72C00120917 /* Hit2.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4875EF29F9A72900120917 /* Hit2.png */; };
 		BE48787929F9A72C00120917 /* _Fall2.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4875F029F9A72900120917 /* _Fall2.png */; };
 		BE48787A29F9A72C00120917 /* Idle2.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4875F129F9A72900120917 /* Idle2.png */; };
 		BE48787B29F9A72C00120917 /* Attack2.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4875F229F9A72900120917 /* Attack2.png */; };
 		BE48787C29F9A72C00120917 /* Jump2.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4875F329F9A72900120917 /* Jump2.png */; };
 		BE48787D29F9A72C00120917 /* Run2.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4875F429F9A72900120917 /* Run2.png */; };
-		BE48787E29F9A72C00120917 /* Ftp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4875F729F9A72900120917 /* Ftp.cpp */; };
-		BE48787F29F9A72C00120917 /* ftp.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE4875F829F9A72900120917 /* ftp.exe */; };
-		BE48788029F9A72C00120917 /* sound-capture.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE4875FA29F9A72900120917 /* sound-capture.exe */; };
-		BE48788129F9A72C00120917 /* SoundCapture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4875FB29F9A72900120917 /* SoundCapture.cpp */; };
-		BE48788229F9A72C00120917 /* TCP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4875FD29F9A72900120917 /* TCP.cpp */; };
-		BE48788329F9A72C00120917 /* UDP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4875FE29F9A72900120917 /* UDP.cpp */; };
-		BE48788429F9A72C00120917 /* Sockets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4875FF29F9A72900120917 /* Sockets.cpp */; };
-		BE48788529F9A72C00120917 /* sockets.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE48760029F9A72900120917 /* sockets.exe */; };
-		BE48788629F9A72C00120917 /* pong.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE48760229F9A72900120917 /* pong.exe */; };
-		BE48788729F9A72C00120917 /* sansation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE48760429F9A72900120917 /* sansation.ttf */; };
-		BE48788829F9A72C00120917 /* ball.wav in Resources */ = {isa = PBXBuildFile; fileRef = BE48760529F9A72900120917 /* ball.wav */; };
-		BE48788929F9A72C00120917 /* Pong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE48760629F9A72900120917 /* Pong.cpp */; };
-		BE48788A29F9A72C00120917 /* window.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE48760829F9A72900120917 /* window.exe */; };
-		BE48788B29F9A72C00120917 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE48760929F9A72900120917 /* Window.cpp */; };
-		BE48788C29F9A72C00120917 /* voip.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE48760B29F9A72900120917 /* voip.exe */; };
-		BE48788D29F9A72C00120917 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE48760C29F9A72900120917 /* Client.cpp */; };
-		BE48788E29F9A72C00120917 /* VoIP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE48760D29F9A72900120917 /* VoIP.cpp */; };
-		BE48788F29F9A72C00120917 /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE48760E29F9A72900120917 /* Server.cpp */; };
-		BE48789029F9A72C00120917 /* shader.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE48761029F9A72900120917 /* shader.exe */; };
-		BE48789129F9A72C00120917 /* billboard.geom in Resources */ = {isa = PBXBuildFile; fileRef = BE48761329F9A72900120917 /* billboard.geom */; };
-		BE48789229F9A72C00120917 /* sansation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE48761429F9A72900120917 /* sansation.ttf */; };
-		BE48789329F9A72C00120917 /* pixelate.frag in Resources */ = {isa = PBXBuildFile; fileRef = BE48761529F9A72900120917 /* pixelate.frag */; };
-		BE48789429F9A72C00120917 /* edge.frag in Resources */ = {isa = PBXBuildFile; fileRef = BE48761629F9A72900120917 /* edge.frag */; };
-		BE48789529F9A72C00120917 /* text-background.png in Resources */ = {isa = PBXBuildFile; fileRef = BE48761729F9A72900120917 /* text-background.png */; };
-		BE48789629F9A72C00120917 /* wave.vert in Resources */ = {isa = PBXBuildFile; fileRef = BE48761829F9A72900120917 /* wave.vert */; };
-		BE48789729F9A72C00120917 /* storm.vert in Resources */ = {isa = PBXBuildFile; fileRef = BE48761929F9A72900120917 /* storm.vert */; };
-		BE48789829F9A72C00120917 /* billboard.frag in Resources */ = {isa = PBXBuildFile; fileRef = BE48761A29F9A72900120917 /* billboard.frag */; };
-		BE48789929F9A72C00120917 /* devices.png in Resources */ = {isa = PBXBuildFile; fileRef = BE48761B29F9A72900120917 /* devices.png */; };
-		BE48789A29F9A72C00120917 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BE48761C29F9A72900120917 /* background.jpg */; };
-		BE48789B29F9A72C00120917 /* billboard.vert in Resources */ = {isa = PBXBuildFile; fileRef = BE48761D29F9A72900120917 /* billboard.vert */; };
-		BE48789C29F9A72C00120917 /* blur.frag in Resources */ = {isa = PBXBuildFile; fileRef = BE48761E29F9A72900120917 /* blur.frag */; };
-		BE48789D29F9A72C00120917 /* sfml.png in Resources */ = {isa = PBXBuildFile; fileRef = BE48761F29F9A72900120917 /* sfml.png */; };
-		BE48789E29F9A72C00120917 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BE48762029F9A72900120917 /* logo.png */; };
-		BE48789F29F9A72C00120917 /* blink.frag in Resources */ = {isa = PBXBuildFile; fileRef = BE48762129F9A72900120917 /* blink.frag */; };
-		BE4878A029F9A72C00120917 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE48762229F9A72900120917 /* Shader.cpp */; };
-		BE4878A129F9A72C00120917 /* sansation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE48762529F9A72900120917 /* sansation.ttf */; };
-		BE4878A229F9A72C00120917 /* terrain.frag in Resources */ = {isa = PBXBuildFile; fileRef = BE48762629F9A72900120917 /* terrain.frag */; };
-		BE4878A329F9A72C00120917 /* terrain.vert in Resources */ = {isa = PBXBuildFile; fileRef = BE48762729F9A72900120917 /* terrain.vert */; };
-		BE4878A429F9A72C00120917 /* Island.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE48762829F9A72900120917 /* Island.cpp */; };
-		BE4878A529F9A72C00120917 /* island.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE48762929F9A72900120917 /* island.exe */; };
-		BE4878A629F9A72C00120917 /* sansation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE48762C29F9A72900120917 /* sansation.ttf */; };
-		BE4878A729F9A72C00120917 /* joystick.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE48762D29F9A72900120917 /* joystick.exe */; };
-		BE4878A829F9A72C00120917 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE48762E29F9A72900120917 /* Joystick.cpp */; };
-		BE4878A929F9A72C00120917 /* canary.wav in Resources */ = {isa = PBXBuildFile; fileRef = BE48763129F9A72900120917 /* canary.wav */; };
-		BE4878AA29F9A72C00120917 /* ding.flac in Resources */ = {isa = PBXBuildFile; fileRef = BE48763229F9A72900120917 /* ding.flac */; };
-		BE4878AB29F9A72C00120917 /* orchestral.ogg in Resources */ = {isa = PBXBuildFile; fileRef = BE48763329F9A72900120917 /* orchestral.ogg */; };
-		BE4878AC29F9A72C00120917 /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE48763429F9A72900120917 /* Sound.cpp */; };
-		BE4878AD29F9A72C00120917 /* sound.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE48763529F9A72900120917 /* sound.exe */; };
-		BE4878AE29F9A72C00120917 /* sansation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE48763829F9A72900120917 /* sansation.ttf */; };
-		BE4878AF29F9A72C00120917 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BE48763929F9A72900120917 /* background.jpg */; };
-		BE4878B029F9A72C00120917 /* texture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BE48763A29F9A72900120917 /* texture.jpg */; };
-		BE4878B129F9A72C00120917 /* OpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE48763B29F9A72900120917 /* OpenGL.cpp */; };
-		BE4878B229F9A72C00120917 /* opengl.exe in Resources */ = {isa = PBXBuildFile; fileRef = BE48763C29F9A72900120917 /* opengl.exe */; };
 		BE4878B329F9A72C00120917 /* Bricks_01.png in Resources */ = {isa = PBXBuildFile; fileRef = BE48763D29F9A72900120917 /* Bricks_01.png */; };
 		BE4878B429F9A72C00120917 /* _Death.png in Resources */ = {isa = PBXBuildFile; fileRef = BE48763F29F9A72900120917 /* _Death.png */; };
 		BE4878B529F9A72C00120917 /* _Idle.png in Resources */ = {isa = PBXBuildFile; fileRef = BE48764029F9A72900120917 /* _Idle.png */; };
@@ -640,9 +587,12 @@
 		BE487AC229F9A73900120917 /* XP Bar Animated Yellow 3.png in Resources */ = {isa = PBXBuildFile; fileRef = BE487AB929F9A73900120917 /* XP Bar Animated Yellow 3.png */; };
 		BE487AC329F9A73900120917 /* XP Bar Animated Yellow 8.png in Resources */ = {isa = PBXBuildFile; fileRef = BE487ABA29F9A73900120917 /* XP Bar Animated Yellow 8.png */; };
 		BE487AC429F9A73900120917 /* XP Bar Animated Yellow 9.png in Resources */ = {isa = PBXBuildFile; fileRef = BE487ABB29F9A73900120917 /* XP Bar Animated Yellow 9.png */; };
+		BE487AC829FA5F3300120917 /* The-Battlefield-of-Abbasya-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE487AC729FA5F3300120917 /* The-Battlefield-of-Abbasya-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE3083A029FA62580002506B /* ResourcePath.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ResourcePath.hpp; path = "../SP-Project-2023/SP-Project-2023/ResourcePath.hpp"; sourceTree = "<group>"; };
+		BE3083A129FA62590002506B /* ResourcePath.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ResourcePath.mm; path = "../SP-Project-2023/SP-Project-2023/ResourcePath.mm"; sourceTree = "<group>"; };
 		BE48754D29F9A72800120917 /* GpuPreference.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GpuPreference.hpp; sourceTree = "<group>"; };
 		BE48754E29F9A72800120917 /* Main.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Main.hpp; sourceTree = "<group>"; };
 		BE48754F29F9A72800120917 /* Graphics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Graphics.hpp; sourceTree = "<group>"; };
@@ -801,60 +751,6 @@
 		BE4875F229F9A72900120917 /* Attack2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Attack2.png; sourceTree = "<group>"; };
 		BE4875F329F9A72900120917 /* Jump2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Jump2.png; sourceTree = "<group>"; };
 		BE4875F429F9A72900120917 /* Run2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Run2.png; sourceTree = "<group>"; };
-		BE4875F729F9A72900120917 /* Ftp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ftp.cpp; sourceTree = "<group>"; };
-		BE4875F829F9A72900120917 /* ftp.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = ftp.exe; sourceTree = "<group>"; };
-		BE4875FA29F9A72900120917 /* sound-capture.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sound-capture.exe"; sourceTree = "<group>"; };
-		BE4875FB29F9A72900120917 /* SoundCapture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundCapture.cpp; sourceTree = "<group>"; };
-		BE4875FD29F9A72900120917 /* TCP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCP.cpp; sourceTree = "<group>"; };
-		BE4875FE29F9A72900120917 /* UDP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UDP.cpp; sourceTree = "<group>"; };
-		BE4875FF29F9A72900120917 /* Sockets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sockets.cpp; sourceTree = "<group>"; };
-		BE48760029F9A72900120917 /* sockets.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = sockets.exe; sourceTree = "<group>"; };
-		BE48760229F9A72900120917 /* pong.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = pong.exe; sourceTree = "<group>"; };
-		BE48760429F9A72900120917 /* sansation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sansation.ttf; sourceTree = "<group>"; };
-		BE48760529F9A72900120917 /* ball.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ball.wav; sourceTree = "<group>"; };
-		BE48760629F9A72900120917 /* Pong.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pong.cpp; sourceTree = "<group>"; };
-		BE48760829F9A72900120917 /* window.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = window.exe; sourceTree = "<group>"; };
-		BE48760929F9A72900120917 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
-		BE48760B29F9A72900120917 /* voip.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = voip.exe; sourceTree = "<group>"; };
-		BE48760C29F9A72900120917 /* Client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client.cpp; sourceTree = "<group>"; };
-		BE48760D29F9A72900120917 /* VoIP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoIP.cpp; sourceTree = "<group>"; };
-		BE48760E29F9A72900120917 /* Server.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Server.cpp; sourceTree = "<group>"; };
-		BE48761029F9A72900120917 /* shader.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = shader.exe; sourceTree = "<group>"; };
-		BE48761129F9A72900120917 /* Effect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Effect.hpp; sourceTree = "<group>"; };
-		BE48761329F9A72900120917 /* billboard.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = billboard.geom; sourceTree = "<group>"; };
-		BE48761429F9A72900120917 /* sansation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sansation.ttf; sourceTree = "<group>"; };
-		BE48761529F9A72900120917 /* pixelate.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = pixelate.frag; sourceTree = "<group>"; };
-		BE48761629F9A72900120917 /* edge.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = edge.frag; sourceTree = "<group>"; };
-		BE48761729F9A72900120917 /* text-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "text-background.png"; sourceTree = "<group>"; };
-		BE48761829F9A72900120917 /* wave.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = wave.vert; sourceTree = "<group>"; };
-		BE48761929F9A72900120917 /* storm.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = storm.vert; sourceTree = "<group>"; };
-		BE48761A29F9A72900120917 /* billboard.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = billboard.frag; sourceTree = "<group>"; };
-		BE48761B29F9A72900120917 /* devices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = devices.png; sourceTree = "<group>"; };
-		BE48761C29F9A72900120917 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
-		BE48761D29F9A72900120917 /* billboard.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = billboard.vert; sourceTree = "<group>"; };
-		BE48761E29F9A72900120917 /* blur.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = blur.frag; sourceTree = "<group>"; };
-		BE48761F29F9A72900120917 /* sfml.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sfml.png; sourceTree = "<group>"; };
-		BE48762029F9A72900120917 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
-		BE48762129F9A72900120917 /* blink.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = blink.frag; sourceTree = "<group>"; };
-		BE48762229F9A72900120917 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
-		BE48762529F9A72900120917 /* sansation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sansation.ttf; sourceTree = "<group>"; };
-		BE48762629F9A72900120917 /* terrain.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = terrain.frag; sourceTree = "<group>"; };
-		BE48762729F9A72900120917 /* terrain.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = terrain.vert; sourceTree = "<group>"; };
-		BE48762829F9A72900120917 /* Island.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Island.cpp; sourceTree = "<group>"; };
-		BE48762929F9A72900120917 /* island.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = island.exe; sourceTree = "<group>"; };
-		BE48762C29F9A72900120917 /* sansation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sansation.ttf; sourceTree = "<group>"; };
-		BE48762D29F9A72900120917 /* joystick.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = joystick.exe; sourceTree = "<group>"; };
-		BE48762E29F9A72900120917 /* Joystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick.cpp; sourceTree = "<group>"; };
-		BE48763129F9A72900120917 /* canary.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = canary.wav; sourceTree = "<group>"; };
-		BE48763229F9A72900120917 /* ding.flac */ = {isa = PBXFileReference; lastKnownFileType = file; path = ding.flac; sourceTree = "<group>"; };
-		BE48763329F9A72900120917 /* orchestral.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; path = orchestral.ogg; sourceTree = "<group>"; };
-		BE48763429F9A72900120917 /* Sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sound.cpp; sourceTree = "<group>"; };
-		BE48763529F9A72900120917 /* sound.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = sound.exe; sourceTree = "<group>"; };
-		BE48763829F9A72900120917 /* sansation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sansation.ttf; sourceTree = "<group>"; };
-		BE48763929F9A72900120917 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
-		BE48763A29F9A72900120917 /* texture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = texture.jpg; sourceTree = "<group>"; };
-		BE48763B29F9A72900120917 /* OpenGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGL.cpp; sourceTree = "<group>"; };
-		BE48763C29F9A72900120917 /* opengl.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = opengl.exe; sourceTree = "<group>"; };
 		BE48763D29F9A72900120917 /* Bricks_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bricks_01.png; sourceTree = "<group>"; };
 		BE48763F29F9A72900120917 /* _Death.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _Death.png; sourceTree = "<group>"; };
 		BE48764029F9A72900120917 /* _Idle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _Idle.png; sourceTree = "<group>"; };
@@ -1375,6 +1271,7 @@
 		BE487AB929F9A73900120917 /* XP Bar Animated Yellow 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "XP Bar Animated Yellow 3.png"; sourceTree = "<group>"; };
 		BE487ABA29F9A73900120917 /* XP Bar Animated Yellow 8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "XP Bar Animated Yellow 8.png"; sourceTree = "<group>"; };
 		BE487ABB29F9A73900120917 /* XP Bar Animated Yellow 9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "XP Bar Animated Yellow 9.png"; sourceTree = "<group>"; };
+		BE487AC729FA5F3300120917 /* The-Battlefield-of-Abbasya-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "The-Battlefield-of-Abbasya-Info.plist"; sourceTree = "<group>"; };
 		BED0922329EDF07B00B3279F /* Battle3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battle3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1664,203 +1561,6 @@
 				BE4875F429F9A72900120917 /* Run2.png */,
 			);
 			path = "Player 2";
-			sourceTree = "<group>";
-		};
-		BE4875F529F9A72900120917 /* examples */ = {
-			isa = PBXGroup;
-			children = (
-				BE4875F629F9A72900120917 /* ftp */,
-				BE4875F929F9A72900120917 /* sound-capture */,
-				BE4875FC29F9A72900120917 /* sockets */,
-				BE48760129F9A72900120917 /* pong */,
-				BE48760729F9A72900120917 /* window */,
-				BE48760A29F9A72900120917 /* voip */,
-				BE48760F29F9A72900120917 /* shader */,
-				BE48762329F9A72900120917 /* island */,
-				BE48762A29F9A72900120917 /* joystick */,
-				BE48762F29F9A72900120917 /* sound */,
-				BE48763629F9A72900120917 /* opengl */,
-			);
-			path = examples;
-			sourceTree = "<group>";
-		};
-		BE4875F629F9A72900120917 /* ftp */ = {
-			isa = PBXGroup;
-			children = (
-				BE4875F729F9A72900120917 /* Ftp.cpp */,
-				BE4875F829F9A72900120917 /* ftp.exe */,
-			);
-			path = ftp;
-			sourceTree = "<group>";
-		};
-		BE4875F929F9A72900120917 /* sound-capture */ = {
-			isa = PBXGroup;
-			children = (
-				BE4875FA29F9A72900120917 /* sound-capture.exe */,
-				BE4875FB29F9A72900120917 /* SoundCapture.cpp */,
-			);
-			path = "sound-capture";
-			sourceTree = "<group>";
-		};
-		BE4875FC29F9A72900120917 /* sockets */ = {
-			isa = PBXGroup;
-			children = (
-				BE4875FD29F9A72900120917 /* TCP.cpp */,
-				BE4875FE29F9A72900120917 /* UDP.cpp */,
-				BE4875FF29F9A72900120917 /* Sockets.cpp */,
-				BE48760029F9A72900120917 /* sockets.exe */,
-			);
-			path = sockets;
-			sourceTree = "<group>";
-		};
-		BE48760129F9A72900120917 /* pong */ = {
-			isa = PBXGroup;
-			children = (
-				BE48760229F9A72900120917 /* pong.exe */,
-				BE48760329F9A72900120917 /* resources */,
-				BE48760629F9A72900120917 /* Pong.cpp */,
-			);
-			path = pong;
-			sourceTree = "<group>";
-		};
-		BE48760329F9A72900120917 /* resources */ = {
-			isa = PBXGroup;
-			children = (
-				BE48760429F9A72900120917 /* sansation.ttf */,
-				BE48760529F9A72900120917 /* ball.wav */,
-			);
-			path = resources;
-			sourceTree = "<group>";
-		};
-		BE48760729F9A72900120917 /* window */ = {
-			isa = PBXGroup;
-			children = (
-				BE48760829F9A72900120917 /* window.exe */,
-				BE48760929F9A72900120917 /* Window.cpp */,
-			);
-			path = window;
-			sourceTree = "<group>";
-		};
-		BE48760A29F9A72900120917 /* voip */ = {
-			isa = PBXGroup;
-			children = (
-				BE48760B29F9A72900120917 /* voip.exe */,
-				BE48760C29F9A72900120917 /* Client.cpp */,
-				BE48760D29F9A72900120917 /* VoIP.cpp */,
-				BE48760E29F9A72900120917 /* Server.cpp */,
-			);
-			path = voip;
-			sourceTree = "<group>";
-		};
-		BE48760F29F9A72900120917 /* shader */ = {
-			isa = PBXGroup;
-			children = (
-				BE48761029F9A72900120917 /* shader.exe */,
-				BE48761129F9A72900120917 /* Effect.hpp */,
-				BE48761229F9A72900120917 /* resources */,
-				BE48762229F9A72900120917 /* Shader.cpp */,
-			);
-			path = shader;
-			sourceTree = "<group>";
-		};
-		BE48761229F9A72900120917 /* resources */ = {
-			isa = PBXGroup;
-			children = (
-				BE48761329F9A72900120917 /* billboard.geom */,
-				BE48761429F9A72900120917 /* sansation.ttf */,
-				BE48761529F9A72900120917 /* pixelate.frag */,
-				BE48761629F9A72900120917 /* edge.frag */,
-				BE48761729F9A72900120917 /* text-background.png */,
-				BE48761829F9A72900120917 /* wave.vert */,
-				BE48761929F9A72900120917 /* storm.vert */,
-				BE48761A29F9A72900120917 /* billboard.frag */,
-				BE48761B29F9A72900120917 /* devices.png */,
-				BE48761C29F9A72900120917 /* background.jpg */,
-				BE48761D29F9A72900120917 /* billboard.vert */,
-				BE48761E29F9A72900120917 /* blur.frag */,
-				BE48761F29F9A72900120917 /* sfml.png */,
-				BE48762029F9A72900120917 /* logo.png */,
-				BE48762129F9A72900120917 /* blink.frag */,
-			);
-			path = resources;
-			sourceTree = "<group>";
-		};
-		BE48762329F9A72900120917 /* island */ = {
-			isa = PBXGroup;
-			children = (
-				BE48762429F9A72900120917 /* resources */,
-				BE48762829F9A72900120917 /* Island.cpp */,
-				BE48762929F9A72900120917 /* island.exe */,
-			);
-			path = island;
-			sourceTree = "<group>";
-		};
-		BE48762429F9A72900120917 /* resources */ = {
-			isa = PBXGroup;
-			children = (
-				BE48762529F9A72900120917 /* sansation.ttf */,
-				BE48762629F9A72900120917 /* terrain.frag */,
-				BE48762729F9A72900120917 /* terrain.vert */,
-			);
-			path = resources;
-			sourceTree = "<group>";
-		};
-		BE48762A29F9A72900120917 /* joystick */ = {
-			isa = PBXGroup;
-			children = (
-				BE48762B29F9A72900120917 /* resources */,
-				BE48762D29F9A72900120917 /* joystick.exe */,
-				BE48762E29F9A72900120917 /* Joystick.cpp */,
-			);
-			path = joystick;
-			sourceTree = "<group>";
-		};
-		BE48762B29F9A72900120917 /* resources */ = {
-			isa = PBXGroup;
-			children = (
-				BE48762C29F9A72900120917 /* sansation.ttf */,
-			);
-			path = resources;
-			sourceTree = "<group>";
-		};
-		BE48762F29F9A72900120917 /* sound */ = {
-			isa = PBXGroup;
-			children = (
-				BE48763029F9A72900120917 /* resources */,
-				BE48763429F9A72900120917 /* Sound.cpp */,
-				BE48763529F9A72900120917 /* sound.exe */,
-			);
-			path = sound;
-			sourceTree = "<group>";
-		};
-		BE48763029F9A72900120917 /* resources */ = {
-			isa = PBXGroup;
-			children = (
-				BE48763129F9A72900120917 /* canary.wav */,
-				BE48763229F9A72900120917 /* ding.flac */,
-				BE48763329F9A72900120917 /* orchestral.ogg */,
-			);
-			path = resources;
-			sourceTree = "<group>";
-		};
-		BE48763629F9A72900120917 /* opengl */ = {
-			isa = PBXGroup;
-			children = (
-				BE48763729F9A72900120917 /* resources */,
-				BE48763B29F9A72900120917 /* OpenGL.cpp */,
-				BE48763C29F9A72900120917 /* opengl.exe */,
-			);
-			path = opengl;
-			sourceTree = "<group>";
-		};
-		BE48763729F9A72900120917 /* resources */ = {
-			isa = PBXGroup;
-			children = (
-				BE48763829F9A72900120917 /* sansation.ttf */,
-				BE48763929F9A72900120917 /* background.jpg */,
-				BE48763A29F9A72900120917 /* texture.jpg */,
-			);
-			path = resources;
 			sourceTree = "<group>";
 		};
 		BE48763E29F9A72900120917 /* Player 1 */ = {
@@ -2428,14 +2128,16 @@
 		BED0921929EDF07A00B3279F = {
 			isa = PBXGroup;
 			children = (
+				BE3083A029FA62580002506B /* ResourcePath.hpp */,
+				BE3083A129FA62590002506B /* ResourcePath.mm */,
 				BE4875EC29F9A72900120917 /* ArcadeClassic.ttf */,
+				BE487AC729FA5F3300120917 /* The-Battlefield-of-Abbasya-Info.plist */,
 				BE4875EB29F9A72900120917 /* Background.jpg */,
 				BE48764C29F9A72A00120917 /* background2.jpg */,
 				BE48763D29F9A72900120917 /* Bricks_01.png */,
 				BE48783929F9A72B00120917 /* Canterbury.ttf */,
 				BE48784129F9A72C00120917 /* cursor.png */,
 				BE48764E29F9A72A00120917 /* doc */,
-				BE4875F529F9A72900120917 /* examples */,
 				BE48783229F9A72B00120917 /* health_bar */,
 				BE48784029F9A72C00120917 /* HigherPixels.ttf */,
 				BE48754B29F9A72800120917 /* include */,
@@ -2542,31 +2244,26 @@
 				BE487A9429F9A72D00120917 /* classsf_1_1SoundSource.png in Resources */,
 				BE48792E29F9A72D00120917 /* classsf_1_1Vertex.html in Resources */,
 				BE48791D29F9A72D00120917 /* functions_y.html in Resources */,
-				BE48787729F9A72C00120917 /* _Death.png in Resources */,
 				BE487A4E29F9A72D00120917 /* classsf_1_1GlResource_1_1TransientContextLock.png in Resources */,
 				BE4878EC29F9A72C00120917 /* classsf_1_1FileInputStream-members.html in Resources */,
 				BE487AAA29F9A72D00120917 /* Canterbury.ttf in Resources */,
 				BE4878F129F9A72C00120917 /* classsf_1_1Keyboard.html in Resources */,
-				BE48789629F9A72C00120917 /* wave.vert in Resources */,
 				BE48790529F9A72C00120917 /* functions_eval_o.html in Resources */,
 				BE48799029F9A72D00120917 /* classsf_1_1OutputSoundFile.png in Resources */,
 				BE48797929F9A72D00120917 /* classsf_1_1Ftp-members.html in Resources */,
-				BE48789E29F9A72C00120917 /* logo.png in Resources */,
 				BE4878DF29F9A72C00120917 /* IpAddress_8hpp_source.html in Resources */,
-				BE48788029F9A72C00120917 /* sound-capture.exe in Resources */,
-				BE48787F29F9A72C00120917 /* ftp.exe in Resources */,
 				BE4878E429F9A72C00120917 /* dir_d44c64559bbebec7f509842c48db8b23.html in Resources */,
 				BE48796429F9A72D00120917 /* dir_c0a853e81d6f1c1f0a3eb7a27dc24256.html in Resources */,
 				BE48793929F9A72D00120917 /* Transformable_8hpp_source.html in Resources */,
 				BE4879AD29F9A72D00120917 /* tab_a.png in Resources */,
 				BE48785629F9A72C00120917 /* SFMLStaticTargets.cmake in Resources */,
 				BE48791229F9A72C00120917 /* classsf_1_1Utf_3_018_01_4.html in Resources */,
-				BE48788629F9A72C00120917 /* pong.exe in Resources */,
 				BE487A7D29F9A72D00120917 /* classsf_1_1MemoryInputStream.png in Resources */,
 				BE487AAF29F9A72D00120917 /* option2.png in Resources */,
 				BE4879A829F9A72D00120917 /* classsf_1_1Image-members.html in Resources */,
 				BE48799729F9A72D00120917 /* classsf_1_1InputStream.html in Resources */,
 				BE487A9629F9A72D00120917 /* functions_eval_t.html in Resources */,
+				BE487AC829FA5F3300120917 /* The-Battlefield-of-Abbasya-Info.plist in Resources */,
 				BE4879BA29F9A72D00120917 /* functions_func_n.html in Resources */,
 				BE487AC329F9A73900120917 /* XP Bar Animated Yellow 8.png in Resources */,
 				BE487A6C29F9A72D00120917 /* classsf_1_1RenderTarget-members.html in Resources */,
@@ -2581,15 +2278,12 @@
 				BE487A8229F9A72D00120917 /* classsf_1_1GlResource.html in Resources */,
 				BE48798029F9A72D00120917 /* classsf_1_1Shape.html in Resources */,
 				BE48793A29F9A72D00120917 /* structsf_1_1Event_1_1MouseWheelScrollEvent-members.html in Resources */,
-				BE4878B229F9A72C00120917 /* opengl.exe in Resources */,
 				BE48794929F9A72D00120917 /* OpenGL_8hpp_source.html in Resources */,
 				BE4879AB29F9A72D00120917 /* classsf_1_1Vertex-members.html in Resources */,
 				BE487AAC29F9A72D00120917 /* silver_button.png in Resources */,
-				BE48789929F9A72C00120917 /* devices.png in Resources */,
 				BE487A4229F9A72D00120917 /* classsf_1_1Vector3.html in Resources */,
 				BE487AA829F9A72D00120917 /* health80.png in Resources */,
 				BE487A4F29F9A72D00120917 /* classsf_1_1VertexArray.html in Resources */,
-				BE4878A129F9A72C00120917 /* sansation.ttf in Resources */,
 				BE48796C29F9A72D00120917 /* Vertex_8hpp_source.html in Resources */,
 				BE48784729F9A72C00120917 /* String.inl in Resources */,
 				BE4879DE29F9A72D00120917 /* String_8hpp_source.html in Resources */,
@@ -2627,14 +2321,12 @@
 				BE487A9E29F9A72D00120917 /* functions_func_f.html in Resources */,
 				BE487A3F29F9A72D00120917 /* VideoMode_8hpp_source.html in Resources */,
 				BE4879CD29F9A72D00120917 /* functions_p.html in Resources */,
-				BE48789229F9A72C00120917 /* sansation.ttf in Resources */,
 				BE487A1529F9A72D00120917 /* InputStream_8hpp_source.html in Resources */,
 				BE487A9529F9A72D00120917 /* classsf_1_1Utf_3_0116_01_4-members.html in Resources */,
 				BE4879C129F9A72D00120917 /* Context_8hpp_source.html in Resources */,
 				BE487A9D29F9A72D00120917 /* Event_8hpp_source.html in Resources */,
 				BE48790429F9A72C00120917 /* structsf_1_1Event_1_1SensorEvent-members.html in Resources */,
 				BE487AAB29F9A72D00120917 /* border.png in Resources */,
-				BE48788729F9A72C00120917 /* sansation.ttf in Resources */,
 				BE487A1329F9A72D00120917 /* dir_e71ec51a9abd604c65f6abb639f6ea75.html in Resources */,
 				BE4879F429F9A72D00120917 /* classsf_1_1Sensor.html in Resources */,
 				BE48798329F9A72D00120917 /* functions_eval_d.html in Resources */,
@@ -2668,7 +2360,6 @@
 				BE4878C629F9A72C00120917 /* classsf_1_1Time-members.html in Resources */,
 				BE4878F929F9A72C00120917 /* classsf_1_1Sensor-members.html in Resources */,
 				BE487A5A29F9A72D00120917 /* functions_func_0x7e.html in Resources */,
-				BE4878AA29F9A72C00120917 /* ding.flac in Resources */,
 				BE48792129F9A72D00120917 /* classsf_1_1Lock-members.html in Resources */,
 				BE48793129F9A72D00120917 /* classsf_1_1GlResource-members.html in Resources */,
 				BE4879FC29F9A72D00120917 /* classsf_1_1Text.html in Resources */,
@@ -2735,7 +2426,6 @@
 				BE487A0529F9A72D00120917 /* functions_h.html in Resources */,
 				BE4878FC29F9A72C00120917 /* structsf_1_1Event_1_1SensorEvent.html in Resources */,
 				BE4879BF29F9A72D00120917 /* functions_eval_i.html in Resources */,
-				BE48789729F9A72C00120917 /* storm.vert in Resources */,
 				BE487AA929F9A72D00120917 /* health20.png in Resources */,
 				BE48792629F9A72D00120917 /* group__network.html in Resources */,
 				BE4879B629F9A72D00120917 /* functions_func.html in Resources */,
@@ -2762,7 +2452,6 @@
 				BE48794A29F9A72D00120917 /* functions_g.html in Resources */,
 				BE48791E29F9A72D00120917 /* classsf_1_1Transform-members.html in Resources */,
 				BE4878F429F9A72C00120917 /* View_8hpp_source.html in Resources */,
-				BE4878A929F9A72C00120917 /* canary.wav in Resources */,
 				BE4879D629F9A72D00120917 /* mainpage_8hpp_source.html in Resources */,
 				BE4879A629F9A72D00120917 /* functions_func_w.html in Resources */,
 				BE4878E129F9A72C00120917 /* classsf_1_1GlResource_1_1TransientContextLock.html in Resources */,
@@ -2776,7 +2465,6 @@
 				BE487A6D29F9A72D00120917 /* functions_eval_y.html in Resources */,
 				BE487AA629F9A72D00120917 /* health60.png in Resources */,
 				BE487A0F29F9A72D00120917 /* functions_eval_g.html in Resources */,
-				BE4878A729F9A72C00120917 /* joystick.exe in Resources */,
 				BE4879CC29F9A72D00120917 /* classsf_1_1TcpListener-members.html in Resources */,
 				BE48795829F9A72D00120917 /* classsf_1_1SoundBufferRecorder.png in Resources */,
 				BE4878E229F9A72C00120917 /* classsf_1_1Http.html in Resources */,
@@ -2802,7 +2490,6 @@
 				BE487AC029F9A73900120917 /* XP Bar Animated Yellow 1.png in Resources */,
 				BE487A3429F9A72D00120917 /* structsf_1_1Shader_1_1CurrentTextureType.html in Resources */,
 				BE4878D829F9A72C00120917 /* classsf_1_1VertexArray.png in Resources */,
-				BE4878A629F9A72C00120917 /* sansation.ttf in Resources */,
 				BE487A2229F9A72D00120917 /* structsf_1_1Event_1_1JoystickConnectEvent.html in Resources */,
 				BE4878D429F9A72C00120917 /* Clock_8hpp_source.html in Resources */,
 				BE48796629F9A72D00120917 /* Vector3_8hpp_source.html in Resources */,
@@ -2826,7 +2513,6 @@
 				BE487A3929F9A72D00120917 /* structsf_1_1Event_1_1MouseWheelScrollEvent.html in Resources */,
 				BE4878F629F9A72C00120917 /* functions_u.html in Resources */,
 				BE48785829F9A72C00120917 /* SFMLStaticTargets-release.cmake in Resources */,
-				BE48789B29F9A72C00120917 /* billboard.vert in Resources */,
 				BE4879B229F9A72D00120917 /* classsf_1_1Texture.html in Resources */,
 				BE4878DB29F9A72C00120917 /* dir_89e9fb32471ae291b179a889144513db.html in Resources */,
 				BE48797029F9A72D00120917 /* classsf_1_1SoundBuffer-members.html in Resources */,
@@ -2840,13 +2526,10 @@
 				BE4878CA29F9A72C00120917 /* functions_eval_w.html in Resources */,
 				BE48792229F9A72D00120917 /* Network_8hpp_source.html in Resources */,
 				BE487ABD29F9A73900120917 /* XP Bar Animated Yellow 6.png in Resources */,
-				BE48788C29F9A72C00120917 /* voip.exe in Resources */,
 				BE487A4C29F9A72D00120917 /* SoundRecorder_8hpp_source.html in Resources */,
 				BE487A1729F9A72D00120917 /* tab_h.png in Resources */,
 				BE487ABC29F9A73900120917 /* XP Bar Animated Yellow 7.png in Resources */,
 				BE487A9C29F9A72D00120917 /* classsf_1_1Ftp_1_1ListingResponse.png in Resources */,
-				BE4878B029F9A72C00120917 /* texture.jpg in Resources */,
-				BE48789829F9A72C00120917 /* billboard.frag in Resources */,
 				BE4878BA29F9A72C00120917 /* Running Animation.png in Resources */,
 				BE48791029F9A72C00120917 /* classsf_1_1Shader.html in Resources */,
 				BE487A8B29F9A72D00120917 /* classsf_1_1Joystick.html in Resources */,
@@ -2856,9 +2539,7 @@
 				BE48787D29F9A72C00120917 /* Run2.png in Resources */,
 				BE4879CE29F9A72D00120917 /* bdwn.png in Resources */,
 				BE487A0729F9A72D00120917 /* classsf_1_1RectangleShape.html in Resources */,
-				BE48789329F9A72C00120917 /* pixelate.frag in Resources */,
 				BE487A0129F9A72D00120917 /* classsf_1_1Sound.html in Resources */,
-				BE48789C29F9A72C00120917 /* blur.frag in Resources */,
 				BE487A6129F9A72D00120917 /* functions_func_k.html in Resources */,
 				BE487A6A29F9A72D00120917 /* classsf_1_1Drawable.png in Resources */,
 				BE48793229F9A72D00120917 /* classsf_1_1TcpListener.png in Resources */,
@@ -2876,11 +2557,9 @@
 				BE48794D29F9A72D00120917 /* classsf_1_1Clock.html in Resources */,
 				BE48785929F9A72C00120917 /* SFMLConfigDependencies.cmake in Resources */,
 				BE48795E29F9A72D00120917 /* classsf_1_1Shader-members.html in Resources */,
-				BE4878AF29F9A72C00120917 /* background.jpg in Resources */,
 				BE4878F229F9A72C00120917 /* structsf_1_1Event_1_1MouseMoveEvent-members.html in Resources */,
 				BE48794129F9A72D00120917 /* System_8hpp_source.html in Resources */,
 				BE48790929F9A72C00120917 /* Cursor_8hpp_source.html in Resources */,
-				BE4878AD29F9A72C00120917 /* sound.exe in Resources */,
 				BE487ABE29F9A73900120917 /* XP Bar Animated Yellow 4.png in Resources */,
 				BE4879C829F9A72D00120917 /* Color_8hpp_source.html in Resources */,
 				BE4878B729F9A72C00120917 /* _Jump.png in Resources */,
@@ -2894,7 +2573,6 @@
 				BE48791529F9A72D00120917 /* structsf_1_1Event_1_1JoystickButtonEvent.html in Resources */,
 				BE48785729F9A72C00120917 /* SFMLConfig.cmake in Resources */,
 				BE487A7729F9A72D00120917 /* RenderStates_8hpp_source.html in Resources */,
-				BE48788A29F9A72C00120917 /* window.exe in Resources */,
 				BE4878CC29F9A72C00120917 /* classsf_1_1RenderTexture.png in Resources */,
 				BE4878CE29F9A72C00120917 /* SoundFileReader_8hpp_source.html in Resources */,
 				BE487A7629F9A72D00120917 /* SoundSource_8hpp_source.html in Resources */,
@@ -2923,7 +2601,6 @@
 				BE487A0D29F9A72D00120917 /* Window_2Window_8hpp_source.html in Resources */,
 				BE48792929F9A72D00120917 /* functions_func_d.html in Resources */,
 				BE487AA729F9A72D00120917 /* health40.png in Resources */,
-				BE48789A29F9A72C00120917 /* background.jpg in Resources */,
 				BE487A1D29F9A72D00120917 /* classsf_1_1Window-members.html in Resources */,
 				BE4878E329F9A72C00120917 /* classsf_1_1Sprite-members.html in Resources */,
 				BE48795329F9A72D00120917 /* functions_func_z.html in Resources */,
@@ -2944,7 +2621,6 @@
 				BE4878EA29F9A72C00120917 /* GpuPreference_8hpp.html in Resources */,
 				BE487AAD29F9A72D00120917 /* background main menu.png in Resources */,
 				BE487A5429F9A72D00120917 /* globals_defs.html in Resources */,
-				BE48789029F9A72C00120917 /* shader.exe in Resources */,
 				BE4878D229F9A72C00120917 /* classsf_1_1TcpSocket.html in Resources */,
 				BE4878FF29F9A72C00120917 /* functions_func_h.html in Resources */,
 				BE4879D129F9A72D00120917 /* Http_8hpp_source.html in Resources */,
@@ -2960,7 +2636,6 @@
 				BE4879C029F9A72D00120917 /* classsf_1_1Ftp_1_1DirectoryResponse.png in Resources */,
 				BE487A8529F9A72D00120917 /* SoundFileFactory_8hpp_source.html in Resources */,
 				BE4879A129F9A72D00120917 /* classsf_1_1RenderTarget.html in Resources */,
-				BE48789129F9A72C00120917 /* billboard.geom in Resources */,
 				BE487A6629F9A72D00120917 /* classsf_1_1VideoMode-members.html in Resources */,
 				BE487A4329F9A72D00120917 /* classsf_1_1Http_1_1Request.html in Resources */,
 				BE48798429F9A72D00120917 /* functions_func_c.html in Resources */,
@@ -2971,7 +2646,6 @@
 				BE487A2729F9A72D00120917 /* Sensor_8hpp_source.html in Resources */,
 				BE48791829F9A72D00120917 /* PrimitiveType_8hpp_source.html in Resources */,
 				BE48787629F9A72C00120917 /* ArcadeClassic.ttf in Resources */,
-				BE48789D29F9A72C00120917 /* sfml.png in Resources */,
 				BE48785A29F9A72C00120917 /* SFMLConfigVersion.cmake in Resources */,
 				BE487A3029F9A72D00120917 /* classsf_1_1Color-members.html in Resources */,
 				BE4879C529F9A72D00120917 /* namespaces.html in Resources */,
@@ -3012,7 +2686,6 @@
 				BE4879A729F9A72D00120917 /* classsf_1_1Mutex-members.html in Resources */,
 				BE4879AF29F9A72D00120917 /* structsf_1_1Event_1_1TouchEvent.html in Resources */,
 				BE487A8E29F9A72D00120917 /* classsf_1_1GlResource_1_1TransientContextLock-members.html in Resources */,
-				BE4878AB29F9A72C00120917 /* orchestral.ogg in Resources */,
 				BE4879E429F9A72D00120917 /* classsf_1_1Ftp_1_1Response-members.html in Resources */,
 				BE487A3229F9A72D00120917 /* group__system.html in Resources */,
 				BE48797229F9A72D00120917 /* structsf_1_1BlendMode.html in Resources */,
@@ -3029,11 +2702,9 @@
 				BE487A6F29F9A72D00120917 /* structsf_1_1SoundStream_1_1Chunk.html in Resources */,
 				BE48784629F9A72C00120917 /* Thread.inl in Resources */,
 				BE48799C29F9A72D00120917 /* Mutex_8hpp_source.html in Resources */,
-				BE48789F29F9A72C00120917 /* blink.frag in Resources */,
 				BE4879C329F9A72D00120917 /* Rect_8hpp_source.html in Resources */,
 				BE487A7A29F9A72D00120917 /* structsf_1_1Event_1_1JoystickButtonEvent-members.html in Resources */,
 				BE487A0B29F9A72D00120917 /* nav_h.png in Resources */,
-				BE48788829F9A72C00120917 /* ball.wav in Resources */,
 				BE4879E529F9A72D00120917 /* Lock_8hpp_source.html in Resources */,
 				BE487A9929F9A72D00120917 /* classsf_1_1Ftp_1_1ListingResponse.html in Resources */,
 				BE4879DA29F9A72D00120917 /* classsf_1_1Font-members.html in Resources */,
@@ -3042,12 +2713,10 @@
 				BE487A8A29F9A72D00120917 /* classsf_1_1Utf.html in Resources */,
 				BE48797A29F9A72D00120917 /* classsf_1_1Sound-members.html in Resources */,
 				BE487A6229F9A72D00120917 /* functions_eval_l.html in Resources */,
-				BE48789529F9A72C00120917 /* text-background.png in Resources */,
 				BE4879C229F9A72D00120917 /* classsf_1_1ConvexShape.png in Resources */,
 				BE487A3E29F9A72D00120917 /* VertexBuffer_8hpp_source.html in Resources */,
 				BE487A1F29F9A72D00120917 /* functions_d.html in Resources */,
 				BE48791A29F9A72D00120917 /* modules.html in Resources */,
-				BE48789429F9A72C00120917 /* edge.frag in Resources */,
 				BE487AC429F9A73900120917 /* XP Bar Animated Yellow 9.png in Resources */,
 				BE48795229F9A72D00120917 /* classsf_1_1Touch.html in Resources */,
 				BE4879EF29F9A72D00120917 /* classsf_1_1TcpListener.html in Resources */,
@@ -3081,14 +2750,10 @@
 				BE4879CF29F9A72D00120917 /* group__graphics.html in Resources */,
 				BE487A2529F9A72D00120917 /* classsf_1_1SoundBufferRecorder.html in Resources */,
 				BE4879F129F9A72D00120917 /* structsf_1_1Event_1_1KeyEvent.html in Resources */,
-				BE4878AE29F9A72C00120917 /* sansation.ttf in Resources */,
-				BE4878A529F9A72C00120917 /* island.exe in Resources */,
 				BE4879AC29F9A72D00120917 /* CircleShape_8hpp_source.html in Resources */,
 				BE4878D029F9A72C00120917 /* classsf_1_1InputStream.png in Resources */,
-				BE4878A229F9A72C00120917 /* terrain.frag in Resources */,
 				BE48799B29F9A72D00120917 /* functions_func_b.html in Resources */,
 				BE487A5C29F9A72D00120917 /* classsf_1_1Lock.png in Resources */,
-				BE4878A329F9A72C00120917 /* terrain.vert in Resources */,
 				BE487A6929F9A72D00120917 /* classsf_1_1Ftp.html in Resources */,
 				BE4879F329F9A72D00120917 /* functions_func_t.html in Resources */,
 				BE48784329F9A72C00120917 /* Utf.inl in Resources */,
@@ -3105,7 +2770,6 @@
 				BE4879D929F9A72D00120917 /* SocketHandle_8hpp_source.html in Resources */,
 				BE487A0229F9A72D00120917 /* classsf_1_1Glyph.html in Resources */,
 				BE48798A29F9A72D00120917 /* Text_8hpp_source.html in Resources */,
-				BE48788529F9A72C00120917 /* sockets.exe in Resources */,
 				BE4878D529F9A72C00120917 /* Font_8hpp_source.html in Resources */,
 				BE4878F829F9A72C00120917 /* classsf_1_1Event.html in Resources */,
 			);
@@ -3116,7 +2780,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		BED0922129EDF07B00B3279F /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -3127,9 +2791,9 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# This shell script simply copies required SFML dylibs/frameworks into the application bundle frameworks folder.\n# If you're using static libraries (which is not recommended) you should remove this script from your project.\n\n# SETTINGS\nSFML_DEPENDENCIES_INSTALL_PREFIX=\"/Users/SFML/Desktop/packaging/tmp/install/Library/Frameworks\"\nCMAKE_INSTALL_FRAMEWORK_PREFIX=\"/Users/SFML/Desktop/packaging/tmp/install/Library/Frameworks\"\nCMAKE_INSTALL_LIB_PREFIX=\"/Users/SFML/Desktop/packaging/tmp/install/Library/Frameworks/lib\"\nFRAMEWORKS_FULL_PATH=\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/\"\n\n# Are we building a project that uses frameworks or dylibs?\ncase \"$SFML_BINARY_TYPE\" in\n    DYLIBS)\n        frameworks=\"false\"\n        ;;\n    *)\n        frameworks=\"true\"\n        ;;\nesac\n\n# Echoes to stderr\nerror () # $* message to display\n{\n    echo $* 1>&2\n    exit 2\n}\n\nassert () # $1 is a boolean, $2...N is an error message\n{\n    if [ $# -lt 2 ]\n    then\n        error \"Internal error in assert: not enough args\"\n    fi\n\n    if [ $1 -ne 0 ]\n    then\n        shift\n        error \"$*\"\n    fi\n}\n\nforce_remove () # $@ is some paths\n{\n    test $# -ge 1\n    assert $? \"force_remove() requires at least one parameter\"\n    rm -fr $@\n    assert $? \"couldn't remove $@\"\n}\n\ncopy () # $1 is a source, $2 is a destination\n{\n    test $# -eq 2\n    assert $? \"copy() requires two parameters\"\n    ditto \"$1\" \"$2\"\n    assert $? \"couldn't copy $1 to $2\"\n}\n\nrequire () # $1 is a SFML module like 'system' or 'audio'\n{\n    dest=\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/\"\n\n    if [ -z \"$1\" ]\n    then\n        error \"require() requires one parameter!\"\n    else\n        # clean potentially old stuff\n        force_remove \"$dest/libsfml-$1\"*\n        force_remove \"$dest/sfml-$1.framework\"\n\n        # copy SFML libraries\n        if [ \"$frameworks\" = \"true\" ]\n        then\n            source=\"$CMAKE_INSTALL_FRAMEWORK_PREFIX/sfml-$1.framework\"\n            target=\"sfml-$1.framework\"\n        elif [ \"$SFML_LINK_DYLIBS_SUFFIX\" = \"-d\" ]\n        then\n            source=\"$CMAKE_INSTALL_LIB_PREFIX/libsfml-$1-d.dylib\"\n            target=\"`readlink $source`\"\n        else\n            source=\"$CMAKE_INSTALL_LIB_PREFIX/libsfml-$1.dylib\"\n            target=\"`readlink $source`\"\n        fi\n\n        copy \"$source\" \"$dest/$target\"\n\n        # copy extra dependencies\n        if [ \"$1\" = \"audio\" ]\n        then\n            # copy \"FLAC\" \"ogg\" \"vorbis\" \"vorbisenc\" \"vorbisfile\" \"OpenAL\" frameworks too\n            for f in \"FLAC\" \"ogg\" \"vorbis\" \"vorbisenc\" \"vorbisfile\" \"OpenAL\"\n            do\n                copy \"$SFML_DEPENDENCIES_INSTALL_PREFIX/$f.framework\" \"$dest/$f.framework\"\n            done\n        elif [ \"$1\" = \"graphics\" ]\n        then\n            copy \"$SFML_DEPENDENCIES_INSTALL_PREFIX/freetype.framework\" \"$dest/freetype.framework\"\n        fi\n    fi\n}\n\nif [ -n \"$SFML_SYSTEM\" ]\nthen\n    require \"system\"\nfi\n\nif [ -n \"$SFML_AUDIO\" ]\nthen\n    require \"audio\"\nfi\n\nif [ -n \"$SFML_NETWORK\" ]\nthen\n    require \"network\"\nfi\n\nif [ -n \"$SFML_WINDOW\" ]\nthen\n    require \"window\"\nfi\n\nif [ -n \"$SFML_GRAPHICS\" ]\nthen\n    require \"graphics\"\nfi\n\n                ";
+			shellScript = "# This shell script simply copies required SFML dylibs/frameworks into the application bundle frameworks folder.\n# If you're using static libraries (which is not recommended) you should remove this script from your project.\n\n# SETTINGS\nSFML_DEPENDENCIES_INSTALL_PREFIX=\"/Users/SFML/Desktop/packaging/tmp/install/Library/Frameworks\"\nCMAKE_INSTALL_FRAMEWORK_PREFIX=\"/Users/SFML/Desktop/packaging/tmp/install/Library/Frameworks\"\nCMAKE_INSTALL_LIB_PREFIX=\"/Users/SFML/Desktop/packaging/tmp/install/Library/Frameworks/lib\"\nFRAMEWORKS_FULL_PATH=\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/\"\n\n# Are we building a project that uses frameworks or dylibs?\ncase \"$SFML_BINARY_TYPE\" in\n    DYLIBS)\n        frameworks=\"false\"\n        ;;\n    *)\n        frameworks=\"true\"\n        ;;\nesac\n\n# Echoes to stderr\nerror () # $* message to display\n{\n    echo $* 1>&2\n    exit 2\n}\n\nassert () # $1 is a boolean, $2...N is an error message\n{\n    if [ $# -lt 2 ]\n    then\n        error \"Internal error in assert: not enough args\"\n    fi\n\n    if [ $1 -ne 0 ]\n    then\n        shift\n        error \"$*\"\n    fi\n}\n\nforce_remove () # $@ is some paths\n{\n    test $# -ge 1\n    assert $? \"force_remove() requires at least one parameter\"\n    rm -fr $@\n    assert $? \"couldn't remove $@\"\n}\n\ncopy () # $1 is a source, $2 is a destination\n{\n    test $# -eq 2\n    assert $? \"copy() requires two parameters\"\n    ditto \"$1\" \"$2\"\n    assert $? \"couldn't copy $1 to $2\"\n}\n\nrequire () # $1 is a SFML module like 'system' or 'audio'\n{\n    dest=\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/\"\n\n    if [ -z \"$1\" ]\n    then\n        error \"require() requires one parameter!\"\n    else\n        # clean potentially old stuff\n        force_remove \"$dest/libsfml-$1\"*\n        force_remove \"$dest/sfml-$1.framework\"\n\n        # copy SFML libraries\n        if [ \"$frameworks\" = \"true\" ]\n        then\n            source=\"$CMAKE_INSTALL_FRAMEWORK_PREFIX/sfml-$1.framework\"\n            target=\"sfml-$1.framework\"\n        elif [ \"$SFML_LINK_DYLIBS_SUFFIX\" = \"-d\" ]\n        then\n            source=\"$CMAKE_INSTALL_LIB_PREFIX/libsfml-$1-d.dylib\"\n            target=\"`readlink $source`\"\n        else\n            source=\"$CMAKE_INSTALL_LIB_PREFIX/libsfml-$1.dylib\"\n            target=\"`readlink $source`\"\n        fi\n\n        copy \"$source\" \"$dest/$target\"\n\n        # copy extra dependencies\n        if [ \"$1\" = \"audio\" ]\n        then\n            # copy \"FLAC\" \"ogg\" \"vorbis\" \"vorbisenc\" \"vorbisfile\" \"OpenAL\" frameworks too\n            for f in \"FLAC\" \"ogg\" \"vorbis\" \"vorbisenc\" \"vorbisfile\" \"OpenAL\"\n            do\n                copy \"$SFML_DEPENDENCIES_INSTALL_PREFIX/$f.framework\" \"$dest/$f.framework\"\n            done\n        elif [ \"$1\" = \"graphics\" ]\n        then\n            copy \"$SFML_DEPENDENCIES_INSTALL_PREFIX/freetype.framework\" \"$dest/freetype.framework\"\n        fi\n    fi\n}\n\nif [ -n \"$SFML_SYSTEM\" ]\nthen\n    require \"system\"\nfi\n\nif [ -n \"$SFML_AUDIO\" ]\nthen\n    require \"audio\"\nfi\n\nif [ -n \"$SFML_NETWORK\" ]\nthen\n    require \"network\"\nfi\n\nif [ -n \"$SFML_WINDOW\" ]\nthen\n    require \"window\"\nfi\n\nif [ -n \"$SFML_GRAPHICS\" ]\nthen\n    require \"graphics\"\nfi\n\n                \n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3138,22 +2802,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE48788E29F9A72C00120917 /* VoIP.cpp in Sources */,
-				BE48788B29F9A72C00120917 /* Window.cpp in Sources */,
-				BE48788F29F9A72C00120917 /* Server.cpp in Sources */,
-				BE48788229F9A72C00120917 /* TCP.cpp in Sources */,
-				BE4878B129F9A72C00120917 /* OpenGL.cpp in Sources */,
-				BE48788D29F9A72C00120917 /* Client.cpp in Sources */,
-				BE48788329F9A72C00120917 /* UDP.cpp in Sources */,
-				BE48788429F9A72C00120917 /* Sockets.cpp in Sources */,
+				BE3083A229FA62590002506B /* ResourcePath.mm in Sources */,
 				BE4878BC29F9A72C00120917 /* The Battlefield of Abbasya.cpp in Sources */,
-				BE4878A029F9A72C00120917 /* Shader.cpp in Sources */,
-				BE48788929F9A72C00120917 /* Pong.cpp in Sources */,
-				BE4878A829F9A72C00120917 /* Joystick.cpp in Sources */,
-				BE48788129F9A72C00120917 /* SoundCapture.cpp in Sources */,
-				BE4878AC29F9A72C00120917 /* Sound.cpp in Sources */,
-				BE4878A429F9A72C00120917 /* Island.cpp in Sources */,
-				BE48787E29F9A72C00120917 /* Ftp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3251,28 +2901,36 @@
 		BED0923929EDF07B00B3279F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "Battle3/Battle3-Info.plist";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = "The-Battlefield-of-Abbasya-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/lib",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_STYLE = "non-global";
 			};
 			name = Debug;
 		};
 		BED0923A29EDF07B00B3279F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = "Battle3/Battle3-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/lib",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_STYLE = "non-global";
 			};
 			name = Release;
 		};
