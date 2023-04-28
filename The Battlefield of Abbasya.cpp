@@ -670,7 +670,7 @@ void name(struct player, RenderWindow& namewindow) {
     string name1,name2;
 
     Font font;
-    font.loadFromFile("ArcadeClassic.ttf");
+    font.loadFromFile("Canterbury.ttf");
     Text text1("", font);
     Text text2("", font);
     text2.setPosition(0, 200);
