@@ -45,6 +45,7 @@ int win2 = 0;
 bool PAUSE = false;
 bool Round_Trans = false;
 int volume_ = 90;
+bool name__ = false;
 
 Font menufont;
 Texture optionButton;
@@ -664,6 +665,113 @@ int PauseMenu(RenderWindow& pausewindow) {
 }
 
 
+void name(struct player, RenderWindow& namewindow) {
+
+    string name1,name2;
+
+    Font font;
+    font.loadFromFile("ArcadeClassic.ttf");
+    Text text1("", font);
+    Text text2("", font);
+    text2.setPosition(0, 200);
+    bool name_ = false;
+    Text text3;
+    text3.setFont(font);
+    text3.setFillColor(Color::White);
+    text3.setString("Start");
+    text3.setCharacterSize(60);
+    text3.setPosition(100, 620);
+
+    RectangleShape start;
+    start.setSize(Vector2f(300.f, 100.f));
+    start.setPosition(110, 620);
+    start.setFillColor(Color::Transparent);
+
+
+    Clock clock;
+
+    while (namewindow.isOpen())
+    {
+        gameclock.restart();
+        Event event;
+        while (namewindow.pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+                namewindow.close();
+            if (!name_) {
+                if (event.type == Event::TextEntered) {
+                    if (isprint(event.text.unicode))
+                        name1 += event.text.unicode;
+                }
+                else if (event.type == Event::KeyPressed) {
+                    if (event.key.code == Keyboard::BackSpace) {
+                        if (!name1.empty())
+                            name1.pop_back();
+                    }
+                    if (event.key.code == Keyboard::Down) {
+                        name_ = true;
+                    }
+
+                }
+            }
+            if (name_) {
+                if (event.type == Event::TextEntered) {
+                    if (isprint(event.text.unicode))
+                        name2 += event.text.unicode;
+                }
+                else if (event.type == Event::KeyPressed) {
+                    if (event.key.code == Keyboard::BackSpace) {
+                        if (!name2.empty())
+                            name2.pop_back();
+                    }
+                    if (event.key.code == Keyboard::Up) {
+                        name_ = false;
+                    }
+                    if (event.key.code == Keyboard::Return) {
+                        name__ = false;
+                        return;
+                    }
+                }
+
+                Mouse mouse;
+                if (start.getGlobalBounds().contains(mouse.getPosition(namewindow).x, mouse.getPosition(namewindow).y))
+                {
+                    if (Mouse::isButtonPressed(Mouse::Left))
+                    {
+                        name__ = false;
+                        return;
+                    }
+                }
+                
+            }
+        }
+
+        static Time text_effect_time;
+        static bool show_cursor;
+
+        text_effect_time += clock.restart();
+
+        if (text_effect_time >= seconds(0.5f))
+        {
+            show_cursor = !show_cursor;
+            text_effect_time = Time::Zero;
+        }
+        if(!name_)
+        text1.setString(name1 + (show_cursor ? '_' : ' '));
+        if(name_)
+        text2.setString(name2 + (show_cursor ? '_' : ' '));
+        cout << player1.name << endl << endl<<player2.name << endl;
+        player1.name = name1;
+        player2.name = name2;
+        namewindow.clear();
+        namewindow.draw(text1);
+        namewindow.draw(text2);
+        namewindow.draw(text3);
+        cur.draw(namewindow);
+        namewindow.display();
+    }
+}
+
 
 //function for defining health bar textures
 void init_health_bar();
@@ -693,6 +801,7 @@ int main()
         MainMenu(get_window);
         if (pagenum == 0) { MainMenu(get_window); }
         else if (pagenum == 1) {
+            name__ = true;
             roundelay = 5.0f;
             Round_Trans = false;
             player1.health = 100;
@@ -914,6 +1023,10 @@ void game(int win1, int win2, RenderWindow& window)
 
     while (window.isOpen()) {
         gameclock.restart();
+        if (name__) {
+            name(player1, window);
+        }
+       
         if (!PAUSE) {
             while (window.pollEvent(e)) {
                 if (e.type == Event::Closed)
