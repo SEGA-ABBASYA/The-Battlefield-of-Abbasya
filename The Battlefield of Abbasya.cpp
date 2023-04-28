@@ -5,7 +5,8 @@
 #include <SFML/window.hpp>
 #include <vector>
 #include <time.h>
-#include "ResourcePath.hpp"
+#include <cstdlib>
+//#include "ResourcePath.hpp"
 
 using namespace sf;
 using namespace std;
@@ -111,6 +112,77 @@ struct plates {
         sh_1.setScale(x5, x6);
     }
 }plt1, plt2, plt3, plt4, plt5, plt6;
+
+struct interactionWindow
+{
+    Vector2f frameScale;
+    Sprite frameSprite;
+    Texture frameTexture;
+
+    Vector2f playerIconScale;
+    Sprite playerIconSprite;
+    Texture playerIconTexture;
+
+    string final_string;
+    Text textToBeDisplayed;
+    // textToBeDisplayed.setString(stringOfText);
+
+    string player_name;
+
+
+    string displayed_text;
+    // constructor
+    interactionWindow(string interactions[], int no_of_interactions, string plyr_nam)
+    {
+        // the constructor initiates the window at a very small case , then it
+        // enlarged in the update function
+        player_name = plyr_nam;
+        displayed_text = "";
+
+        // takes a random interaction out of the interactions array
+        int randomNumb =  rand() % no_of_interactions;
+        final_string = player_name + ": " + interactions[randomNumb];       
+        //textToBeDisplayed.setString(final_string);
+        textToBeDisplayed.setString(displayed_text);
+    }
+    
+    // update functions: gradually scales window, then gradually scales icon, then gradually shows text
+    int text_index = 0;
+    void update(float deltatime, RenderWindow& window)    
+    {   
+        int scale_offset = 0.25;
+
+        // if the window isnt big enough yet, it gets scaled
+        if(frameSprite.getScale().x < frameScale.x and frameSprite.getScale().y < frameScale.y)
+        {
+            // adds a slight increase to the scale every frame relative to delatatime
+            frameSprite.setScale({frameSprite.getScale().x + scale_offset*deltatime, frameSprite.getScale().y + scale_offset*deltatime});
+        }
+
+        // if window is finally scaled, but the icon is not, we get to scale the icon
+        else if(playerIconSprite.getScale().x < playerIconScale.x and playerIconSprite.getScale().y < playerIconScale.y)
+        {
+            // adds a slight increase to the scale every frame relative to delatatime
+            playerIconSprite.setScale({playerIconSprite.getScale().x + scale_offset*deltatime, playerIconSprite.getScale().y + scale_offset*deltatime});
+        }
+
+        // if both window and icon are finally scaled, we start displaying the text gradually
+        else
+        {
+            // if not all of string have been displayed
+            if(text_index < final_string.length() - 1)
+            {
+                displayed_text = displayed_text + final_string[text_index];
+                textToBeDisplayed.setString(displayed_text);
+                text_index ++;
+            }
+        }   
+
+        window.draw(frameSprite);
+        window.draw(playerIconSprite);
+        window.draw(textToBeDisplayed);
+    }
+};
 
 int cursor_select(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
@@ -916,8 +988,44 @@ void game(int win1, int win2, RenderWindow& window)
 
     window.setFramerateLimit(60);
 
+    float interactionTimer = 10;
+    bool isInInteractionMode = false;
+    string arrayOfInteractions[100];
+    int no_of_interactions = 5;
+    interactionWindow interactionwindow1(arrayOfInteractions, no_of_interactions, player1.name);
 
-    while (window.isOpen()) {
+    while (window.isOpen())
+    {
+        // if timer is not out and neither players are dead
+        if (interactionTimer > 0 and player1.health > 0 and player2.health > 0)
+        {
+            // the boolean used to pause the game when transferring between rounds shall be used
+            // for the same purpose when the interactions happen once at the start of the game 
+            Round_Trans = true;
+            isInInteractionMode = true;
+        }
+        /*
+        if the timer is out but neither players are dead, this stops the interaction  mode by 
+        setting isInInteractionMode to false and Round_Trans to false
+        the health condition is neccesary, otherwise the Round_Trans will always be true
+        because the timer will always be < 0 when the interaction is finished 
+        */
+        else if(interactionTimer <= 0 and player1.health > 0 and player2.health > 0)
+        {
+            Round_Trans = false;
+            isInInteractionMode = false;
+        }
+
+        if(isInInteractionMode)
+        {
+            interactionwindow1.update(deltatime, window);
+            interactionTimer -= deltatime;  
+        }
+        else if(interactionTimer < 0)
+        {
+
+        }
+
         gameclock.restart();
         if (!PAUSE) {
             while (window.pollEvent(e)) {
