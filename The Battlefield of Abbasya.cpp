@@ -680,7 +680,7 @@ int PauseMenu(RenderWindow& pausewindow) {
         else if (page == 0) {
             PAUSE = false;
             return 1;
-        }
+        }//return 
         else if (page == 2) {
             Round_Trans = false;
             win1 = 0;
@@ -765,8 +765,8 @@ void name(struct player, RenderWindow& namewindow) {
     Font font;
     font.loadFromFile("Canterbury.ttf");
 
-    Text text1("Bakr", font);
-    Text text2("Fat7allah", font);
+    Text text1("", font);
+    Text text2("", font);
 
     text1.setPosition(150, 385);
     text1.setCharacterSize(42);
