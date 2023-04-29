@@ -587,7 +587,7 @@ void Options(RenderWindow& optionwindow)
     }
 }
 
-int PauseMenu(RenderWindow& pausewindow) {
+int PauseMenu(RenderWindow& pausewindow) {sdaasd
     Font pausefont;
     pausefont.loadFromFile("Canterbury.ttf");
     Text Pause[5];
