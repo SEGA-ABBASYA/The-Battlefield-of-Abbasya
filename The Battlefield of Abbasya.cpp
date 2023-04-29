@@ -914,7 +914,7 @@ void game(int win1, int win2, RenderWindow& window)
     Texture Idle2;
     Texture Fall;
     Texture Fall2;
-    Texture Back[2];
+    Texture Back[3];
     Texture Attacking;
     Texture Attacking2;
     Texture Hit;
@@ -927,12 +927,14 @@ void game(int win1, int win2, RenderWindow& window)
     Texture plateform_1;
     Texture plateform_2;
     Texture plateform_3;
+    Texture plateform_round3;
 
     // call init_health_bar once in the beginning of the game
     init_health_bar();
     ourFont.loadFromFile("ArcadeClassic.ttf");
     Back[0].loadFromFile("Background.jpg");
     Back[1].loadFromFile("background2.jpg");
+    Back[2].loadFromFile("Round3_Background.jpg");
     Idle.loadFromFile("Player 1/_Idle.png");
     Idle2.loadFromFile("Player 2/Idle2.png");
     Running2.loadFromFile("Player 2/Run2.png");
@@ -952,6 +954,7 @@ void game(int win1, int win2, RenderWindow& window)
     plateform_1.loadFromFile("Plates/firstplate.png");
     plateform_2.loadFromFile("Plates/secondplate.png");
     plateform_3.loadFromFile("Plates/thirdplate.png");
+    plateform_round3.loadFromFile("Plates/plate_Round3.png");
 
     Event e;
 
@@ -972,7 +975,7 @@ void game(int win1, int win2, RenderWindow& window)
     }
     if (win1 + win2 == 2) {
         plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 0, 0);
-        plt2.plat_set(plateform_2, plt2.platrec, 750, 70, 250, 450, 1, 1);
+        plt2.plat_set(plateform_round3, plt2.platrec, 750, 70, 250, 450, 1, 1);
         plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 0, 0);
         plt4.plat_set(plateform_2, plt4.platrec, 150, 50, 100, 300, 0, 0);
         plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 0, 0);
