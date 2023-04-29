@@ -927,6 +927,7 @@ void game(int win1, int win2, RenderWindow& window)
     Texture plateform_1;
     Texture plateform_2;
     Texture plateform_3;
+    Texture plateform_4;
 
     // call init_health_bar once in the beginning of the game
     init_health_bar();
@@ -943,8 +944,6 @@ void game(int win1, int win2, RenderWindow& window)
     Fall2.loadFromFile("Player 2/_Fall2.png");
     Hit.loadFromFile("Player 1/_Hit.png");
     Hit2.loadFromFile("Player 2/Hit2.png");
-    Floor.loadFromFile("Bricks_01.png");
-    Floor.setRepeated(true);
     Attacking.loadFromFile("Player 1/_Attack.png");
     Attacking2.loadFromFile("Player 2/Attack2.png");
     Death.loadFromFile("Player 1/_Death.png");
@@ -952,6 +951,7 @@ void game(int win1, int win2, RenderWindow& window)
     plateform_1.loadFromFile("Plates/firstplate.png");
     plateform_2.loadFromFile("Plates/secondplate.png");
     plateform_3.loadFromFile("Plates/thirdplate.png");
+    plateform_4.loadFromFile("Plates/fourthplate.png");
 
     Event e;
 
@@ -960,14 +960,14 @@ void game(int win1, int win2, RenderWindow& window)
     //setting prop to plates
     plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
     plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
-    plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 1, 1);
-    plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 0, 0);
+    plt3.plat_set(plateform_1, plt3.platrec, 150, 50, 100, 450, 1, 1);
+    plt5.plat_set(plateform_1, plt5.platrec, 150, 50, 1000, 300, 0, 0);
     plt4.plat_set(plateform_2, plt4.platrec, 1280, 50, 0, 650, 1, 1);
     if (win1 + win2 == 1) {
-        plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 500, 1, 1);
-        plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
+        plt1.plat_set(plateform_3, plt1.platrec, 150, 50, 1000, 500, 1, 1);
+        plt2.plat_set(plateform_4, plt2.platrec, 450, 50, 400, 400, 1, 1);
         plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 500, 1, 1);
-        plt4.plat_set(plateform_2, plt4.platrec, 150, 50, 100, 300, 1, 1);
+        plt4.plat_set(plateform_4, plt4.platrec, 150, 50, 100, 300, 1, 1);
         plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 1, 1);
     }
     if (win1 + win2 == 2) {
