@@ -676,11 +676,11 @@ void name(struct player, RenderWindow& namewindow) {
     namebackground.setTexture(nameback);
 
     Texture frames[5];
-    frames[0].loadFromFile("Game_text_boxes.png");
-    frames[1].loadFromFile("name-box.png");
-    frames[2].loadFromFile("_Idle1 1.png");
-    frames[3].loadFromFile("_Idle2 1.png");
-    frames[4].loadFromFile("start1.png");
+    frames[0].loadFromFile("Name Entry/Game_text_boxes.png");
+    frames[1].loadFromFile("Name Entry/name-box.png");
+    frames[2].loadFromFile("Name Entry/_Idle1 1.png");
+    frames[3].loadFromFile("Name Entry/_Idle2 1.png");
+    frames[4].loadFromFile("Name Entry/start1.png");
 
     RectangleShape start[3];
 
