@@ -835,8 +835,6 @@ void game(int win1, int win2, RenderWindow& window)
     Fall2.loadFromFile("Player 2/_Fall2.png");
     Hit.loadFromFile("Player 1/_Hit.png");
     Hit2.loadFromFile("Player 2/Hit2.png");
-    Floor.loadFromFile("Bricks_01.png");
-    Floor.setRepeated(true);
     Attacking.loadFromFile("Player 1/_Attack.png");
     Attacking2.loadFromFile("Player 2/Attack2.png");
     Death.loadFromFile("Player 1/_Death.png");
