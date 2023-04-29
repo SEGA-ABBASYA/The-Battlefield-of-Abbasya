@@ -161,7 +161,7 @@ void setTextprop(Text& text) {
 int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
     Mouse mouse;
-    for (int i = 1; i < 6; i++)
+    for (int i = 0; i < 4; i++)
     {
 
         if (Buttonarr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
@@ -593,7 +593,8 @@ void Options(RenderWindow& optionwindow)
 
 int PauseMenu(RenderWindow& pausewindow) {
     Font pausefont;
-    PAUSE = true;
+    
+    //PAUSE = true;
     pausefont.loadFromFile("Canterbury.ttf");
 
     Texture Pauseback;
@@ -611,7 +612,7 @@ int PauseMenu(RenderWindow& pausewindow) {
     Pausemenu_background.setTexture(Pauseback);
     Border.setTexture(Pauseborder);
     Border.setOrigin(749 / 2.f, 207 / 2.f);
-    Border.setPosition(pausewindow.getSize().x, 120);
+    Border.setPosition(pausewindow.getSize().x / 2.f, 120);
 
     for (int i = 0; i < 4; i++) {
         buttons[i].setTexture(&Buttontex);
@@ -619,13 +620,13 @@ int PauseMenu(RenderWindow& pausewindow) {
         buttons[i].setOrigin(buttons[i].getSize() / 2.f);
     }
     
-    buttons[0].setPosition(467, 279);
+    buttons[0].setPosition(pausewindow.getSize().x / 2.f, 279);
 
-    buttons[1].setPosition(467, 389);
+    buttons[1].setPosition(pausewindow.getSize().x / 2.f, 389);
 
-    buttons[2].setPosition(467, 499);
+    buttons[2].setPosition(pausewindow.getSize().x / 2.f, 499);
 
-    buttons[3].setPosition(467, 609);
+    buttons[3].setPosition(pausewindow.getSize().x / 2.f, 609);
 
     Text Pause[5];
     Pause[0].setFont(pausefont);
@@ -637,10 +638,10 @@ int PauseMenu(RenderWindow& pausewindow) {
     Pause[0].setOrigin(Pause[0].getLocalBounds().left + Pause[0].getLocalBounds().width / 2, Pause[0].getLocalBounds().top + Pause[0].getLocalBounds().height / 2);
     Pause[0].setPosition(Border.getPosition());
 
-    Pause[1].setString("Options");
+    Pause[1].setString("Resume");
     Pause[1].setPosition(buttons[0].getPosition());
 
-    Pause[2].setString("Resume");
+    Pause[2].setString("Options");
     Pause[2].setPosition(buttons[1].getPosition());
 
     Pause[3].setString("Main Menu");
@@ -675,8 +676,8 @@ int PauseMenu(RenderWindow& pausewindow) {
             PAUSE = false;
             return 1;
         }
-        else if (page == 0) { Volume(pausewindow); }//volume
-        else if (page == 1) {
+        else if (page == 1) { Volume(pausewindow); }//volume
+        else if (page == 0) {
             PAUSE = false;
             return 1;
         }
@@ -690,15 +691,15 @@ int PauseMenu(RenderWindow& pausewindow) {
         else if (page == 3) { pausewindow.close(); }//exit
 
         pausewindow.clear();
+        pausewindow.draw(Pausemenu_background);
+        pausewindow.draw(Border);
 
-        for (int i = 0; i < 5; i++) {
-            pausewindow.draw(Pause[i]);
-        }
         for (int i = 0; i < 4; i++) {
             pausewindow.draw(buttons[i]);
         }
-        pausewindow.draw(Pausemenu_background);
-        pausewindow.draw(Border);
+        for (int i = 0; i < 5; i++) {
+            pausewindow.draw(Pause[i]);
+        }
         cur.draw(pausewindow);
 
         pausewindow.display();
