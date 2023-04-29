@@ -522,10 +522,10 @@ void Controlls(RenderWindow& controllswindow)
     while (controllswindow.isOpen())
     {
 
-        sf::Event event;
+        Event event;
         while (controllswindow.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
             {
                 controllswindow.close();
             }
