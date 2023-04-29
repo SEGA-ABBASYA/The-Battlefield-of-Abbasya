@@ -123,21 +123,49 @@ struct interactionWindow
     Sprite playerIconSprite;
     Texture playerIconTexture;
 
+    Font arcadeClassic;
     string final_string;
+    string displayed_text;
     Text textToBeDisplayed;
     // textToBeDisplayed.setString(stringOfText);
 
     string player_name;
 
-
-    string displayed_text;
+    bool finishedInteracting = false;
     // constructor
     interactionWindow(string interactions[], int no_of_interactions, string plyr_nam)
     {
+        cout << "constructed" << endl;
         // the constructor initiates the window at a very small case , then it
         // enlarged in the update function
-        player_name = plyr_nam;
+
+        // loads textures
+        frameTexture.loadFromFile(path + "TextBox.png");
+        playerIconTexture.loadFromFile(path);
+        frameSprite.setTexture(frameTexture);
+        playerIconSprite.setTexture(playerIconTexture);
+
+        //set positions
+        frameSprite.setPosition(300, 400);
+        frameSprite.setOrigin(250, 250);
+        playerIconSprite.setPosition(100, 300);
+        textToBeDisplayed.setPosition(100, 400);
+        textToBeDisplayed.setColor(Color::Black);  
+
+        // set initial scales
+        frameSprite.setScale(0.1, 0.1);
+        playerIconSprite.setScale(0.5, 0.5);
+
+        //set finale scales 
+        frameScale = {1, 1};
+        playerIconScale = {1, 1};
+        
+        // loads font and initial/Applications/Visual Studio Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.htmlizes text
+        arcadeClassic.loadFromFile(path + "ArcadeClassic.ttf");
+        textToBeDisplayed.setFont(arcadeClassic);
         displayed_text = "";
+
+        player_name = plyr_nam;
 
         // takes a random interaction out of the interactions array
         int randomNumb =  rand() % no_of_interactions;
@@ -148,20 +176,26 @@ struct interactionWindow
     
     // update functions: gradually scales window, then gradually scales icon, then gradually shows text
     int text_index = 0;
+    float textTimer = 0.1;
     void update(float deltatime, RenderWindow& window)    
     {   
-        int scale_offset = 0.25;
+        // cout << "update of interaction got called\n";
+        float scale_offset = 2;
 
         // if the window isnt big enough yet, it gets scaled
         if(frameSprite.getScale().x < frameScale.x and frameSprite.getScale().y < frameScale.y)
         {
+            cout << "deltatime: " << deltatime << endl;
+            cout << "frame current scale: " << frameSprite.getScale().x ;
             // adds a slight increase to the scale every frame relative to delatatime
             frameSprite.setScale({frameSprite.getScale().x + scale_offset*deltatime, frameSprite.getScale().y + scale_offset*deltatime});
+            cout << "  frame new scale: " <<  frameSprite.getScale().x << endl;
         }
 
         // if window is finally scaled, but the icon is not, we get to scale the icon
         else if(playerIconSprite.getScale().x < playerIconScale.x and playerIconSprite.getScale().y < playerIconScale.y)
         {
+            cout << "frame fininshed scaling" << endl;
             // adds a slight increase to the scale every frame relative to delatatime
             playerIconSprite.setScale({playerIconSprite.getScale().x + scale_offset*deltatime, playerIconSprite.getScale().y + scale_offset*deltatime});
         }
@@ -172,17 +206,41 @@ struct interactionWindow
             // if not all of string have been displayed
             if(text_index < final_string.length() - 1)
             {
-                displayed_text = displayed_text + final_string[text_index];
-                textToBeDisplayed.setString(displayed_text);
-                text_index ++;
+                if(textTimer <= 0)
+                {
+                    displayed_text = displayed_text + final_string[text_index];
+                    textToBeDisplayed.setString(displayed_text);
+                    text_index ++;
+
+                    textTimer = 0.1;
+                }
+                else    
+                    textTimer -= deltatime;
             }
+            // if all has been displayed, starts timer, and when it ends, it destroys the window
+            else
+                finishedInteracting = true;
         }   
 
+        // window.draw(frameSprite);
+        // window.draw(playerIconSprite);
+        // window.draw(textToBeDisplayed);
+    }
+    void draw(RenderWindow& window)
+    {
         window.draw(frameSprite);
         window.draw(playerIconSprite);
         window.draw(textToBeDisplayed);
     }
-};
+    // destroy window
+    void destroyInteractionWindow()
+    {
+        frameSprite.setScale(0, 0);
+        playerIconSprite.setScale(0, 0);
+        textToBeDisplayed.setScale(0, 0);
+        // finishedInteracting = true;
+    }
+};          
 
 int cursor_select(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
@@ -988,14 +1046,17 @@ void game(int win1, int win2, RenderWindow& window)
 
     window.setFramerateLimit(60);
 
-    float interactionTimer = 10;
+    float interactionTimer = 5;
     bool isInInteractionMode = false;
     string arrayOfInteractions[100];
-    int no_of_interactions = 5;
+    int no_of_interactions = 1;
+    arrayOfInteractions[0] = "el salamo 3alekom wa ra7matolah";
     interactionWindow interactionwindow1(arrayOfInteractions, no_of_interactions, player1.name);
 
     while (window.isOpen())
     {
+        gameclock.restart();
+
         // if timer is not out and neither players are dead
         if (interactionTimer > 0 and player1.health > 0 and player2.health > 0)
         {
@@ -1018,15 +1079,18 @@ void game(int win1, int win2, RenderWindow& window)
 
         if(isInInteractionMode)
         {
+            cout << "interaction mode on\n";
             interactionwindow1.update(deltatime, window);
+            //interactionwindow1.draw(window);
             interactionTimer -= deltatime;  
         }
         else if(interactionTimer < 0)
         {
-
+            interactionwindow1.destroyInteractionWindow();
+            cout << "interaction off\n";
         }
 
-        gameclock.restart();
+        
         if (!PAUSE) {
             while (window.pollEvent(e)) {
                 if (e.type == Event::Closed)
@@ -1507,7 +1571,9 @@ void game(int win1, int win2, RenderWindow& window)
             window.draw(p2_healthBar);
             window.draw(player1.sprite);
             window.draw(player2.sprite);
+            interactionwindow1.draw(window);
             window.display();
+            //interactionwindow1.update(deltatime, window);
             deltatime = gameclock.getElapsedTime().asSeconds();
         }
     }

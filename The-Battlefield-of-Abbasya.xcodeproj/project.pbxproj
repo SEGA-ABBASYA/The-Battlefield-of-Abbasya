@@ -588,6 +588,7 @@
 		BE487AC329F9A73900120917 /* XP Bar Animated Yellow 8.png in Resources */ = {isa = PBXBuildFile; fileRef = BE487ABA29F9A73900120917 /* XP Bar Animated Yellow 8.png */; };
 		BE487AC429F9A73900120917 /* XP Bar Animated Yellow 9.png in Resources */ = {isa = PBXBuildFile; fileRef = BE487ABB29F9A73900120917 /* XP Bar Animated Yellow 9.png */; };
 		BE487AC829FA5F3300120917 /* The-Battlefield-of-Abbasya-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE487AC729FA5F3300120917 /* The-Battlefield-of-Abbasya-Info.plist */; };
+		BEBE021329FD533100140917 /* TextBox.png in Resources */ = {isa = PBXBuildFile; fileRef = BEBE021229FD533100140917 /* TextBox.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1272,6 +1273,7 @@
 		BE487ABA29F9A73900120917 /* XP Bar Animated Yellow 8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "XP Bar Animated Yellow 8.png"; sourceTree = "<group>"; };
 		BE487ABB29F9A73900120917 /* XP Bar Animated Yellow 9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "XP Bar Animated Yellow 9.png"; sourceTree = "<group>"; };
 		BE487AC729FA5F3300120917 /* The-Battlefield-of-Abbasya-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "The-Battlefield-of-Abbasya-Info.plist"; sourceTree = "<group>"; };
+		BEBE021229FD533100140917 /* TextBox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TextBox.png; sourceTree = "<group>"; };
 		BED0922329EDF07B00B3279F /* Battle3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battle3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -2132,6 +2134,7 @@
 				BE3083A129FA62590002506B /* ResourcePath.mm */,
 				BE4875EC29F9A72900120917 /* ArcadeClassic.ttf */,
 				BE487AC729FA5F3300120917 /* The-Battlefield-of-Abbasya-Info.plist */,
+				BEBE021229FD533100140917 /* TextBox.png */,
 				BE4875EB29F9A72900120917 /* Background.jpg */,
 				BE48764C29F9A72A00120917 /* background2.jpg */,
 				BE48763D29F9A72900120917 /* Bricks_01.png */,
@@ -2334,6 +2337,7 @@
 				BE48793E29F9A72D00120917 /* classsf_1_1Shape-members.html in Resources */,
 				BE4879A529F9A72D00120917 /* Ftp_8hpp_source.html in Resources */,
 				BE4878C029F9A72C00120917 /* background2.jpg in Resources */,
+				BEBE021329FD533100140917 /* TextBox.png in Resources */,
 				BE487A9829F9A72D00120917 /* functions_func_s.html in Resources */,
 				BE48791F29F9A72D00120917 /* classsf_1_1ThreadLocal.png in Resources */,
 				BE487AA129F9A72D00120917 /* Shader_8hpp_source.html in Resources */,
