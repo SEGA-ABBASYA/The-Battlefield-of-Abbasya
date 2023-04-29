@@ -671,7 +671,7 @@ void name(struct player, RenderWindow& namewindow) {
 
 
     Texture nameback;
-    nameback.loadFromFile("name enternce.png");
+    nameback.loadFromFile("Name Entry/name enternce.png");
     Sprite namebackground;
     namebackground.setTexture(nameback);
 
