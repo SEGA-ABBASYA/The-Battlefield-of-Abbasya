@@ -158,28 +158,32 @@ void setTextprop(Text& text) {
     text.setOrigin(text.getLocalBounds().left + text.getLocalBounds().width / 2, text.getLocalBounds().top + text.getLocalBounds().height / 2);
 }
 
-int cursor_select_pause(Text* arr, RenderWindow& mywindow)
+int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
     Mouse mouse;
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 4; i++)
     {
 
-        if (arr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
+        if (Buttonarr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
         {
-            arr[i].setFillColor(Color::Red);
+            arr[i+1].setFillColor(Color::White);
+            Buttonarr[i].setScale(1.1f, 1.1f);
+
 
             if (Mouse::isButtonPressed(Mouse::Left))
             {
-                arr[i].setFillColor(Color::White);
+                Buttonarr[i].setScale(1.f, 1.f);
+                arr[i+1].setFillColor(Color{ 245,176,38 });
                 return i;
             }
         }
         else
         {
-            arr[i].setFillColor(Color::White);
+            Buttonarr[i].setScale(1.f, 1.f);
+            arr[i+1].setFillColor(Color{ 245,176,38 });
         }
     }
-    return 0;
+    //return 0;
 }
 
 Sprite vol_arr[9];
@@ -589,38 +593,71 @@ void Options(RenderWindow& optionwindow)
 
 int PauseMenu(RenderWindow& pausewindow) {
     Font pausefont;
+    
+    //PAUSE = true;
     pausefont.loadFromFile("Canterbury.ttf");
+
+    Texture Pauseback;
+    Texture Pauseborder;
+    Texture Buttontex;
+
+    Pauseback.loadFromFile("Pause Menu/Pause Menu Background.png");
+    Pauseborder.loadFromFile("Pause Menu/Logo Frame.png");
+    Buttontex.loadFromFile("Pause Menu/Gold Button.png");
+
+    RectangleShape buttons[4];
+
+    Sprite Border;
+    Sprite Pausemenu_background;
+    Pausemenu_background.setTexture(Pauseback);
+    Border.setTexture(Pauseborder);
+    Border.setOrigin(749 / 2.f, 207 / 2.f);
+    Border.setPosition(pausewindow.getSize().x / 2.f, 120);
+
+    for (int i = 0; i < 4; i++) {
+        buttons[i].setTexture(&Buttontex);
+        buttons[i].setSize(Vector2f(345.f, 81.f));
+        buttons[i].setOrigin(buttons[i].getSize() / 2.f);
+    }
+    
+    buttons[0].setPosition(pausewindow.getSize().x / 2.f, 279);
+
+    buttons[1].setPosition(pausewindow.getSize().x / 2.f, 389);
+
+    buttons[2].setPosition(pausewindow.getSize().x / 2.f, 499);
+
+    buttons[3].setPosition(pausewindow.getSize().x / 2.f, 609);
+
     Text Pause[5];
     Pause[0].setFont(pausefont);
-    Pause[0].setString("The Battlefield of Abbasya");
-    Pause[0].setCharacterSize(60);
-    Pause[0].setFillColor(Color{ 255,204,0 });
-    Pause[0].setPosition(300, 100);
+    Pause[0].setString("Pause Menu");
+    Pause[0].setCharacterSize(96);
+    Pause[0].setFillColor(Color{ 245,176,38 });
+    Pause[0].setOutlineColor(Color::Black);
+    Pause[0].setOutlineThickness(2);
+    Pause[0].setOrigin(Pause[0].getLocalBounds().left + Pause[0].getLocalBounds().width / 2, Pause[0].getLocalBounds().top + Pause[0].getLocalBounds().height / 2);
+    Pause[0].setPosition(Border.getPosition());
 
-    Pause[1].setFont(pausefont);
-    Pause[1].setString("Volume");
-    Pause[1].setCharacterSize(60);
-    Pause[1].setFillColor(Color{ 255,204,0 });
-    Pause[1].setPosition(300, 200);
+    Pause[1].setString("Resume");
+    Pause[1].setPosition(buttons[0].getPosition());
 
-    Pause[2].setFont(pausefont);
-    Pause[2].setString("Resume");
-    Pause[2].setCharacterSize(60);
-    Pause[2].setFillColor(Color{ 255,204,0 });
-    Pause[2].setPosition(300, 250);
+    Pause[2].setString("Options");
+    Pause[2].setPosition(buttons[1].getPosition());
 
-    Pause[3].setFont(pausefont);
-    Pause[3].setString("Back To MainMenu");
-    Pause[3].setCharacterSize(60);
-    Pause[3].setFillColor(Color{ 255,204,0 });
-    Pause[3].setPosition(300, 300);
+    Pause[3].setString("Main Menu");
+    Pause[3].setPosition(buttons[2].getPosition());
 
-    Pause[4].setFont(pausefont);
     Pause[4].setString("Exit");
-    Pause[4].setCharacterSize(60);
-    Pause[4].setFillColor(Color{ 255,204,0 });
-    Pause[4].setPosition(300, 350);
+    Pause[4].setPosition(buttons[3].getPosition());
 
+    for (int i = 1;i < 5;i++) {
+        Pause[i].setFont(pausefont);
+        Pause[i].setFillColor(Color{ 245,176,38 });
+        Pause[i].setOutlineColor(Color::Black);
+        Pause[i].setOutlineThickness(1);
+        Pause[i].setCharacterSize(48);
+        Pause[i].setOrigin(Pause[i].getLocalBounds().left + Pause[i].getLocalBounds().width / 2, Pause[i].getLocalBounds().top + Pause[i].getLocalBounds().height / 2);
+    }
 
     while (pausewindow.isOpen())
     {
@@ -628,33 +665,38 @@ int PauseMenu(RenderWindow& pausewindow) {
         Event event;
         while (pausewindow.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
             {
                 pausewindow.close();
             }
 
         }
-        page = cursor_select_pause(Pause, pausewindow);
+        page = cursor_select_pause(Pause, buttons, pausewindow);
         if (Keyboard::isKeyPressed(Keyboard::R)) {
             PAUSE = false;
             return 1;
         }
         else if (page == 1) { Volume(pausewindow); }//volume
-        else if (page == 2) {
+        else if (page == 0) {
             PAUSE = false;
             return 1;
         }
-        else if (page == 3) {
+        else if (page == 2) {
             Round_Trans = false;
             win1 = 0;
             win2 = 0;
             PAUSE = false;
             return 0;
         }//main menu
-        else if (page == 4) { pausewindow.close(); }//exit
+        else if (page == 3) { pausewindow.close(); }//exit
 
         pausewindow.clear();
+        pausewindow.draw(Pausemenu_background);
+        pausewindow.draw(Border);
 
+        for (int i = 0; i < 4; i++) {
+            pausewindow.draw(buttons[i]);
+        }
         for (int i = 0; i < 5; i++) {
             pausewindow.draw(Pause[i]);
         }
