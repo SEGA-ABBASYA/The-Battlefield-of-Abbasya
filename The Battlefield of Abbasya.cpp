@@ -562,7 +562,7 @@ void Options(RenderWindow& optionwindow)
         sf::Event event;
         while (optionwindow.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
             {
                 optionwindow.close();
             }
@@ -589,7 +589,7 @@ void Options(RenderWindow& optionwindow)
 
 int PauseMenu(RenderWindow& pausewindow) {
     Font pausefont;
-    pausefont.loadFromFile("ArcadeClassic.ttf");
+    pausefont.loadFromFile("Canterbury.ttf");
     Text Pause[5];
     Pause[0].setFont(pausefont);
     Pause[0].setString("The Battlefield of Abbasya");
