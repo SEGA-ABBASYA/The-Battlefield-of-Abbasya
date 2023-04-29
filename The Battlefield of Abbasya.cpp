@@ -669,60 +669,6 @@ void name(struct player, RenderWindow& namewindow) {
 
     string name1,name2;
     Mouse mouse;
-    bool name_ = false;
-
-    Font font;
-    font.loadFromFile("Canterbury.ttf");
-
-    Text text1("", font);
-    Text text2("", font);
-
-    text1.setPosition(150, 380);
-    text1.setCharacterSize(42);
-    text2.setPosition(970, 380);
-    text2.setCharacterSize(42);
-
-    Text text[4];
-
-    text[0].setFont(font);
-    text[0].setFillColor(Color{ 255,204,0 });
-    text[0].setString("Player 1");
-    text[0].setCharacterSize(80);
-    text[0].setPosition(130, 270);
-
-    text[1].setFont(font);
-    text[1].setFillColor(Color{ 255,204,0 });
-    text[1].setString("Player 2");
-    text[1].setCharacterSize(80);
-    text[1].setPosition(950, 270);
-
-    text[2].setFont(font);
-    text[2].setFillColor(Color{ 255,204,0 });
-    text[2].setString("Enter Your Name");
-    text[2].setCharacterSize(42);
-    text[2].setPosition(500, 60);
-
-    text[3].setFont(font);
-    text[3].setFillColor(Color{ 255,204,0 });
-    text[3].setString("Start");
-    text[3].setCharacterSize(60);
-    text[3].setPosition(580, 375);
-
-    RectangleShape start[3];
-
-    start[0].setSize(Vector2f(316.f, 106.f));
-    start[0].setOrigin(158, 0);
-    start[0].setPosition(namewindow.getSize().x / 2, 370);
-    start[0].setFillColor(Color::Transparent);
-
-    start[1].setSize(Vector2f(300.f, 92.f));
-    start[1].setPosition(100, 370);
-    start[1].setFillColor(Color::Transparent);
-
-    start[2].setSize(Vector2f(300.f, 92.f));
-    start[2].setPosition(920, 370);
-    start[2].setFillColor(Color::Transparent);
-
 
 
     Texture nameback;
@@ -737,23 +683,80 @@ void name(struct player, RenderWindow& namewindow) {
     frames[3].loadFromFile("_Idle2 1.png");
     frames[4].loadFromFile("start1.png");
 
-    Sprite frame[6];
-    frame[0].setTexture(frames[0]);
-    frame[1].setTexture(frames[1]);
-    frame[2].setTexture(frames[1]);
-    frame[3].setTexture(frames[2]);
-    frame[4].setTexture(frames[3]);
-    frame[5].setTexture(frames[4]);
+    RectangleShape start[3];
 
-    frame[0].setOrigin(240, 0);
-    frame[0].setPosition(namewindow.getSize().x / 2, 10);
-    frame[1].setPosition(100, 370);
-    frame[2].setPosition(920, 370);
-    frame[3].setPosition(150, 350);
-    frame[4].setPosition(930, 340);
-    frame[5].setOrigin(158, 0);
-    frame[5].setPosition(namewindow.getSize().x / 2, 370);
+    //Start Button
+    start[0].setSize(Vector2f(316.f, 106.f));
+    start[0].setOrigin(151.f, 53.f);
+    start[0].setPosition(namewindow.getSize().x / 2, 400);
+    start[0].setTexture(&frames[4]);
+
+    //Player 1 name entry button
+    start[1].setSize(Vector2f(300.f, 92.f));
+    start[1].setPosition(250, 416);
+    start[1].setOrigin(150.f, 46.f);
+    start[1].setTexture(&frames[1]);
+
+    //Player 2 name entry button
+    start[2].setSize(Vector2f(300.f, 92.f));
+    start[2].setPosition(1070, 416);
+    start[2].setOrigin(150.f, 46.f);
+    start[2].setTexture(&frames[1]);
+
+    Sprite frame[3];
+
+    //Player 1 Picture
+    frame[0].setTexture(frames[2]);
+
+    //Player 2 Picture
+    frame[1].setTexture(frames[3]);
+
+    //Enter Your name 
+    frame[2].setTexture(frames[0]);
+
+    frame[0].setPosition(150, 350);
+    frame[1].setPosition(930, 340);
+    frame[2].setOrigin(240, 70);
+    frame[2].setPosition(namewindow.getSize().x / 2, 100);
     
+    bool name_ = false;
+
+    Font font;
+    font.loadFromFile("Canterbury.ttf");
+
+    Text text1("Bakr", font);
+    Text text2("Fat7allah", font);
+
+    text1.setPosition(150, 385);
+    text1.setCharacterSize(42);
+    text2.setPosition(970, 385);
+    text2.setCharacterSize(42);
+
+    Text text[4];
+
+    text[0].setString("Player 1");
+    text[0].setCharacterSize(80);
+    text[0].setPosition(start[1].getPosition().x, 270);
+
+    text[1].setString("Player 2");
+    text[1].setCharacterSize(80);
+    text[1].setPosition(start[2].getPosition().x, 270);
+
+    text[2].setString("Enter Your Name");
+    text[2].setCharacterSize(42);
+    text[2].setPosition(frame[2].getPosition().x, frame[2].getPosition().y + 5);
+
+    text[3].setString("Start");
+    text[3].setCharacterSize(60);
+    text[3].setPosition(start[0].getPosition().x, start[0].getPosition().y - 5);
+
+    for (int i = 0;i < 4;i++) {
+        text[i].setFont(font);
+        text[i].setFillColor(Color{ 101,154,171 });
+        text[i].setOutlineColor(Color::Black);
+        text[i].setOutlineThickness(2);
+        text[i].setOrigin(text[i].getLocalBounds().left + text[i].getLocalBounds().width / 2, text[i].getLocalBounds().top + text[i].getLocalBounds().height / 2);
+    }
 
 
 
@@ -770,7 +773,7 @@ void name(struct player, RenderWindow& namewindow) {
 
             if (start[2].getGlobalBounds().contains(mouse.getPosition(namewindow).x, mouse.getPosition(namewindow).y))
             {
-                frame[2].setScale(1.1, 1.1);
+                start[2].setScale(1.1, 1.1);
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     name_ = true;
@@ -779,12 +782,12 @@ void name(struct player, RenderWindow& namewindow) {
             }
             else
             {
-                frame[2].setScale(1, 1);
+                start[2].setScale(1, 1);
             }
 
             if (start[1].getGlobalBounds().contains(mouse.getPosition(namewindow).x, mouse.getPosition(namewindow).y))
             {
-                frame[1].setScale(1.1, 1.1);
+                start[1].setScale(1.1, 1.1);
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     name_ = false;
@@ -793,12 +796,13 @@ void name(struct player, RenderWindow& namewindow) {
             }
             else
             {
-                frame[1].setScale(1, 1);
+                start[1].setScale(1, 1);
             }
 
+            //Start Button
             if (start[0].getGlobalBounds().contains(mouse.getPosition(namewindow).x, mouse.getPosition(namewindow).y))
             {
-                frame[5].setScale(1.1, 1.1);
+                start[0].setScale(1.1, 1.1);
                 text[3].setFillColor(Color::White);
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
@@ -807,8 +811,8 @@ void name(struct player, RenderWindow& namewindow) {
                 }
             }
             else {
-                text[3].setFillColor(Color{ 255,204,0 });
-                frame[5].setScale(1, 1);
+                text[3].setFillColor(Color{ 101,154,171 });
+                start[0].setScale(1, 1);
 
             }
 
@@ -874,12 +878,10 @@ void name(struct player, RenderWindow& namewindow) {
         player2.name = name2;
         namewindow.clear();
         namewindow.draw(namebackground);
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 3; i++) {
             namewindow.draw(frame[i]);
+            namewindow.draw(start[i]);
         }
-        namewindow.draw(start[0]);
-        namewindow.draw(start[1]);
-        namewindow.draw(start[2]);
         namewindow.draw(text1);
         namewindow.draw(text2);
         for (int j = 0; j < 4; j++) {
