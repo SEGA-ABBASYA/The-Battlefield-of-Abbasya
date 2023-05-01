@@ -1204,7 +1204,7 @@ void game(int win1, int win2, RenderWindow &window)
         {
             Round_Trans = false;
             // interactionwindow1.destroyInteractionWindow();
-            cout << "interaction off\n";
+            // cout << "interaction off\n";
         }
 
         if (!PAUSE)
