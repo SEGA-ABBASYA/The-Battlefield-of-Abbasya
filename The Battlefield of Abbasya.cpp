@@ -45,9 +45,9 @@ int win1 = 0;
 int win2 = 0;
 bool PAUSE = false;
 bool Round_Trans = false;
-int volume_ = 90;
+int volume_ = 100;
 bool name__ = false;
-
+Sprite vol_arr[11];
 Font menufont;
 Texture optionButton;
 Texture optionButton2;
@@ -187,8 +187,6 @@ int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywi
     //return 0;
 }
 
-Sprite vol_arr[9];
-
 void MainMenu(RenderWindow& mainwindow)
 {
     // Create the menu items
@@ -301,59 +299,139 @@ void MainMenu(RenderWindow& mainwindow)
 
     }
 }
+void credits_text(Text* arr,RenderWindow& textwindow) {
+    Mouse mouse;
+    /*if (arr[0].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
+    {
+        arr[0].setFillColor(Color::Red);
+    }
+    else {
+        arr[0].setFillColor(Color::Black);
+    }*/
+
+
+    if (arr[1].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
+    {
+        arr[1].setFillColor(Color::Blue);
+    }
+    else {
+        arr[1].setFillColor(Color::Black);
+    }
+
+
+    if (arr[2].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
+    {
+        arr[2].setFillColor(Color::Cyan);
+    }
+    else {
+        arr[2].setFillColor(Color::Black);
+    }
+
+    if (arr[3].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
+    {
+        arr[3].setFillColor(Color::Magenta);
+    }
+    else {
+        arr[3].setFillColor(Color::Black);
+    }
+
+    if (arr[4].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
+    {
+        arr[4].setFillColor(Color::Yellow);
+    }
+    else {
+        arr[4].setFillColor(Color::Black);
+    }
+
+    if (arr[5].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
+    {
+        arr[5].setFillColor(Color::Green);
+    }
+    else {
+        arr[5].setFillColor(Color::Black);
+    }
+
+    if (arr[6].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
+    {
+        arr[6].setFillColor(Color{ 255,204,0 });
+    }
+    else {
+        arr[6].setFillColor(Color::Black);
+    }
+    if (arr[7].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
+    {
+        arr[7].setFillColor(Color(187, 220, 244));
+    }
+    else {
+        arr[7].setFillColor(Color::Black);
+    }
+    
+}
 
 void Credits(RenderWindow& creditswindow) {
     Font Credits;
-    Credits.loadFromFile("ArcadeClassic.ttf");
+    Credits.loadFromFile("Canterbury.ttf");
 
+    Texture group;
+    group.loadFromFile("credit_pic1 1.png");
+    Sprite pic;
+    pic.setTexture(group);
+
+    Texture frame;
+    frame.loadFromFile("main frame1.png");
+    Sprite mainframe;
+    mainframe.setTexture(frame);
+
+    mainframe.setOrigin(180, 0);
+    mainframe.setPosition(1050, 30);
     Text select[8];
     select[0].setFont(Credits);
-    select[0].setFillColor(Color::White);
+    select[0].setFillColor(Color::Black);
     select[0].setString("Main Menu");
     select[0].setCharacterSize(60);
-    select[0].setPosition(100, 620);
+    select[0].setPosition(925, 30);
 
     select[1].setFont(Credits);
     select[1].setString("Abd ElRahman Mustafa");
     select[1].setCharacterSize(40);
-    select[1].setFillColor(Color::White);
-    select[1].setPosition(20, 20);
+    select[1].setFillColor(Color::Black);
+    select[1].setPosition(155, 10);
 
     select[2].setFont(Credits);
-    select[2].setFillColor(Color::White);
+    select[2].setFillColor(Color::Black);
     select[2].setString("Abd ElRahman Osama");
     select[2].setCharacterSize(40);
-    select[2].setPosition(20, 100);
+    select[2].setPosition(155, 65);
 
     select[3].setFont(Credits);
-    select[3].setFillColor(Color::White);
+    select[3].setFillColor(Color::Black);
     select[3].setString("Mahmoud Emad");
     select[3].setCharacterSize(40);
-    select[3].setPosition(20, 180);
+    select[3].setPosition(170, 180);
 
     select[4].setFont(Credits);
-    select[4].setFillColor(Color::White);
+    select[4].setFillColor(Color::Black);
     select[4].setString("Yousef Ashraf");
     select[4].setCharacterSize(40);
-    select[4].setPosition(20, 260);
+    select[4].setPosition(600, 10);
 
     select[5].setFont(Credits);
-    select[5].setFillColor(Color::White);
+    select[5].setFillColor(Color::Black);
     select[5].setString("Yousef Ahmed");
     select[5].setCharacterSize(40);
-    select[5].setPosition(20, 340);
+    select[5].setPosition(600, 125);
 
     select[6].setFont(Credits);
-    select[6].setFillColor(Color::White);
+    select[6].setFillColor(Color::Black);
     select[6].setString("Yousef Khataan");
     select[6].setCharacterSize(40);
-    select[6].setPosition(20, 420);
+    select[6].setPosition(600, 65);
 
     select[7].setFont(Credits);
-    select[7].setFillColor(Color::White);
-    select[7].setString("Ziad Khaled ");
+    select[7].setFillColor(Color::Black);
+    select[7].setString("Ziad Khaled Shraf");
     select[7].setCharacterSize(40);
-    select[7].setPosition(20, 520);
+    select[7].setPosition(155, 125);
 
     while (creditswindow.isOpen())
     {
@@ -364,23 +442,30 @@ void Credits(RenderWindow& creditswindow) {
             {
                 creditswindow.close();
             }
-        }
-        RectangleShape backtomain;
-        backtomain.setSize(Vector2f(300.f, 100.f));
-        backtomain.setPosition(110, 620);
-        backtomain.setFillColor(Color::Transparent);
-
+        } 
         Mouse mouse;
-        if (backtomain.getGlobalBounds().contains(mouse.getPosition(creditswindow).x, mouse.getPosition(creditswindow).y))
+        if (mainframe.getGlobalBounds().contains(mouse.getPosition(creditswindow).x, mouse.getPosition(creditswindow).y))
         {
+            mainframe.setOrigin(180, 0);
+            mainframe.setScale(1.1, 1.1);
+            select[0].setFillColor(Color::Red);
             if (Mouse::isButtonPressed(Mouse::Left))
             {
                 return;
             }
         }
-        creditswindow.clear();
-        //pagenum = cursor_select(select, creditswindow);
+        else {
+            mainframe.setOrigin(180, 0);
+            mainframe.setScale(1, 1);
+            select[0].setFillColor(Color::Black);
 
+        }
+       
+        credits_text(select,creditswindow);
+        creditswindow.clear();
+       
+        creditswindow.draw(pic);
+        creditswindow.draw(mainframe);
 
         for (int i = 0; i < 8; i++) {
             creditswindow.draw(select[i]);
@@ -388,7 +473,7 @@ void Credits(RenderWindow& creditswindow) {
 
 
         cur.draw(creditswindow);
-        creditswindow.draw(backtomain);
+    
         creditswindow.display();
     }
 }
@@ -397,62 +482,80 @@ void game(int win1, int win2, RenderWindow& window);
 
 void Volume(RenderWindow& volumewindow)
 {
+    Mouse mouse;
     Font volumefont;
-    volumefont.loadFromFile("ArcadeClassic.ttf");
-    Text volume[3];
+    volumefont.loadFromFile("Canterbury.ttf");
+    Text volume[2];
     volume[0].setFont(volumefont);
-    volume[0].setString("The Battlefield of Abbasya");
+    volume[0].setString("Volume");
     volume[0].setCharacterSize(60);
-    volume[0].setFillColor(Color{ 255,204,0 });
-    volume[0].setPosition(300, 100);
+    volume[0].setFillColor(Color::Black);
+    volume[0].setPosition((volumewindow.getSize().x / 2)-85, 20);
 
     volume[1].setFont(volumefont);
-    volume[1].setString("Resume");
+    volume[1].setString("Back");
     volume[1].setCharacterSize(60);
-    volume[1].setFillColor(Color{ 255,204,0 });
-    volume[1].setPosition(600, 600);
+    volume[1].setFillColor(Color::Black);
+    volume[1].setPosition(590, 580);
 
-    volume[2].setFont(volumefont);
-    volume[2].setString("Mute");
-    volume[2].setCharacterSize(60);
-    volume[2].setFillColor(Color{ 255,204,0 });
-    volume[2].setPosition(600, 550);
+    Texture volume_back;
+    volume_back.loadFromFile("Volume Bar/volume background.png");
+    Sprite Back;
+    Back.setTexture(volume_back);
 
 
-    Texture vol80;
-    Texture vol70;
-    Texture vol60;
-    Texture vol50;
-    Texture vol40;
-    Texture vol30;
-    Texture vol20;
-    Texture vol10;
-    Texture vol0;
+    Texture buttons[5];
+    buttons[0].loadFromFile("Volume Bar/back frame.png");
+    buttons[1].loadFromFile("Volume Bar/mute-.png");
+    buttons[2].loadFromFile("Volume Bar/volume frame.png");
+    buttons[3].loadFromFile("Volume Bar/volume++-.png");
+    buttons[4].loadFromFile("Volume Bar/volume--- 1.png");
 
-    vol80.loadFromFile("Volume Bar/XP Bar Animated Yellow 1.png");
-    vol70.loadFromFile("Volume Bar/XP Bar Animated Yellow 2.png");
-    vol60.loadFromFile("Volume Bar/XP Bar Animated Yellow 3.png");
-    vol50.loadFromFile("Volume Bar/XP Bar Animated Yellow 4.png");
-    vol40.loadFromFile("Volume Bar/XP Bar Animated Yellow 5.png");
-    vol30.loadFromFile("Volume Bar/XP Bar Animated Yellow 6.png");
-    vol20.loadFromFile("Volume Bar/XP Bar Animated Yellow 7.png");
-    vol10.loadFromFile("Volume Bar/XP Bar Animated Yellow 8.png");
-    vol0.loadFromFile("Volume Bar/XP Bar Animated Yellow 9.png");
+ 
+    Sprite button[5];
+    for (int i = 0; i < 5; i++) {
+        button[i].setTexture(buttons[i]);
+    }
 
-    vol_arr[8].setTexture(vol80);
-    vol_arr[7].setTexture(vol70);
-    vol_arr[6].setTexture(vol60);
-    vol_arr[5].setTexture(vol50);
-    vol_arr[4].setTexture(vol40);
-    vol_arr[3].setTexture(vol30);
-    vol_arr[2].setTexture(vol20);
-    vol_arr[1].setTexture(vol10);
-    vol_arr[0].setTexture(vol0);
+    button[0].setOrigin(150, 0);
+    button[0].setPosition((volumewindow.getSize().x / 2)+10, 20);
+    
+    button[1].setOrigin(0, 0);
+    button[1].setPosition(volumewindow.getSize().x / 2-50, (volumewindow.getSize().y / 2)+50);
 
-    for (int i = 0; i < 9; i++) {
-        vol_arr[i].setScale(7, 7);
-        vol_arr[i].setOrigin(vol10.getSize().x / 2, vol10.getSize().y / 2);
-        vol_arr[i].setPosition(volumewindow.getSize().x / 2, volumewindow.getSize().y / 2);
+    button[2].setOrigin(140, 0);
+    button[2].setPosition(volumewindow.getSize().x / 2, 550);
+
+    button[3].setOrigin(0, 0);
+    button[3].setPosition((volumewindow.getSize().x / 2) + 420, (volumewindow.getSize().y / 2) - 90);
+    button[3].setScale(0.9, 0.9);
+
+    button[4].setOrigin(44, 0);
+    button[4].setPosition((volumewindow.getSize().x / 2) - 500, (volumewindow.getSize().y / 2) - 90);
+
+
+    Texture vol[11];
+    
+    vol[10].loadFromFile("Volume Bar/New_HealthBar100.png");
+    vol[9].loadFromFile("Volume Bar/New_HealthBar90.png");
+    vol[8].loadFromFile("Volume Bar/New_HealthBar80.png");
+    vol[7].loadFromFile("Volume Bar/New_HealthBar70.png");
+    vol[6].loadFromFile("Volume Bar/New_HealthBar60.png");
+    vol[5].loadFromFile("Volume Bar/New_HealthBar50.png");
+    vol[4].loadFromFile("Volume Bar/New_HealthBar40.png");
+    vol[3].loadFromFile("Volume Bar/New_HealthBar30.png");
+    vol[2].loadFromFile("Volume Bar/New_HealthBar20.png");
+    vol[1].loadFromFile("Volume Bar/New_HealthBar10.png");
+    vol[0].loadFromFile("Volume Bar/New_HealthBar00.png");
+
+    for (int i = 0; i < 11; i++) {
+        vol_arr[i].setTexture(vol[i]);
+    }
+
+    for (int i = 0; i < 11; i++) {
+        vol_arr[i].setScale(1, 1);
+        vol_arr[i].setOrigin(vol[i].getSize().x / 2, vol[i].getSize().y / 2);
+        vol_arr[i].setPosition(volumewindow.getSize().x / 2, volumewindow.getSize().y / 2-47);
 
     }
 
@@ -465,44 +568,81 @@ void Volume(RenderWindow& volumewindow)
             {
                 volumewindow.close();
             }
-            if (event.type == Event::KeyPressed) {
-                if (event.key.code == Keyboard::L) {
+            if (button[4].getGlobalBounds().contains(mouse.getPosition(volumewindow).x, mouse.getPosition(volumewindow).y)) {
+
+                button[4].setOrigin(44, 0);
+                button[4].setScale(1.1, 1.1);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
                     if (volume_ - 10 >= 0)
                         volume_ -= 10;
                 }
+            }
+            else
+            {
+                button[4].setScale(1, 1);
+            }
+            
+            if (button[3].getGlobalBounds().contains(mouse.getPosition(volumewindow).x, mouse.getPosition(volumewindow).y)) {
 
-
-                if (event.type == Event::KeyPressed) {
-                    if (event.key.code == Keyboard::H) {
-                        if (volume_ + 10 <= 90)
-                            volume_ += 10;
-                    }
-
+                button[3].setOrigin(0, 0);
+                button[3].setScale(1, 1);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    if (volume_ + 10 <= 100)
+                        volume_ += 10;
                 }
             }
-        }
-        RectangleShape resume_volume;
-        resume_volume.setSize(Vector2f(200.f, 100.f));
-        resume_volume.setPosition(600, 600);
-        resume_volume.setFillColor(Color::Transparent);
-
-        Mouse mouse;
-        if (resume_volume.getGlobalBounds().contains(mouse.getPosition(volumewindow).x, mouse.getPosition(volumewindow).y))
-        {
-            if (Mouse::isButtonPressed(Mouse::Left))
+            else
             {
-                return;
+                button[3].setScale(0.9, 0.9);
+            }
+
+            if (button[1].getGlobalBounds().contains(mouse.getPosition(volumewindow).x, mouse.getPosition(volumewindow).y)) {
+
+                button[1].setOrigin(0, 0);
+                button[1].setScale(1.1, 1.1);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                        volume_ = 0;
+                }
+            }
+            else
+            {
+                button[1].setScale(1, 1);
+                
+            }
+            if (button[2].getGlobalBounds().contains(mouse.getPosition(volumewindow).x, mouse.getPosition(volumewindow).y)) {
+
+                button[2].setOrigin(140, 0);
+                button[2].setScale(1.1, 1.1);
+                volume[1].setFillColor(Color::White);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                button[2].setScale(1, 1);
+                volume[1].setFillColor(Color::Black);
             }
         }
+        
 
-        volumewindow.clear(Color::White);
+        volumewindow.clear();
+
+        volumewindow.draw(Back);
+
+        for (int i = 0; i < 5; i++) {
+            volumewindow.draw(button[i]);
+        }
 
         for (int i = 0; i < 2; i++) {
             volumewindow.draw(volume[i]);
         }
 
-        volumewindow.draw(resume_volume);
-        int voll = ((volume_ - 1) / 10.0);
+        int voll = ((volume_) / 10.0);
 
         volumewindow.draw(vol_arr[voll]);
 
@@ -968,6 +1108,7 @@ Texture hp_bar[6];
 int main()
 {
     RenderWindow get_window(VideoMode(1280, 720), "The Battlefield of Abbasya");
+    
     get_window.setFramerateLimit(60);
 
     while (get_window.isOpen())
