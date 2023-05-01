@@ -11,9 +11,9 @@
 
 using namespace sf;
 using namespace std;
-string path = "/Users/yoyo/#COLLEGE/The-Battlefield-of-Abbasya/";
+// string path = "/Users/yoyo/#COLLEGE/The-Battlefield-of-Abbasya/";
 // string path = resourcePath();
-// string path = "";
+ string path = "";
 
 // 0 -> MainMenu
 // 1 -> Choose Your Hero
@@ -139,7 +139,7 @@ private:
     void setInteractions(string arr[])
     {
         arr[0] = "el salamo 3alekom wa \nra7matolah dejcbeijcn \nencije ibnceiuc ubce unu3ni";
-        arr[1] = "hey whats up guys";
+        arr[1] = "Aboos Edak Er7mny";
         arr[2] = "I am delighted to be here";
         arr[3] = "You may not indure the \nslays of my mighty sword";
         arr[4] = "May the odds be in your \nfavor";
@@ -177,7 +177,7 @@ public:
         // frameSprite.setPosition(300, 200);
         frameSprite.setPosition(xPos, yPos);
         textToBeDisplayed.setPosition(frameSprite.getPosition().x - 200, frameSprite.getPosition().y - 40);
-        textToBeDisplayed.setColor(Color::Black);
+        textToBeDisplayed.setFillColor(Color::Black);
         frameSprite.setOrigin(250, 250);
 
         pressSpaceToSkip.setPosition(310, 633);
@@ -190,7 +190,7 @@ public:
         frameScale = {1, 1};
 
         // loads font and initial/Applications/Visual Studio Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.htmlizes text
-        arcadeClassic.loadFromFile(path + "ArcadeClassic.ttf");
+        arcadeClassic.loadFromFile(path + "Canterbury.ttf");
         textToBeDisplayed.setFont(arcadeClassic);
         pressSpaceToSkip.setFont(arcadeClassic);
         pressSpaceToSkip.setString("Press Space To Skip");
