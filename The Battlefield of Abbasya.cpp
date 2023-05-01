@@ -127,14 +127,15 @@ private:
     Sprite frameSprite;
     Texture frameTexture;
 
-
     Font arcadeClassic;
     string final_string;
     string displayed_text;
     Text textToBeDisplayed;
 
+    Text pressSpaceToSkip;
     string player_name;
 
+    bool aborted = false;
     void setInteractions(string arr[])
     {
         arr[0] = "el salamo 3alekom wa \nra7matolah dejcbeijcn \nencije ibnceiuc ubce unu3ni";
@@ -163,9 +164,8 @@ public:
     interactionWindow(string interactions[], string plyr_nam, float xPos, float yPos)
     {
         cout << "constructed" << endl;
-        // the constructor initiates the window at a very small case , then it
-        // enlarged in the update function
-        
+        // the constructor initiates the window at a zero size, then it enlarged in the update function
+
         // initialize the array of text interactions
         setInteractions(interactions);
 
@@ -179,16 +179,22 @@ public:
         textToBeDisplayed.setPosition(frameSprite.getPosition().x - 200, frameSprite.getPosition().y - 40);
         textToBeDisplayed.setColor(Color::Black);
         frameSprite.setOrigin(250, 250);
-            
+
+        pressSpaceToSkip.setPosition(310, 633);
+        pressSpaceToSkip.setScale(2, 2);
+
         // set initial scales
         frameSprite.setScale(0, 0);
 
-        // set finale scales
+        // set final scales
         frameScale = {1, 1};
 
         // loads font and initial/Applications/Visual Studio Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.htmlizes text
         arcadeClassic.loadFromFile(path + "ArcadeClassic.ttf");
         textToBeDisplayed.setFont(arcadeClassic);
+        pressSpaceToSkip.setFont(arcadeClassic);
+        pressSpaceToSkip.setString("Press Space To Skip");
+        // pressSpaceToSkip.setColor(Color::White);
         displayed_text = "";
 
         player_name = plyr_nam;
@@ -206,10 +212,15 @@ private:
     float textTimer = 0.1;
     float pauseTimer = 2.5;
     int lettersPerLine = 0;
+    int flutter_timer = 20;
+    bool isSkipTextShown = true;
 
 public:
     void update(float deltatime, RenderWindow &window)
     {
+
+
+
         // cout << "update of interaction got called\n";
         float scale_offset = 2;
         float descale_offset = 2;
@@ -220,7 +231,7 @@ public:
         //     cout << "not finished interacting\n";
 
         // if the window isnt big enough yet, it gets scaled
-        if (frameSprite.getScale().x < frameScale.x and frameSprite.getScale().y < frameScale.y and !deletingWindow)
+        if (frameSprite.getScale().x < frameScale.x and frameSprite.getScale().y < frameScale.y and !deletingWindow and !aborted)
         {
             cout << "window getting bigger\n";
             // cout << "deltatime: " << deltatime << endl;
@@ -234,7 +245,7 @@ public:
         else
         {
             // if not all of string have been displayed
-            if (text_index < final_string.length())
+            if (text_index < final_string.length() and !aborted)
             {
                 cout << "text getting displayed\n";
                 if (textTimer <= 0)
@@ -243,9 +254,10 @@ public:
                     textToBeDisplayed.setString(displayed_text);
                     text_index++;
                     lettersPerLine++;
-                    
-                    // resets timer 
+
+                    // resets timer
                     textTimer = timer_per_letter;
+
                 }
                 else
                     textTimer -= deltatime;
@@ -253,7 +265,7 @@ public:
             // if all has been displayed, starts timer, and when it ends, it destroys the window
             else
             {
-                if (pauseTimer <= 0)
+                if (pauseTimer <= 0 or aborted)
                 {
                     deletingWindow = true;
                     // if not , plays reverse animation for shrinking
@@ -263,7 +275,7 @@ public:
                         frameSprite.setScale({frameSprite.getScale().x - descale_offset * deltatime, frameSprite.getScale().y - descale_offset * deltatime});
                         // cout << "  frame new scale: " << frameSprite.getScale().x << "  delatatime: " << deltatime << endl;
 
-                        //textToBeDisplayed.setScale({textToBeDisplayed.getScale().x - scale_offset * deltatime, textToBeDisplayed.getScale().y - scale_offset * deltatime});
+                        // textToBeDisplayed.setScale({textToBeDisplayed.getScale().x - scale_offset * deltatime, textToBeDisplayed.getScale().y - scale_offset * deltatime});
                         textToBeDisplayed.setScale(0, 0);
                     }
                     // if finished shrinking, destroys and marks the bool as true for external use
@@ -287,18 +299,48 @@ public:
     }
     void draw(RenderWindow &window)
     {
-        if(!finishedInteracting)
+        if (!finishedInteracting)
         {
+            // flutters the press to skip text
+            if(!aborted)
+            {
+                if (flutter_timer <= 0)
+                {
+                    if (isSkipTextShown)
+                    {
+                        isSkipTextShown = false;
+                    }
+                    else
+                        isSkipTextShown = true;
+
+                    flutter_timer = 20;
+                }
+                else
+                {
+                    if (isSkipTextShown)
+                    {
+                        window.draw(pressSpaceToSkip);
+                    }
+                    flutter_timer -= deltatime;
+                }
+            }
+
             window.draw(frameSprite);
-            //window.draw(playerIconSprite);
+            // window.draw(playerIconSprite);
             window.draw(textToBeDisplayed);
+            // window.draw(pressSpaceToSkip);
         }
+    }
+
+    void abort()
+    {
+        aborted = true;
     }
     // destroy window
     void destroyInteractionWindow()
     {
         frameSprite.setScale(0, 0);
-        //playerIconSprite.setScale(0, 0);
+        // playerIconSprite.setScale(0, 0);
         textToBeDisplayed.setScale(0, 0);
         // finishedInteracting = true;
     }
@@ -1140,28 +1182,28 @@ void game(int win1, int win2, RenderWindow &window)
     window.setFramerateLimit(60);
 
     string arrayOfInteractions[100];
-    interactionWindow interactionwindow1(arrayOfInteractions,  player1.name, 300, 200);
+    interactionWindow interactionwindow1(arrayOfInteractions, player1.name, 300, 200);
     interactionWindow interactionWindow2(arrayOfInteractions, player2.name, 1000, 200);
 
     while (window.isOpen())
     {
         gameclock.restart();
 
-        if(!interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
+        if (!interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
         {
             Round_Trans = true;
-            //cout << "interaction mode on\n";
+            // cout << "interaction mode on\n";
             interactionwindow1.update(deltatime, window);
         }
-        else if(interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
+        else if (interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
         {
             Round_Trans = true;
             interactionWindow2.update(deltatime, window);
         }
-        else if(interactionwindow1.finishedInteracting and interactionWindow2.finishedInteracting)
+        else if (interactionwindow1.finishedInteracting and interactionWindow2.finishedInteracting)
         {
             Round_Trans = false;
-            //interactionwindow1.destroyInteractionWindow();
+            // interactionwindow1.destroyInteractionWindow();
             cout << "interaction off\n";
         }
 
@@ -1274,6 +1316,18 @@ void game(int win1, int win2, RenderWindow &window)
                                 p1_healthBar.setTexture(&P1_HealthBar_Texture);
                             }
                         }
+                    }
+
+                    // space to stop interacting
+                    if (!interactionwindow1.finishedInteracting)
+                    {
+                        if (e.key.code == Keyboard::Space)
+                            interactionwindow1.abort();
+                    }
+                    if (!interactionWindow2.finishedInteracting)
+                    {
+                        if (e.key.code == Keyboard::Space)
+                            interactionWindow2.abort();
                     }
                 }
             }
