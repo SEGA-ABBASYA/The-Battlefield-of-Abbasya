@@ -139,7 +139,7 @@ private:
     bool aborted = false;
     void setInteractions(string arr[])
     {
-        arr[0] = "el salamo 3alekom wa \nra7matolah dejcbeijcn \nencije ibnceiuc ubce unu3ni";
+        arr[0] = "el salamo 3alekom wa \nrahmat allah w barakato";
         arr[1] = "Aboos Edak Er7mny";
         arr[2] = "I am delighted to be here";
         arr[3] = "You may not indure the \nslays of my mighty sword";
@@ -164,7 +164,7 @@ public:
     // constructor
     interactionWindow(string interactions[], string plyr_nam, float xPos, float yPos)
     {
-        cout << "constructed" << endl;
+        //cout << "constructed" << endl;
         // the constructor initiates the window at a zero size, then it enlarged in the update function
 
         // initialize the array of text interactions
