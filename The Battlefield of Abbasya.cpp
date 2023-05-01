@@ -1590,9 +1590,6 @@ void game(int win1, int win2, RenderWindow &window)
         if (name__) {
             name(player1, window);
         }
-       
-        if (!PAUSE) {
-            while (window.pollEvent(e)) {
 
         if (!interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
         {
