@@ -1,13 +1,19 @@
-﻿#include <iostream>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/window.hpp>
 #include <vector>
-#include <string>
 #include <time.h>
+#include <string>
+#include <cstdlib>
+// #include "ResourcePath.hpp"
+
 using namespace sf;
 using namespace std;
+// string path = "/Users/yoyo/#COLLEGE/The-Battlefield-of-Abbasya/";
+// string path = resourcePath();
+ string path = "";
 
 // 0 -> MainMenu
 // 1 -> Choose Your Hero 
@@ -52,13 +58,15 @@ Font menufont;
 Texture optionButton;
 Texture optionButton2;
 
-struct cursor {
+struct cursor
+{
     Texture texture;
     Sprite sprite;
 
-    cursor() {
+    cursor()
+    {
         // Load the cursor texture
-        texture.loadFromFile("cursor.png");
+        texture.loadFromFile(path + "cursor.png");
 
         // Create the cursor sprite
         sprite.setTexture(texture);
@@ -66,7 +74,8 @@ struct cursor {
         sprite.setOrigin(texture.getSize().x / 15, texture.getSize().y / 15);
     }
 
-    void draw(RenderWindow& window) {
+    void draw(RenderWindow &window)
+    {
         // Set the cursor sprite's position to the mouse position
         sprite.setPosition(Vector2f(Mouse::getPosition(window)));
         // Set the mouse cursor to be hidden
@@ -74,24 +83,26 @@ struct cursor {
         // Draw the cursor sprite
         window.draw(sprite);
     }
-}cur;
+} cur;
 struct Hitbox
 {
     RectangleShape attack;
     RectangleShape player;
 
-    //function for setting the properties of a hitbox
-    void sethitbox(Sprite& w, RectangleShape& x, float y, float z, Color l) {
+    // function for setting the properties of a hitbox
+    void sethitbox(Sprite &w, RectangleShape &x, float y, float z, Color l)
+    {
         x.setSize(Vector2f(y, z));
         x.setFillColor(l);
         x.setPosition(w.getPosition().x, w.getPosition().y + 10);
         x.setOrigin(y / 2, -6);
     }
 };
-struct player {
+struct player
+{
     string name;
     int health = 100;
-    Vector2f velocity{ 0,0 };
+    Vector2f velocity{0, 0};
     Sprite sprite;
     Hitbox hitbox;
     bool grounded = false, attackbool = false, hitbool = false, timereset = false;
@@ -100,16 +111,243 @@ struct player {
 struct plates {
     RectangleShape platrec;
 
-    //function for setting the properties of the plates
-    void plat_set(Texture& imag, RectangleShape& sh_1, float x1, float x2, int x3, int x4, int x5, int x6) {
+    // function for setting the properties of the plates
+    void plat_set(Texture &imag, RectangleShape &sh_1, float x1, float x2, int x3, int x4, int x5, int x6)
+    {
         sh_1.setSize(Vector2f(x1, x2));
         sh_1.setPosition(x3, x4);
         sh_1.setTexture(&imag);
         sh_1.setScale(x5, x6);
     }
-}plt1, plt2, plt3, plt4, plt5, plt6;
+} plt1, plt2, plt3, plt4, plt5, plt6;
 
-int cursor_select(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
+struct interactionWindow
+{
+private:
+    Vector2f frameScale;
+    Sprite frameSprite;
+    Texture frameTexture;
+
+    Font arcadeClassic;
+    string final_string;
+    string displayed_text;
+    Text textToBeDisplayed;
+
+    Text pressSpaceToSkip;
+    string player_name;
+
+    bool aborted = false;
+    void setInteractions(string arr[])
+    {
+        arr[0] = "el salamo 3alekom wa \nra7matolah dejcbeijcn \nencije ibnceiuc ubce unu3ni";
+        arr[1] = "Aboos Edak Er7mny";
+        arr[2] = "I am delighted to be here";
+        arr[3] = "You may not indure the \nslays of my mighty sword";
+        arr[4] = "May the odds be in your \nfavor";
+        arr[5] = "";
+        arr[6] = "";
+        arr[7] = "";
+        arr[8] = "";
+        arr[9] = "";
+        arr[10] = "";
+        arr[11] = "";
+    }
+
+public:
+    int no_of_interactions = 5;
+    int max_letters_per_line = 27;
+    float timer_per_letter = 0.1;
+
+    bool finishedInteracting = false;
+    bool deletingWindow = false;
+    bool isActive = false;
+    // constructor
+    interactionWindow(string interactions[], string plyr_nam, float xPos, float yPos)
+    {
+        cout << "constructed" << endl;
+        // the constructor initiates the window at a zero size, then it enlarged in the update function
+
+        // initialize the array of text interactions
+        setInteractions(interactions);
+
+        // loads textures
+        frameTexture.loadFromFile(path + "TextBox.png");
+        frameSprite.setTexture(frameTexture);
+
+        // set positions (!!THEY MUST BE SET IN THAT ORDER!!!)
+        // frameSprite.setPosition(300, 200);
+        frameSprite.setPosition(xPos, yPos);
+        textToBeDisplayed.setPosition(frameSprite.getPosition().x - 200, frameSprite.getPosition().y - 40);
+        textToBeDisplayed.setFillColor(Color::Black);
+        frameSprite.setOrigin(250, 250);
+
+        pressSpaceToSkip.setPosition(310, 633);
+        pressSpaceToSkip.setScale(2, 2);
+
+        // set initial scales
+        frameSprite.setScale(0, 0);
+
+        // set final scales
+        frameScale = {1, 1};
+
+        // loads font and initial/Applications/Visual Studio Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.htmlizes text
+        arcadeClassic.loadFromFile(path + "Canterbury.ttf");
+        textToBeDisplayed.setFont(arcadeClassic);
+        pressSpaceToSkip.setFont(arcadeClassic);
+        pressSpaceToSkip.setString("Press Space To Skip");
+        // pressSpaceToSkip.setColor(Color::White);
+        displayed_text = "";
+
+        player_name = plyr_nam;
+
+        // takes a random interaction out of the interactions array
+        int randomNumb = rand() % no_of_interactions;
+        final_string = plyr_nam + " " + interactions[randomNumb];
+        // textToBeDisplayed.setString(final_string);
+        textToBeDisplayed.setString(displayed_text);
+    }
+
+    // update functions: gradually scales window, then gradually scales icon, then gradually shows text
+private:
+    int text_index = 0;
+    float textTimer = 0.1;
+    float pauseTimer = 2.5;
+    int lettersPerLine = 0;
+    int flutter_timer = 20;
+    bool isSkipTextShown = true;
+
+public:
+    void update(float deltatime, RenderWindow &window)
+    {
+
+
+
+        // cout << "update of interaction got called\n";
+        float scale_offset = 2;
+        float descale_offset = 2;
+
+        // if(finishedInteracting)
+        //     cout << "finished interacting\n";
+        // else
+        //     cout << "not finished interacting\n";
+
+        // if the window isnt big enough yet, it gets scaled
+        if (frameSprite.getScale().x < frameScale.x and frameSprite.getScale().y < frameScale.y and !deletingWindow and !aborted)
+        {
+            cout << "window getting bigger\n";
+            // cout << "deltatime: " << deltatime << endl;
+            // cout << "frame current scale: " << frameSprite.getScale().x;
+            // adds a slight increase to the scale every frame relative to delatatime
+            frameSprite.setScale({frameSprite.getScale().x + scale_offset * deltatime, frameSprite.getScale().y + scale_offset * deltatime});
+            // cout << "  frame new scale: " << frameSprite.getScale().x << endl;
+        }
+
+        // if both window is scaled, we start displaying the text gradually
+        else
+        {
+            // if not all of string have been displayed
+            if (text_index < final_string.length() and !aborted)
+            {
+                cout << "text getting displayed\n";
+                if (textTimer <= 0)
+                {
+                    displayed_text = displayed_text + final_string[text_index];
+                    textToBeDisplayed.setString(displayed_text);
+                    text_index++;
+                    lettersPerLine++;
+
+                    // resets timer
+                    textTimer = timer_per_letter;
+
+                }
+                else
+                    textTimer -= deltatime;
+            }
+            // if all has been displayed, starts timer, and when it ends, it destroys the window
+            else
+            {
+                if (pauseTimer <= 0 or aborted)
+                {
+                    deletingWindow = true;
+                    // if not , plays reverse animation for shrinking
+                    if (frameSprite.getScale().x > 0 and frameSprite.getScale().y > 0 and !finishedInteracting)
+                    {
+                        cout << "frame getting smaller\n";
+                        frameSprite.setScale({frameSprite.getScale().x - descale_offset * deltatime, frameSprite.getScale().y - descale_offset * deltatime});
+                        // cout << "  frame new scale: " << frameSprite.getScale().x << "  delatatime: " << deltatime << endl;
+
+                        // textToBeDisplayed.setScale({textToBeDisplayed.getScale().x - scale_offset * deltatime, textToBeDisplayed.getScale().y - scale_offset * deltatime});
+                        textToBeDisplayed.setScale(0, 0);
+                    }
+                    // if finished shrinking, destroys and marks the bool as true for external use
+                    else if (frameSprite.getScale().x <= 0 or frameSprite.getScale().y <= 0)
+                    {
+                        cout << "destroyed" << endl;
+                        frameSprite.setScale(0, 0);
+                        // playerIconSprite.setScale(0, 0);
+                        textToBeDisplayed.setScale(0, 0);
+                        finishedInteracting = true;
+                    }
+                }
+                else
+                    pauseTimer -= deltatime;
+            }
+        }
+
+        // window.draw(frameSprite);
+        // window.draw(playerIconSprite);
+        // window.draw(textToBeDisplayed);
+    }
+    void draw(RenderWindow &window)
+    {
+        if (!finishedInteracting)
+        {
+            // flutters the press to skip text
+            if(!aborted)
+            {
+                if (flutter_timer <= 0)
+                {
+                    if (isSkipTextShown)
+                    {
+                        isSkipTextShown = false;
+                    }
+                    else
+                        isSkipTextShown = true;
+
+                    flutter_timer = 20;
+                }
+                else
+                {
+                    if (isSkipTextShown)
+                    {
+                        window.draw(pressSpaceToSkip);
+                    }
+                    flutter_timer -= deltatime;
+                }
+            }
+
+            window.draw(frameSprite);
+            // window.draw(playerIconSprite);
+            window.draw(textToBeDisplayed);
+            // window.draw(pressSpaceToSkip);
+        }
+    }
+
+    void abort()
+    {
+        aborted = true;
+    }
+    // destroy window
+    void destroyInteractionWindow()
+    {
+        frameSprite.setScale(0, 0);
+        // playerIconSprite.setScale(0, 0);
+        textToBeDisplayed.setScale(0, 0);
+        // finishedInteracting = true;
+    }
+};
+
+int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
 {
     Mouse mouse;
     for (int i = 1; i < 5; i++)
@@ -195,12 +433,11 @@ void MainMenu(RenderWindow& mainwindow)
     Texture Menuback;
     Texture BorderTex;
 
-
-    ButtonTexture.loadFromFile("Main Menu/silver_button.png");
-    BorderTex.loadFromFile("Main Menu/border.png");
-    Menuback.loadFromFile("Main Menu/background main menu.png");
-    optionButton.loadFromFile("Main Menu/option1.png");
-    optionButton2.loadFromFile("Main Menu/option2.png");
+    ButtonTexture.loadFromFile(path + "Main Menu/silver_button.png");
+    BorderTex.loadFromFile(path + "Main Menu/border.png");
+    Menuback.loadFromFile(path + "Main Menu/background main menu.png");
+    optionButton.loadFromFile(path + "Main Menu/option1.png");
+    optionButton2.loadFromFile(path + "Main Menu/option2.png");
 
     Text select[6];
 
@@ -213,7 +450,8 @@ void MainMenu(RenderWindow& mainwindow)
     Border.setPosition(mainwindow.getSize().x / 2, 200);
     Border.setOrigin(151, 0);
 
-    for (int i = 1; i < 4; i++) {
+    for (int i = 1; i < 4; i++)
+    {
         buttons[i].setTexture(&ButtonTexture);
         buttons[i].setSize(Vector2f(300.f, 81.f));
         buttons[i].setOrigin(buttons[i].getSize() / 2.f);
@@ -263,7 +501,6 @@ void MainMenu(RenderWindow& mainwindow)
             {
                 mainwindow.close();
             }
-
         }
 
         // select which window
@@ -296,7 +533,6 @@ void MainMenu(RenderWindow& mainwindow)
 
         // Display the window
         mainwindow.display();
-
     }
 }
 void credits_text(Text* arr,RenderWindow& textwindow) {
@@ -463,7 +699,6 @@ void Credits(RenderWindow& creditswindow) {
         for (int i = 0; i < 8; i++) {
             creditswindow.draw(select[i]);
         }
-
 
         cur.draw(creditswindow);
     
@@ -642,19 +877,18 @@ void Volume(RenderWindow& volumewindow)
         cur.draw(volumewindow);
 
         volumewindow.display();
-
     }
 }
 
-void Controlls(RenderWindow& controllswindow)
+void Controlls(RenderWindow &controllswindow)
 {
     Font controllsfont;
-    controllsfont.loadFromFile("ArcadeClassic.ttf");
+    controllsfont.loadFromFile(path + "ArcadeClassic.ttf");
     Text controlls[9];
     controlls[0].setFont(controllsfont);
     controlls[0].setString("The Battlefield of Abbasya");
     controlls[0].setCharacterSize(60);
-    controlls[0].setFillColor(Color{ 255,204,0 });
+    controlls[0].setFillColor(Color{255, 204, 0});
     controlls[0].setPosition(300, 100);
 
     while (controllswindow.isOpen())
@@ -667,12 +901,11 @@ void Controlls(RenderWindow& controllswindow)
             {
                 controllswindow.close();
             }
-
         }
 
         controllswindow.clear();
 
-        for (int i = 0;i < 9;i++)
+        for (int i = 0; i < 9; i++)
             controllswindow.draw(controlls[i]);
 
         cur.draw(controllswindow);
@@ -681,20 +914,19 @@ void Controlls(RenderWindow& controllswindow)
     }
 }
 
-void Options(RenderWindow& optionwindow)
+void Options(RenderWindow &optionwindow)
 {
     Font optionfont;
-    optionfont.loadFromFile("ArcadeClassic.ttf");
+    optionfont.loadFromFile(path + "ArcadeClassic.ttf");
     Text option;
     option.setFont(optionfont);
     option.setString("The Battlefield of Abbasya");
     option.setCharacterSize(60);
-    option.setFillColor(Color{ 255,204,0 });
+    option.setFillColor(Color{255, 204, 0});
     option.setPosition(300, 100);
 
     while (optionwindow.isOpen())
     {
-
 
         // Handle events
         sf::Event event;
@@ -704,13 +936,15 @@ void Options(RenderWindow& optionwindow)
             {
                 optionwindow.close();
             }
-
         }
 
         // select which window
-       // pagenum = cursor_select(select, optionwindow);
+        // pagenum = cursor_select(select, optionwindow);
 
-        if (pagenum != 2) { return; }
+        if (pagenum != 2)
+        {
+            return;
+        }
 
         // Clear the window
         optionwindow.clear();
@@ -725,7 +959,8 @@ void Options(RenderWindow& optionwindow)
     }
 }
 
-int PauseMenu(RenderWindow& pausewindow) {
+int PauseMenu(RenderWindow &pausewindow)
+{
     Font pausefont;
     
     //PAUSE = true;
@@ -803,7 +1038,6 @@ int PauseMenu(RenderWindow& pausewindow) {
             {
                 pausewindow.close();
             }
-
         }
         page = cursor_select_pause(Pause, buttons, pausewindow);
         if (Keyboard::isKeyPressed(Keyboard::R)) {
@@ -1084,17 +1318,17 @@ void name(struct player, RenderWindow& namewindow) {
 //function for defining health bar textures
 void init_health_bar();
 
-//function for updating health bar according to player's health
+// function for updating health bar according to player's health
 int update_healthbar(int health);
 
-//function for setting setting initial properties to a player
-void setprop(Sprite&, Texture&, int, int, int);
+// function for setting setting initial properties to a player
+void setprop(Sprite &, Texture &, int, int, int);
 
-//function for checking the colliding the hitbox of attack with the hitbox of player
-bool intersection(RectangleShape&, RectangleShape&);
+// function for checking the colliding the hitbox of attack with the hitbox of player
+bool intersection(RectangleShape &, RectangleShape &);
 
-//function for checking the colliding the hitbox of player and the plates
-bool platecoliode_1(RectangleShape&, RectangleShape&);
+// function for checking the colliding the hitbox of player and the plates
+bool platecoliode_1(RectangleShape &, RectangleShape &);
 
 Texture hp_bar[6];
 
@@ -1120,14 +1354,23 @@ int main()
             Deathindex = 0;
             game(win1, win2, get_window);
         }
-        else if (pagenum == 4) { Volume(get_window); }
-        else if (pagenum == 2) { Credits(get_window); }
-        else if (pagenum == 3) { get_window.close(); }
+        else if (pagenum == 4)
+        {
+            Volume(get_window);
+        }
+        else if (pagenum == 2)
+        {
+            Credits(get_window);
+        }
+        else if (pagenum == 3)
+        {
+            get_window.close();
+        }
     }
     return 0;
 }
 
-//function definition above
+// function definition above
 
 void init_health_bar()
 {
@@ -1138,12 +1381,12 @@ void init_health_bar()
     Texture Hp20;
     Texture Hp00;
 
-    Hp100.loadFromFile("health_bar/health100.png");
-    Hp80.loadFromFile("health_bar/health80.png");
-    Hp60.loadFromFile("health_bar/health60.png");
-    Hp40.loadFromFile("health_bar/health40.png");
-    Hp20.loadFromFile("health_bar/health20.png");
-    Hp00.loadFromFile("health_bar/health00.png");
+    Hp100.loadFromFile(path + "health_bar/health100.png");
+    Hp80.loadFromFile(path + "health_bar/health80.png");
+    Hp60.loadFromFile(path + "health_bar/health60.png");
+    Hp40.loadFromFile(path + "health_bar/health40.png");
+    Hp20.loadFromFile(path + "health_bar/health20.png");
+    Hp00.loadFromFile(path + "health_bar/health00.png");
 
     hp_bar[0] = Hp00;
     hp_bar[1] = Hp20;
@@ -1178,7 +1421,8 @@ int update_healthbar(int health)
     return -1;
 }
 
-void setprop(Sprite& x, Texture& y, int z, int l, int m) {
+void setprop(Sprite &x, Texture &y, int z, int l, int m)
+{
 
     x.setTexture(y);
     x.setOrigin(60, 40);
@@ -1187,7 +1431,8 @@ void setprop(Sprite& x, Texture& y, int z, int l, int m) {
     x.setScale(z, 3);
 }
 
-bool intersection(RectangleShape& x, RectangleShape& y) {
+bool intersection(RectangleShape &x, RectangleShape &y)
+{
     if (x.getGlobalBounds().intersects(y.getGlobalBounds()))
         return true;
     else
@@ -1198,22 +1443,23 @@ bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& pl
     if (player_x.getGlobalBounds().intersects(plat_y1.getGlobalBounds()) &&
         player_x.getGlobalBounds().top + player_x.getGlobalBounds().height - 20 < plat_y1.getGlobalBounds().top)
     {
-        //cout << plat_y1.getGlobalBounds().top << endl;
+        // cout << plat_y1.getGlobalBounds().top << endl;
         player.setPosition(player.getPosition().x, plat_y1.getGlobalBounds().top - player.getGlobalBounds().height / 2);
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-void game(int win1, int win2, RenderWindow& window)
+void game(int win1, int win2, RenderWindow &window)
 {
     int arr_index = 5;
 
     srand(time(0));
 
-    //Textures
+    // Textures
     Texture Floor;
     Texture Jumping;
     Texture Jumping2;
@@ -1269,7 +1515,7 @@ void game(int win1, int win2, RenderWindow& window)
 
     Sprite background(Back[win1 + win2]);
 
-    //setting prop to plates
+    // setting prop to plates
     plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
     plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
     plt3.plat_set(plateform_1, plt3.platrec, 150, 50, 100, 450, 1, 1);
@@ -1282,7 +1528,8 @@ void game(int win1, int win2, RenderWindow& window)
         plt4.plat_set(plateform_4, plt4.platrec, 150, 50, 100, 300, 1, 1);
         plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 1, 1);
     }
-    if (win1 + win2 == 2) {
+    if (win1 + win2 == 2)
+    {
         plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 0, 0);
         plt2.plat_set(plateform_round3, plt2.platrec, 750, 70, 250, 450, 1, 1);
         plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 0, 0);
@@ -1290,7 +1537,7 @@ void game(int win1, int win2, RenderWindow& window)
         plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 0, 0);
     }
 
-    //Player 1 health bar prop
+    // Player 1 health bar prop
     RectangleShape p1_healthBar(Vector2f(305.f, 100.f));
     p1_healthBar.setScale(0.8f, 0.7f);
     p1_healthBar.setPosition(50, 50);
@@ -1298,7 +1545,7 @@ void game(int win1, int win2, RenderWindow& window)
     P1_HealthBar_Texture = hp_bar[arr_index];
     p1_healthBar.setTexture(&P1_HealthBar_Texture);
 
-    //Player 2 health bar prop
+    // Player 2 health bar prop
     RectangleShape p2_healthBar(Vector2f(305.f, 100.f));
     p2_healthBar.setScale(-0.8f, 0.7f);
     p2_healthBar.setPosition(895, 50);
@@ -1306,21 +1553,24 @@ void game(int win1, int win2, RenderWindow& window)
     P2_HealthBar_Texture = hp_bar[arr_index];
     p2_healthBar.setTexture(&P2_HealthBar_Texture);
 
-    //Players initial prop
-    if (win1 + win2 == 0) {
+    // Players initial prop
+    if (win1 + win2 == 0)
+    {
         setprop(player1.sprite, Idle, 3, 320, 480);
         setprop(player2.sprite, Idle2, -3, 960, 480);
     }
-    else if (win1 + win2 == 1) {
+    else if (win1 + win2 == 1)
+    {
         setprop(player1.sprite, Idle, 3, 180, 350);
         setprop(player2.sprite, Idle2, -3, 1050, 350);
     }
-    else {
+    else
+    {
         setprop(player1.sprite, Idle, 3, 330, 150);
         setprop(player2.sprite, Idle2, -3, 900, 150);
     }
 
-    //Hitboxes initial prop
+    // Hitboxes initial prop
     player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
     player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Yellow);
     player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 30.f, 115.f, Color::Blue);
@@ -1330,8 +1580,12 @@ void game(int win1, int win2, RenderWindow& window)
 
     window.setFramerateLimit(60);
 
+    string arrayOfInteractions[100];
+    interactionWindow interactionwindow1(arrayOfInteractions, player1.name, 300, 200);
+    interactionWindow interactionWindow2(arrayOfInteractions, player2.name, 1000, 200);
 
-    while (window.isOpen()) {
+    while (window.isOpen())
+    {
         gameclock.restart();
         if (name__) {
             name(player1, window);
@@ -1339,13 +1593,37 @@ void game(int win1, int win2, RenderWindow& window)
        
         if (!PAUSE) {
             while (window.pollEvent(e)) {
+
+        if (!interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
+        {
+            Round_Trans = true;
+            // cout << "interaction mode on\n";
+            interactionwindow1.update(deltatime, window);
+        }
+        else if (interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
+        {
+            Round_Trans = true;
+            interactionWindow2.update(deltatime, window);
+        }
+        else if (interactionwindow1.finishedInteracting and interactionWindow2.finishedInteracting)
+        {
+            Round_Trans = false;
+            // interactionwindow1.destroyInteractionWindow();
+            // cout << "interaction off\n";
+        }
+
+        if (!PAUSE)
+        {
+            while (window.pollEvent(e))
+            {
                 if (e.type == Event::Closed)
                 {
                     window.close();
                 }
                 if (e.type == Event::KeyPressed)
                 {
-                    if (e.key.code == Keyboard::Escape) {
+                    if (e.key.code == Keyboard::Escape)
+                    {
                         PAUSE = true;
                         if (!PauseMenu(window))
                         {
@@ -1369,8 +1647,9 @@ void game(int win1, int win2, RenderWindow& window)
                         player1.attackbool = true;
                         attacktimer = 0;
                         attackindex = 0;
-                        //Attacksound.play();
-                        if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool) {
+                        // Attacksound.play();
+                        if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
+                        {
                             player2.health -= 20;
                             player2.hitbool = true;
                             hittimer2 = 0.3f;
@@ -1411,8 +1690,9 @@ void game(int win1, int win2, RenderWindow& window)
                         }
                     }
 
-                    //player 2 Jumping button
-                    if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans) {
+                    // player 2 Jumping button
+                    if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans)
+                    {
                         timer2 = 0;
                         index2 = 0;
                         player2.velocity.y = -10;
@@ -1437,11 +1717,22 @@ void game(int win1, int win2, RenderWindow& window)
                             }
                         }
                     }
-                }
 
+                    // space to stop interacting
+                    if (!interactionwindow1.finishedInteracting)
+                    {
+                        if (e.key.code == Keyboard::Space)
+                            interactionwindow1.abort();
+                    }
+                    if (!interactionWindow2.finishedInteracting)
+                    {
+                        if (e.key.code == Keyboard::Space)
+                            interactionWindow2.abort();
+                    }
+                }
             }
 
-            //Round Transition & Death
+            // Round Transition & Death
             if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
             {
                 roundelay -= deltatime;
@@ -1502,14 +1793,8 @@ void game(int win1, int win2, RenderWindow& window)
                 }
             }
 
-            //Gravity and Plates
-            if (((platecoliode_1(player1.sprite, player1.hitbox.player, plt1.platrec))
-                || (platecoliode_1(player1.sprite, player1.hitbox.player, plt2.platrec))
-                || (platecoliode_1(player1.sprite, player1.hitbox.player, plt3.platrec))
-                || (platecoliode_1(player1.sprite, player1.hitbox.player, plt4.platrec))
-                || (platecoliode_1(player1.sprite, player1.hitbox.player, plt5.platrec))
-                || player1.hitbox.player.getPosition().y > window.getSize().y)
-                && player1.velocity.y >= 0)
+            // Gravity and Plates
+            if (((platecoliode_1(player1.sprite, player1.hitbox.player, plt1.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt2.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt3.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt4.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt5.platrec)) || player1.hitbox.player.getPosition().y > window.getSize().y) && player1.velocity.y >= 0)
             {
                 player1.timereset = false;
                 player1.velocity.y = 0;
@@ -1758,7 +2043,6 @@ void game(int win1, int win2, RenderWindow& window)
                         if (attackindex2 == 0) {
                             player2.attackbool = false;
                         }
-
                     }
                     else {
                         attacktimer2 -= deltatime;
@@ -1821,6 +2105,8 @@ void game(int win1, int win2, RenderWindow& window)
             window.draw(p2_healthBar);
             window.draw(player1.sprite);
             window.draw(player2.sprite);
+            interactionwindow1.draw(window);
+            interactionWindow2.draw(window);
             for (int i = 0;i < 3;i++)
             {
                 window.draw(player1.Round_won[i]);
