@@ -27,7 +27,7 @@ int playerindex = 0;
 int Deathindex = 0;
 float timer = 0.0f;
 float delay = 0.15f;
-float roundelay = 5.0f;
+float roundelay = 1.0f;
 int attackindex = 0;
 float attacktimer = 0.0f;
 float attackdelay = 0.1f;
@@ -977,7 +977,7 @@ int main()
         if (pagenum == 0) { MainMenu(get_window); }
         else if (pagenum == 1) {
             name__ = true;
-            roundelay = 5.0f;
+            roundelay = 1.0f;
             Round_Trans = false;
             player1.health = 100;
             player2.health = 100;
@@ -1259,15 +1259,13 @@ void game(int win1, int win2, RenderWindow& window)
                             Deathindex = 0;
                             if (player2.health == 0) {
                                 player1.Round_won[win1 + win2].setPosition(player2.Round_won[win1 + win2].getPosition());
-                                cout << "p1 wins this round\n";
                                 win1++;
                             }
                             else if (player1.health == 0) {
                                 player2.Round_won[win1 + win2].setPosition(player1.Round_won[win1 + win2].getPosition());
-                                cout << "p2 wins this round\n";
                                 win2++;
                             }
-                            roundelay = 5.0f;
+                            roundelay = 1.0f;
                             Round_Trans = false;
                             player1.health = 100;
                             player2.health = 100;
