@@ -301,13 +301,6 @@ void MainMenu(RenderWindow& mainwindow)
 }
 void credits_text(Text* arr,RenderWindow& textwindow) {
     Mouse mouse;
-    /*if (arr[0].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
-    {
-        arr[0].setFillColor(Color::Red);
-    }
-    else {
-        arr[0].setFillColor(Color::Black);
-    }*/
 
 
     if (arr[1].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
