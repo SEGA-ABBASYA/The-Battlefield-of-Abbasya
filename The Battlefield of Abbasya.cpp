@@ -4,6 +4,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/window.hpp>
 #include <vector>
+#include <string>
 #include <time.h>
 using namespace sf;
 using namespace std;
@@ -26,7 +27,7 @@ int playerindex = 0;
 int Deathindex = 0;
 float timer = 0.0f;
 float delay = 0.15f;
-float roundelay = 5.0f;
+float roundelay = 1.0f;
 int attackindex = 0;
 float attacktimer = 0.0f;
 float attackdelay = 0.1f;
@@ -94,7 +95,7 @@ struct player {
     Sprite sprite;
     Hitbox hitbox;
     bool grounded = false, attackbool = false, hitbool = false, timereset = false;
-
+    Text Round_won[3];
 }player1, player2;
 struct plates {
     RectangleShape platrec;
@@ -148,13 +149,13 @@ int cursor_select(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
     return 0;
 }
 
-void setTextprop(Text& text) {
+void setTextprop(Text& text , int x,int y) {
     menufont.loadFromFile("Canterbury.ttf");
-    text.setCharacterSize(48);
+    text.setCharacterSize(x);
     text.setFillColor(Color(187, 220, 244));
     text.setFont(menufont);
     text.setOutlineColor(Color::Black);
-    text.setOutlineThickness(1);
+    text.setOutlineThickness(y);
     text.setOrigin(text.getLocalBounds().left + text.getLocalBounds().width / 2, text.getLocalBounds().top + text.getLocalBounds().height / 2);
 }
 
@@ -251,7 +252,7 @@ void MainMenu(RenderWindow& mainwindow)
     select[3].setPosition(buttons[3].getPosition().x, buttons[3].getPosition().y);
 
     for (int i = 1;i < 5;i++) {
-        setTextprop(select[i]);
+        setTextprop(select[i],48,1);
     }
 
     while (mainwindow.isOpen())
@@ -917,6 +918,20 @@ void name(struct player, RenderWindow& namewindow) {
         //cout << player1.name << endl << endl<<player2.name << endl;
         player1.name = name1;
         player2.name = name2;
+
+        //Text wins
+        string fullstring = player1.name + ' ' + "wins";
+        string fullstring2 = player2.name + ' ' + "wins";
+
+        for (int i = 0;i < 3;i++)
+        {
+            player1.Round_won[i].setString(fullstring);
+            player2.Round_won[i].setString(fullstring2);
+            setTextprop(player1.Round_won[i],96,2);
+            setTextprop(player2.Round_won[i],96,2);
+            player1.Round_won[i].setPosition(namewindow.getSize().x / 2, -70);
+            player2.Round_won[i].setPosition(namewindow.getSize().x / 2, -70);
+        }
         namewindow.clear();
         namewindow.draw(namebackground);
         for (int i = 0; i < 3; i++) {
@@ -962,7 +977,7 @@ int main()
         if (pagenum == 0) { MainMenu(get_window); }
         else if (pagenum == 1) {
             name__ = true;
-            roundelay = 5.0f;
+            roundelay = 1.0f;
             Round_Trans = false;
             player1.health = 100;
             player2.health = 100;
@@ -1179,8 +1194,6 @@ void game(int win1, int win2, RenderWindow& window)
     player1.hitbox.attack.setOrigin(0, 0);
     player2.hitbox.attack.setOrigin(0, 0);
 
-
-
     window.setFramerateLimit(60);
 
 
@@ -1245,14 +1258,14 @@ void game(int win1, int win2, RenderWindow& window)
                         {
                             Deathindex = 0;
                             if (player2.health == 0) {
-                                cout << "p1 wins this round\n";
+                                player1.Round_won[win1 + win2].setPosition(player2.Round_won[win1 + win2].getPosition());
                                 win1++;
                             }
                             else if (player1.health == 0) {
-                                cout << "p2 wins this round\n";
+                                player2.Round_won[win1 + win2].setPosition(player1.Round_won[win1 + win2].getPosition());
                                 win2++;
                             }
-                            roundelay = 5.0f;
+                            roundelay = 1.0f;
                             Round_Trans = false;
                             player1.health = 100;
                             player2.health = 100;
@@ -1299,6 +1312,8 @@ void game(int win1, int win2, RenderWindow& window)
             {
                 roundelay -= deltatime;
                 if (player1.health == 0) {
+                    if (player2.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
+                        player2.Round_won[win1 + win2].move(0, 5);
                     player1.sprite.setTexture(Death);
                     player1.sprite.setColor(Color(128, 0, 0));
                     if (timer <= 0) {
@@ -1312,6 +1327,8 @@ void game(int win1, int win2, RenderWindow& window)
                         timer -= deltatime;
                 }
                 if (player2.health == 0) {
+                    if (player1.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
+                        player1.Round_won[win1 + win2].move(0, 5);
                     player2.sprite.setColor(Color(128, 0, 0));
                     player2.sprite.setTexture(Death2);
                     if (timer2 <= 0) {
@@ -1670,6 +1687,11 @@ void game(int win1, int win2, RenderWindow& window)
             window.draw(p2_healthBar);
             window.draw(player1.sprite);
             window.draw(player2.sprite);
+            for (int i = 0;i < 3;i++)
+            {
+                window.draw(player1.Round_won[i]);
+                window.draw(player2.Round_won[i]);
+            }
             window.display();
             deltatime = gameclock.getElapsedTime().asSeconds();
         }
