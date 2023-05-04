@@ -51,12 +51,14 @@ int win1 = 0;
 int win2 = 0;
 bool PAUSE = false;
 bool Round_Trans = false;
+bool Round_Trans2 = false;
 int volume_ = 100;
 bool name__ = false;
 Sprite vol_arr[11];
 Font menufont;
 Texture optionButton;
 Texture optionButton2;
+string arrayOfInteractions[100];
 
 struct cursor
 {
@@ -162,7 +164,7 @@ public:
     bool deletingWindow = false;
     bool isActive = false;
     // constructor
-    interactionWindow(string interactions[], string plyr_nam, float xPos, float yPos)
+    void interactionSetProp(string interactions[], string plyr_nam, float xPos, float yPos)
     {
         //cout << "constructed" << endl;
         // the constructor initiates the window at a zero size, then it enlarged in the update function
@@ -177,7 +179,7 @@ public:
         // set positions (!!THEY MUST BE SET IN THAT ORDER!!!)
         // frameSprite.setPosition(300, 200);
         frameSprite.setPosition(xPos, yPos);
-        textToBeDisplayed.setPosition(frameSprite.getPosition().x - 200, frameSprite.getPosition().y - 40);
+        textToBeDisplayed.setPosition(frameSprite.getPosition().x - 200, frameSprite.getPosition().y - 60);
         textToBeDisplayed.setFillColor(Color::Black);
         frameSprite.setOrigin(250, 250);
 
@@ -202,7 +204,7 @@ public:
 
         // takes a random interaction out of the interactions array
         int randomNumb = rand() % no_of_interactions;
-        final_string = plyr_nam + " " + interactions[randomNumb];
+        final_string = plyr_nam + "\n" + interactions[randomNumb];
         // textToBeDisplayed.setString(final_string);
         textToBeDisplayed.setString(displayed_text);
     }
@@ -234,7 +236,6 @@ public:
         // if the window isnt big enough yet, it gets scaled
         if (frameSprite.getScale().x < frameScale.x and frameSprite.getScale().y < frameScale.y and !deletingWindow and !aborted)
         {
-            cout << "window getting bigger\n";
             // cout << "deltatime: " << deltatime << endl;
             // cout << "frame current scale: " << frameSprite.getScale().x;
             // adds a slight increase to the scale every frame relative to delatatime
@@ -248,7 +249,6 @@ public:
             // if not all of string have been displayed
             if (text_index < final_string.length() and !aborted)
             {
-                cout << "text getting displayed\n";
                 if (textTimer <= 0)
                 {
                     displayed_text = displayed_text + final_string[text_index];
@@ -272,7 +272,6 @@ public:
                     // if not , plays reverse animation for shrinking
                     if (frameSprite.getScale().x > 0 and frameSprite.getScale().y > 0 and !finishedInteracting)
                     {
-                        cout << "frame getting smaller\n";
                         frameSprite.setScale({frameSprite.getScale().x - descale_offset * deltatime, frameSprite.getScale().y - descale_offset * deltatime});
                         // cout << "  frame new scale: " << frameSprite.getScale().x << "  delatatime: " << deltatime << endl;
 
@@ -282,7 +281,6 @@ public:
                     // if finished shrinking, destroys and marks the bool as true for external use
                     else if (frameSprite.getScale().x <= 0 or frameSprite.getScale().y <= 0)
                     {
-                        cout << "destroyed" << endl;
                         frameSprite.setScale(0, 0);
                         // playerIconSprite.setScale(0, 0);
                         textToBeDisplayed.setScale(0, 0);
@@ -345,7 +343,7 @@ public:
         textToBeDisplayed.setScale(0, 0);
         // finishedInteracting = true;
     }
-};
+}interactionwindow1,interactionWindow2;
 
 int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
 {
@@ -1124,7 +1122,7 @@ void name(struct player, RenderWindow& namewindow) {
     frame[2].setTexture(frames[0]);
 
     frame[0].setPosition(150, 350);
-    frame[1].setPosition(930, 340);
+    frame[1].setPosition(935, 340);
     frame[2].setOrigin(240, 70);
     frame[2].setPosition(namewindow.getSize().x / 2, 100);
     
@@ -1227,39 +1225,37 @@ void name(struct player, RenderWindow& namewindow) {
 
 
             if (!name_) {
-                if (event.type == Event::TextEntered) {
-                    if (isprint(event.text.unicode))
-                        name1 += event.text.unicode;
+                if (name1.size() < 12)
+                {
+                    if (event.type == Event::TextEntered) {
+                        if (isprint(event.text.unicode))
+                            name1 += event.text.unicode;
+                    }
                 }
-                else if (event.type == Event::KeyPressed) {
+                if (event.type == Event::KeyPressed) {
                     if (event.key.code == Keyboard::BackSpace) {
                         if (!name1.empty())
                             name1.pop_back();
                     }
-                    /*if (event.key.code == Keyboard::Right) {
-                        name_ = true;
-                    }*/
-
+                    
                 }
             }
-            if (name_) {
-
-                if (event.type == Event::TextEntered) {
-                    if (isprint(event.text.unicode))
-                        name2 += event.text.unicode;
+            if (name_ ) {
+                if ( name2.size() < 12)
+                {
+                    if (event.type == Event::TextEntered)
+                    {
+                        if (isprint(event.text.unicode))
+                            name2 += event.text.unicode;
+                    }
                 }
-                else if (event.type == Event::KeyPressed) {
+
+                if (event.type == Event::KeyPressed) {
                     if (event.key.code == Keyboard::BackSpace) {
                         if (!name2.empty())
                             name2.pop_back();
                     }
-                   /* if (event.key.code == Keyboard::Left) {
-                        name_ = false;
-                    }*/
-                    /*if (event.key.code == Keyboard::Return) {
-                        name__ = false;
-                        return;
-                    }*/
+                 
                 }
 
                 
@@ -1290,15 +1286,12 @@ void name(struct player, RenderWindow& namewindow) {
         string fullstring = player1.name + ' ' + "wins";
         string fullstring2 = player2.name + ' ' + "wins";
 
-        for (int i = 0;i < 3;i++)
-        {
+        for (int i = 0;i < 3;i++) {
             player1.Round_won[i].setString(fullstring);
             player2.Round_won[i].setString(fullstring2);
-            setTextprop(player1.Round_won[i],96,2);
-            setTextprop(player2.Round_won[i],96,2);
-            player1.Round_won[i].setPosition(namewindow.getSize().x / 2, -70);
-            player2.Round_won[i].setPosition(namewindow.getSize().x / 2, -70);
         }
+
+
         namewindow.clear();
         namewindow.draw(namebackground);
         for (int i = 0; i < 3; i++) {
@@ -1340,10 +1333,12 @@ int main()
 
     while (get_window.isOpen())
     {
-
+        
         MainMenu(get_window);
         if (pagenum == 0) { MainMenu(get_window); }
         else if (pagenum == 1) {
+            player1.name.clear();
+            player2.name.clear();
             name__ = true;
             roundelay = 1.0f;
             Round_Trans = false;
@@ -1580,31 +1575,37 @@ void game(int win1, int win2, RenderWindow &window)
 
     window.setFramerateLimit(60);
 
-    string arrayOfInteractions[100];
-    interactionWindow interactionwindow1(arrayOfInteractions, player1.name, 300, 200);
-    interactionWindow interactionWindow2(arrayOfInteractions, player2.name, 1000, 200);
-
     while (window.isOpen())
     {
         gameclock.restart();
         if (name__) {
             name(player1, window);
+
+            interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
+            interactionWindow2.interactionSetProp(arrayOfInteractions, player2.name, 1000, 200);
+            for (int i = 0;i < 3;i++)
+            {
+                setTextprop(player1.Round_won[i], 96, 2);
+                setTextprop(player2.Round_won[i], 96, 2);
+                player1.Round_won[i].setPosition(window.getSize().x / 2, -70);
+                player2.Round_won[i].setPosition(window.getSize().x / 2, -70);
+            }
         }
 
         if (!interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
         {
-            Round_Trans = true;
+            Round_Trans2 = true;
             // cout << "interaction mode on\n";
             interactionwindow1.update(deltatime, window);
         }
         else if (interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
         {
-            Round_Trans = true;
+            Round_Trans2 = true;
             interactionWindow2.update(deltatime, window);
         }
         else if (interactionwindow1.finishedInteracting and interactionWindow2.finishedInteracting)
         {
-            Round_Trans = false;
+            Round_Trans2 = false;
             // interactionwindow1.destroyInteractionWindow();
             // cout << "interaction off\n";
         }
@@ -1632,7 +1633,7 @@ void game(int win1, int win2, RenderWindow &window)
                     }
 
                     //player 1 Jumping button
-                    if (e.key.code == Keyboard::W && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans) {
+                    if (e.key.code == Keyboard::W && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans && !Round_Trans2) {
                         timer = 0;
                         playerindex = 0;
                         player1.velocity.y = -10;
@@ -1640,7 +1641,7 @@ void game(int win1, int win2, RenderWindow &window)
                     }
 
                     //Player 1 Attacking button
-                    if (e.key.code == Keyboard::X && player1.grounded == true && !player1.attackbool && !Round_Trans) {
+                    if (e.key.code == Keyboard::X && player1.grounded == true && !player1.attackbool && !Round_Trans && !Round_Trans && !Round_Trans2) {
                         player1.attackbool = true;
                         attacktimer = 0;
                         attackindex = 0;
@@ -1688,7 +1689,7 @@ void game(int win1, int win2, RenderWindow &window)
                     }
 
                     // player 2 Jumping button
-                    if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans)
+                    if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Trans2)
                     {
                         timer2 = 0;
                         index2 = 0;
@@ -1697,7 +1698,7 @@ void game(int win1, int win2, RenderWindow &window)
                     }
 
                     //Player 2 Attacking button
-                    if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans) {
+                    if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Trans2) {
                         player2.attackbool = true;
                         attacktimer2 = 0;
                         attackindex2 = 0;
@@ -1883,7 +1884,7 @@ void game(int win1, int win2, RenderWindow &window)
                 else
                 {
                     //Moving right
-                    if (Keyboard::isKeyPressed(Keyboard::D) && player1.sprite.getPosition().x < (window.getSize().x - player1.sprite.getGlobalBounds().width / 100) && !Round_Trans) {
+                    if (Keyboard::isKeyPressed(Keyboard::D) && player1.sprite.getPosition().x < (window.getSize().x - player1.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Trans2) {
                         player1.sprite.setScale(3, 3);
                         player1.hitbox.attack.setScale(1, 1);
                         if (player1.grounded == true) {
@@ -1901,7 +1902,7 @@ void game(int win1, int win2, RenderWindow &window)
                         player1.sprite.move(500 * deltatime, 0);
                     }
                     //Moving left
-                    if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0 && !Round_Trans) {
+                    if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0 && !Round_Trans && !Round_Trans2) {
                         player1.sprite.setScale(-3, 3);
                         player1.hitbox.attack.setScale(-1, 1);
                         if (player1.grounded == true) {
@@ -2049,7 +2050,7 @@ void game(int win1, int win2, RenderWindow &window)
                 else
                 {
                     //Moving right
-                    if (Keyboard::isKeyPressed(Keyboard::Right) && player2.sprite.getPosition().x < (window.getSize().x - player2.sprite.getGlobalBounds().width / 100) && !Round_Trans) {
+                    if (Keyboard::isKeyPressed(Keyboard::Right) && player2.sprite.getPosition().x < (window.getSize().x - player2.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Trans2) {
                         player2.sprite.setScale(3, 3);
                         player2.hitbox.attack.setScale(1, 1);
                         if (player2.grounded == true) {
@@ -2067,7 +2068,7 @@ void game(int win1, int win2, RenderWindow &window)
                         player2.sprite.move(500 * deltatime, 0);
                     }
                     //Moving left
-                    if (Keyboard::isKeyPressed(Keyboard::Left) && player2.sprite.getPosition().x > 0 && !Round_Trans) {
+                    if (Keyboard::isKeyPressed(Keyboard::Left) && player2.sprite.getPosition().x > 0 && !Round_Trans && !Round_Trans2) {
                         player2.sprite.setScale(-3, 3);
                         player2.hitbox.attack.setScale(-1, 1);
                         if (player2.grounded == true) {
