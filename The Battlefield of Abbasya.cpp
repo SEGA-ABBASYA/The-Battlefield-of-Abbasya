@@ -182,6 +182,101 @@ int cursor_select_pause(Text* arr, RenderWindow& mywindow)
     return 0;
 }
 
+void Controlls(RenderWindow& controllswindow)
+{
+    Texture controll_back;
+    controll_back.loadFromFile("controlls back.png");
+    Sprite back;
+    back.setTexture(controll_back);
+
+    Texture Jumping;
+    Texture Jumping2;
+    Texture Running2;
+    Texture Running;
+    Texture Attacking;
+    Texture Attacking2;
+    Texture buttons[9];
+
+    Running2.loadFromFile("Player 2/Run2.png");
+    Running.loadFromFile("Player 1/Running Animation.png");
+    Jumping.loadFromFile("Player 1/_Jump.png");
+    Jumping2.loadFromFile("Player 2/Jump2.png");
+    Attacking.loadFromFile("Player 1/_Attack.png");
+    Attacking2.loadFromFile("Player 2/Attack2.png");
+
+    Sprite jumping1,attacking1,running1r,jumping2,attacking2,running2r,running2l, running1l;
+    jumping1.setTexture(Jumping);
+    attacking1.setTexture(Attacking);
+    running1r.setTexture(Running);
+    running1l.setTexture(Running);
+    jumping2.setTexture(Jumping2);
+    attacking2.setTexture(Attacking2);
+    running2r.setTexture(Running2);
+    running2l.setTexture(Running2);
+
+    jumping1.setTextureRect(IntRect(0, 0, 120, 80));
+    jumping2.setTextureRect(IntRect(0, 0, 120, 80));
+    attacking1.setTextureRect(IntRect((3*120), 0, 120, 80));
+    attacking2.setTextureRect(IntRect((3*120), 0, 120, 80));
+    running1r.setTextureRect(IntRect(0, 0, 120, 80));
+    running1l.setTextureRect(IntRect(0, 0, 120, 80));
+    running2r.setTextureRect(IntRect(0, 0, 120, 80));
+    running2l.setTextureRect(IntRect(0, 0, 120, 80));
+
+    jumping1.setScale(3, 3);
+    jumping2.setScale(3, 3);
+    attacking1.setScale(3, 3);
+    attacking2.setScale(3, 3);
+    running1r.setScale(3, 3);
+    running1l.setScale(-3, 3);
+    running2r.setScale(3, 3);
+    running2l.setScale(-3, 3);
+    
+
+
+
+    Font controllsfont;
+    controllsfont.loadFromFile("ArcadeClassic.ttf");
+    Text controlls[9];
+    controlls[0].setFont(controllsfont);
+    controlls[0].setString("Controllers");
+    controlls[0].setCharacterSize(60);
+    controlls[0].setFillColor(Color{ 255,204,0 });
+    controlls[0].setPosition(300, 100);
+
+    while (controllswindow.isOpen())
+    {
+
+        sf::Event event;
+        while (controllswindow.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                controllswindow.close();
+            }
+
+        }
+        
+          
+
+        controllswindow.clear();
+        controllswindow.draw(back);
+        //controllswindow.draw(attacking1);
+        //controllswindow.draw(attacking2);
+        //controllswindow.draw(jumping1);
+        //controllswindow.draw(jumping2);
+        //controllswindow.draw(running1r);
+        //controllswindow.draw(running2r);
+        controllswindow.draw(running1l);
+        controllswindow.draw(running2l);
+        //for (int i = 0;i < 9;i++)
+        controllswindow.draw(controlls[0]);
+
+        cur.draw(controllswindow);
+
+        controllswindow.display();
+    }
+}
 void MainMenu(RenderWindow& mainwindow)
 {
     // Create the menu items
@@ -189,6 +284,9 @@ void MainMenu(RenderWindow& mainwindow)
     Texture ButtonTexture;
     Texture Menuback;
     Texture BorderTex;
+    Texture controll1;
+    Texture controll2;
+
 
 
     ButtonTexture.loadFromFile("Main Menu/silver_button.png");
@@ -196,6 +294,9 @@ void MainMenu(RenderWindow& mainwindow)
     Menuback.loadFromFile("Main Menu/background main menu.png");
     optionButton.loadFromFile("Main Menu/option1.png");
     optionButton2.loadFromFile("Main Menu/option2.png");
+    controll1.loadFromFile("Main Menu/controller_blue.png");
+    controll2.loadFromFile("Main Menu/controller_grey.png");
+
 
     Text select[6];
 
@@ -218,7 +319,14 @@ void MainMenu(RenderWindow& mainwindow)
     buttons[4].setSize(Vector2f(50.f, 50.f));
     buttons[4].setOrigin(buttons[4].getSize() / 2.f);
     buttons[4].setPosition(mainwindow.getSize().x - 60.f, 650);
+
+    Sprite controllbutton;
+
     
+    controllbutton.setTexture(controll1);
+    controllbutton.setOrigin(40,0);
+    controllbutton.setPosition(70, 620);
+
 
     buttons[1].setPosition(640, 319);
 
@@ -244,7 +352,7 @@ void MainMenu(RenderWindow& mainwindow)
     select[3].setString("Exit");
     select[3].setPosition(buttons[3].getPosition().x, buttons[3].getPosition().y);
 
-    for (int i = 1;i < 5;i++) {
+    for (int i = 1;i < 6;i++) {
         setTextprop(select[i]);
     }
 
@@ -265,7 +373,21 @@ void MainMenu(RenderWindow& mainwindow)
         pagenum = cursor_select(select, buttons, mainwindow);
 
         if (pagenum != 0) { return; }
+        Mouse mouse;
+        if (controllbutton.getGlobalBounds().contains(mouse.getPosition(mainwindow).x, mouse.getPosition(mainwindow).y))
+        {
+            controllbutton.setScale(1.1, 1.1);
+            controllbutton.setTexture(controll2);
+            if (Mouse::isButtonPressed(Mouse::Left))
+            {
+                Controlls(mainwindow);
+            }
+        }
+        else {
+            controllbutton.setScale(1, 1);
+            controllbutton.setTexture(controll1);
 
+        }
         // Clear the window
         mainwindow.clear();
 
@@ -279,7 +401,7 @@ void MainMenu(RenderWindow& mainwindow)
 
         // Draw Border
         mainwindow.draw(Border);
-
+        mainwindow.draw(controllbutton);
         // Draw the menu items
         for (int i = 0; i < 6; i++)
         {
@@ -648,40 +770,7 @@ void Volume(RenderWindow& volumewindow)
     }
 }
 
-void Controlls(RenderWindow& controllswindow)
-{
-    Font controllsfont;
-    controllsfont.loadFromFile("ArcadeClassic.ttf");
-    Text controlls[9];
-    controlls[0].setFont(controllsfont);
-    controlls[0].setString("The Battlefield of Abbasya");
-    controlls[0].setCharacterSize(60);
-    controlls[0].setFillColor(Color{ 255,204,0 });
-    controlls[0].setPosition(300, 100);
 
-    while (controllswindow.isOpen())
-    {
-
-        sf::Event event;
-        while (controllswindow.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
-                controllswindow.close();
-            }
-
-        }
-
-        controllswindow.clear();
-
-        for (int i = 0;i < 9;i++)
-            controllswindow.draw(controlls[i]);
-
-        cur.draw(controllswindow);
-
-        controllswindow.display();
-    }
-}
 
 void Options(RenderWindow& optionwindow)
 {
