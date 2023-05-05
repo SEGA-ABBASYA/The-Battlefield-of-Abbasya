@@ -8,14 +8,12 @@
 using namespace sf;
 using namespace std;
 
-// 0 -> MainMenu
-// 1 -> Choose Your Hero 
-// 2 -> Options
-// 3 -> Credits 
-// Esc -> PauseMen
-// 4 -> Close
-
-
+// 0  -> MainMenu
+// 1  -> Choose Your Hero
+// 2  -> Options
+// 3  -> Credits
+// ESC  -> PauseMen
+// 4  -> Close
 
 //Global Variables
 Clock gameclock;
@@ -87,6 +85,7 @@ struct Hitbox
         x.setOrigin(y / 2, -6);
     }
 };
+
 struct player {
     string name;
     int health = 100;
@@ -107,6 +106,58 @@ struct plates {
         sh_1.setScale(x5, x6);
     }
 }plt1, plt2, plt3, plt4, plt5, plt6;
+
+//powerups
+
+RectangleShape Powers_sp[3];
+Texture Powers_tex[3];
+Clock timerpow;
+void power_draw()
+{
+    Powers_sp[0].setSize(Vector2f(100, 100));
+    Powers_sp[1].setSize(Vector2f(100, 100));
+    Powers_sp[2].setSize(Vector2f(100, 100));
+
+    Powers_tex[0].loadFromFile("attack.png");
+    Powers_tex[1].loadFromFile("attack.png");
+    Powers_tex[2].loadFromFile("heal.png");
+
+
+    for (int i = 0; i < 3; i++)
+    {
+        Powers_sp[i].setTexture(&Powers_tex[i]);
+    }
+    Powers_sp[0].setOrigin(50, 50);
+    Powers_sp[1].setOrigin(50, 50);
+    Powers_sp[2].setOrigin(50, 50);
+
+}
+/*bool powercoliodeattack(Sprite& player, RectangleShape& player_x, Sprite& Powers)
+{
+    if (player_x.getGlobalBounds().intersects(Powers.getGlobalBounds()))
+    {
+        toucher=false;
+        return true;
+
+    }
+    else {
+        return false;
+    }
+}*/
+bool powercoliodeheal(Sprite& player, RectangleShape& player_x, Sprite& Powers)
+{
+    if (player_x.getGlobalBounds().intersects(Powers.getGlobalBounds()))
+    {
+        Powers.setScale(0, 0);
+        return true;
+
+    }
+    else {
+        return false;
+    }
+}
+
+// power end
 
 int cursor_select(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
@@ -158,28 +209,32 @@ void setTextprop(Text& text) {
     text.setOrigin(text.getLocalBounds().left + text.getLocalBounds().width / 2, text.getLocalBounds().top + text.getLocalBounds().height / 2);
 }
 
-int cursor_select_pause(Text* arr, RenderWindow& mywindow)
+int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
     Mouse mouse;
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 4; i++)
     {
 
-        if (arr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
+        if (Buttonarr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
         {
-            arr[i].setFillColor(Color::Red);
+            arr[i + 1].setFillColor(Color::White);
+            Buttonarr[i].setScale(1.1f, 1.1f);
+
 
             if (Mouse::isButtonPressed(Mouse::Left))
             {
-                arr[i].setFillColor(Color::White);
+                Buttonarr[i].setScale(1.f, 1.f);
+                arr[i + 1].setFillColor(Color{ 245,176,38 });
                 return i;
             }
         }
         else
         {
-            arr[i].setFillColor(Color::White);
+            Buttonarr[i].setScale(1.f, 1.f);
+            arr[i + 1].setFillColor(Color{ 245,176,38 });
         }
     }
-    return 0;
+    //return 0;
 }
 
 Sprite vol_arr[9];
@@ -220,7 +275,7 @@ void MainMenu(RenderWindow& mainwindow)
     buttons[4].setSize(Vector2f(50.f, 50.f));
     buttons[4].setOrigin(buttons[4].getSize() / 2.f);
     buttons[4].setPosition(mainwindow.getSize().x - 60.f, 650);
-    
+
 
     buttons[1].setPosition(640, 319);
 
@@ -246,7 +301,7 @@ void MainMenu(RenderWindow& mainwindow)
     select[3].setString("Exit");
     select[3].setPosition(buttons[3].getPosition().x, buttons[3].getPosition().y);
 
-    for (int i = 1;i < 5;i++) {
+    for (int i = 1; i < 5; i++) {
         setTextprop(select[i]);
     }
 
@@ -275,7 +330,7 @@ void MainMenu(RenderWindow& mainwindow)
         mainwindow.draw(Mainmenu_background);
 
         // Draw the buttons
-        for (int i = 1;i < 5;i++) {
+        for (int i = 1; i < 5; i++) {
             mainwindow.draw(buttons[i]);
         }
 
@@ -296,6 +351,7 @@ void MainMenu(RenderWindow& mainwindow)
 
     }
 }
+
 
 void Credits(RenderWindow& creditswindow) {
     Font Credits;
@@ -534,7 +590,7 @@ void Controlls(RenderWindow& controllswindow)
 
         controllswindow.clear();
 
-        for (int i = 0;i < 9;i++)
+        for (int i = 0; i < 9; i++)
             controllswindow.draw(controlls[i]);
 
         cur.draw(controllswindow);
@@ -589,38 +645,71 @@ void Options(RenderWindow& optionwindow)
 
 int PauseMenu(RenderWindow& pausewindow) {
     Font pausefont;
+
+    //PAUSE = true;
     pausefont.loadFromFile("Canterbury.ttf");
+
+    Texture Pauseback;
+    Texture Pauseborder;
+    Texture Buttontex;
+
+    Pauseback.loadFromFile("Pause Menu/Pause Menu Background.png");
+    Pauseborder.loadFromFile("Pause Menu/Logo Frame.png");
+    Buttontex.loadFromFile("Pause Menu/Gold Button.png");
+
+    RectangleShape buttons[4];
+
+    Sprite Border;
+    Sprite Pausemenu_background;
+    Pausemenu_background.setTexture(Pauseback);
+    Border.setTexture(Pauseborder);
+    Border.setOrigin(749 / 2.f, 207 / 2.f);
+    Border.setPosition(pausewindow.getSize().x / 2.f, 120);
+
+    for (int i = 0; i < 4; i++) {
+        buttons[i].setTexture(&Buttontex);
+        buttons[i].setSize(Vector2f(345.f, 81.f));
+        buttons[i].setOrigin(buttons[i].getSize() / 2.f);
+    }
+
+    buttons[0].setPosition(pausewindow.getSize().x / 2.f, 279);
+
+    buttons[1].setPosition(pausewindow.getSize().x / 2.f, 389);
+
+    buttons[2].setPosition(pausewindow.getSize().x / 2.f, 499);
+
+    buttons[3].setPosition(pausewindow.getSize().x / 2.f, 609);
+
     Text Pause[5];
     Pause[0].setFont(pausefont);
-    Pause[0].setString("The Battlefield of Abbasya");
-    Pause[0].setCharacterSize(60);
-    Pause[0].setFillColor(Color{ 255,204,0 });
-    Pause[0].setPosition(300, 100);
+    Pause[0].setString("Pause Menu");
+    Pause[0].setCharacterSize(96);
+    Pause[0].setFillColor(Color{ 245,176,38 });
+    Pause[0].setOutlineColor(Color::Black);
+    Pause[0].setOutlineThickness(2);
+    Pause[0].setOrigin(Pause[0].getLocalBounds().left + Pause[0].getLocalBounds().width / 2, Pause[0].getLocalBounds().top + Pause[0].getLocalBounds().height / 2);
+    Pause[0].setPosition(Border.getPosition());
 
-    Pause[1].setFont(pausefont);
-    Pause[1].setString("Volume");
-    Pause[1].setCharacterSize(60);
-    Pause[1].setFillColor(Color{ 255,204,0 });
-    Pause[1].setPosition(300, 200);
+    Pause[1].setString("Resume");
+    Pause[1].setPosition(buttons[0].getPosition());
 
-    Pause[2].setFont(pausefont);
-    Pause[2].setString("Resume");
-    Pause[2].setCharacterSize(60);
-    Pause[2].setFillColor(Color{ 255,204,0 });
-    Pause[2].setPosition(300, 250);
+    Pause[2].setString("Options");
+    Pause[2].setPosition(buttons[1].getPosition());
 
-    Pause[3].setFont(pausefont);
-    Pause[3].setString("Back To MainMenu");
-    Pause[3].setCharacterSize(60);
-    Pause[3].setFillColor(Color{ 255,204,0 });
-    Pause[3].setPosition(300, 300);
+    Pause[3].setString("Main Menu");
+    Pause[3].setPosition(buttons[2].getPosition());
 
-    Pause[4].setFont(pausefont);
     Pause[4].setString("Exit");
-    Pause[4].setCharacterSize(60);
-    Pause[4].setFillColor(Color{ 255,204,0 });
-    Pause[4].setPosition(300, 350);
+    Pause[4].setPosition(buttons[3].getPosition());
 
+    for (int i = 1; i < 5; i++) {
+        Pause[i].setFont(pausefont);
+        Pause[i].setFillColor(Color{ 245,176,38 });
+        Pause[i].setOutlineColor(Color::Black);
+        Pause[i].setOutlineThickness(1);
+        Pause[i].setCharacterSize(48);
+        Pause[i].setOrigin(Pause[i].getLocalBounds().left + Pause[i].getLocalBounds().width / 2, Pause[i].getLocalBounds().top + Pause[i].getLocalBounds().height / 2);
+    }
 
     while (pausewindow.isOpen())
     {
@@ -628,33 +717,38 @@ int PauseMenu(RenderWindow& pausewindow) {
         Event event;
         while (pausewindow.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
             {
                 pausewindow.close();
             }
 
         }
-        page = cursor_select_pause(Pause, pausewindow);
+        page = cursor_select_pause(Pause, buttons, pausewindow);
         if (Keyboard::isKeyPressed(Keyboard::R)) {
             PAUSE = false;
             return 1;
         }
         else if (page == 1) { Volume(pausewindow); }//volume
-        else if (page == 2) {
+        else if (page == 0) {
             PAUSE = false;
             return 1;
         }
-        else if (page == 3) {
+        else if (page == 2) {
             Round_Trans = false;
             win1 = 0;
             win2 = 0;
             PAUSE = false;
             return 0;
         }//main menu
-        else if (page == 4) { pausewindow.close(); }//exit
+        else if (page == 3) { pausewindow.close(); }//exit
 
         pausewindow.clear();
+        pausewindow.draw(Pausemenu_background);
+        pausewindow.draw(Border);
 
+        for (int i = 0; i < 4; i++) {
+            pausewindow.draw(buttons[i]);
+        }
         for (int i = 0; i < 5; i++) {
             pausewindow.draw(Pause[i]);
         }
@@ -666,25 +760,97 @@ int PauseMenu(RenderWindow& pausewindow) {
 
 void name(struct player, RenderWindow& namewindow) {
 
-    string name1,name2;
+    string name1, name2;
+    Mouse mouse;
+
+
+    Texture nameback;
+    nameback.loadFromFile("Name Entry/name enternce.png");
+    Sprite namebackground;
+    namebackground.setTexture(nameback);
+
+    Texture frames[5];
+    frames[0].loadFromFile("Name Entry/Game_text_boxes.png");
+    frames[1].loadFromFile("Name Entry/name-box.png");
+    frames[2].loadFromFile("Name Entry/_Idle1 1.png");
+    frames[3].loadFromFile("Name Entry/_Idle2 1.png");
+    frames[4].loadFromFile("Name Entry/start1.png");
+
+    RectangleShape start[3];
+
+    //Start Button
+    start[0].setSize(Vector2f(316.f, 106.f));
+    start[0].setOrigin(151.f, 53.f);
+    start[0].setPosition(namewindow.getSize().x / 2, 400);
+    start[0].setTexture(&frames[4]);
+
+    //Player 1 name entry button
+    start[1].setSize(Vector2f(300.f, 92.f));
+    start[1].setPosition(250, 416);
+    start[1].setOrigin(150.f, 46.f);
+    start[1].setTexture(&frames[1]);
+
+    //Player 2 name entry button
+    start[2].setSize(Vector2f(300.f, 92.f));
+    start[2].setPosition(1070, 416);
+    start[2].setOrigin(150.f, 46.f);
+    start[2].setTexture(&frames[1]);
+
+    Sprite frame[3];
+
+    //Player 1 Picture
+    frame[0].setTexture(frames[2]);
+
+    //Player 2 Picture
+    frame[1].setTexture(frames[3]);
+
+    //Enter Your name
+    frame[2].setTexture(frames[0]);
+
+    frame[0].setPosition(150, 350);
+    frame[1].setPosition(930, 340);
+    frame[2].setOrigin(240, 70);
+    frame[2].setPosition(namewindow.getSize().x / 2, 100);
+
+    bool name_ = false;
 
     Font font;
     font.loadFromFile("Canterbury.ttf");
-    Text text1("", font);
-    Text text2("", font);
-    text2.setPosition(0, 200);
-    bool name_ = false;
-    Text text3;
-    text3.setFont(font);
-    text3.setFillColor(Color::White);
-    text3.setString("Start");
-    text3.setCharacterSize(60);
-    text3.setPosition(100, 620);
 
-    RectangleShape start;
-    start.setSize(Vector2f(300.f, 100.f));
-    start.setPosition(110, 620);
-    start.setFillColor(Color::Transparent);
+    Text text1("Bakr", font);
+    Text text2("Fat7allah", font);
+
+    text1.setPosition(150, 385);
+    text1.setCharacterSize(42);
+    text2.setPosition(970, 385);
+    text2.setCharacterSize(42);
+
+    Text text[4];
+
+    text[0].setString("Player 1");
+    text[0].setCharacterSize(80);
+    text[0].setPosition(start[1].getPosition().x, 270);
+
+    text[1].setString("Player 2");
+    text[1].setCharacterSize(80);
+    text[1].setPosition(start[2].getPosition().x, 270);
+
+    text[2].setString("Enter Your Name");
+    text[2].setCharacterSize(42);
+    text[2].setPosition(frame[2].getPosition().x, frame[2].getPosition().y + 5);
+
+    text[3].setString("Start");
+    text[3].setCharacterSize(60);
+    text[3].setPosition(start[0].getPosition().x, start[0].getPosition().y - 5);
+
+    for (int i = 0; i < 4; i++) {
+        text[i].setFont(font);
+        text[i].setFillColor(Color{ 101,154,171 });
+        text[i].setOutlineColor(Color::Black);
+        text[i].setOutlineThickness(2);
+        text[i].setOrigin(text[i].getLocalBounds().left + text[i].getLocalBounds().width / 2, text[i].getLocalBounds().top + text[i].getLocalBounds().height / 2);
+    }
+
 
 
     Clock clock;
@@ -697,6 +863,53 @@ void name(struct player, RenderWindow& namewindow) {
         {
             if (event.type == Event::Closed)
                 namewindow.close();
+
+            if (start[2].getGlobalBounds().contains(mouse.getPosition(namewindow).x, mouse.getPosition(namewindow).y))
+            {
+                start[2].setScale(1.1, 1.1);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    name_ = true;
+
+                }
+            }
+            else
+            {
+                start[2].setScale(1, 1);
+            }
+
+            if (start[1].getGlobalBounds().contains(mouse.getPosition(namewindow).x, mouse.getPosition(namewindow).y))
+            {
+                start[1].setScale(1.1, 1.1);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    name_ = false;
+
+                }
+            }
+            else
+            {
+                start[1].setScale(1, 1);
+            }
+
+            //Start Button
+            if (start[0].getGlobalBounds().contains(mouse.getPosition(namewindow).x, mouse.getPosition(namewindow).y))
+            {
+                start[0].setScale(1.1, 1.1);
+                text[3].setFillColor(Color::White);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    name__ = false;
+                    return;
+                }
+            }
+            else {
+                text[3].setFillColor(Color{ 101,154,171 });
+                start[0].setScale(1, 1);
+
+            }
+
+
             if (!name_) {
                 if (event.type == Event::TextEntered) {
                     if (isprint(event.text.unicode))
@@ -707,13 +920,14 @@ void name(struct player, RenderWindow& namewindow) {
                         if (!name1.empty())
                             name1.pop_back();
                     }
-                    if (event.key.code == Keyboard::Down) {
+                    /*if (event.key.code == Keyboard::Right) {
                         name_ = true;
-                    }
+                    }*/
 
                 }
             }
             if (name_) {
+
                 if (event.type == Event::TextEntered) {
                     if (isprint(event.text.unicode))
                         name2 += event.text.unicode;
@@ -723,25 +937,18 @@ void name(struct player, RenderWindow& namewindow) {
                         if (!name2.empty())
                             name2.pop_back();
                     }
-                    if (event.key.code == Keyboard::Up) {
-                        name_ = false;
-                    }
-                    if (event.key.code == Keyboard::Return) {
-                        name__ = false;
-                        return;
-                    }
+                    /* if (event.key.code == Keyboard::Left) {
+                         name_ = false;
+                     }*/
+                     /*if (event.key.code == Keyboard::Return) {
+                         name__ = false;
+                         return;
+                     }*/
                 }
 
-                Mouse mouse;
-                if (start.getGlobalBounds().contains(mouse.getPosition(namewindow).x, mouse.getPosition(namewindow).y))
-                {
-                    if (Mouse::isButtonPressed(Mouse::Left))
-                    {
-                        name__ = false;
-                        return;
-                    }
-                }
-                
+
+
+
             }
         }
 
@@ -755,17 +962,24 @@ void name(struct player, RenderWindow& namewindow) {
             show_cursor = !show_cursor;
             text_effect_time = Time::Zero;
         }
-        if(!name_)
-        text1.setString(name1 + (show_cursor ? '_' : ' '));
-        if(name_)
-        text2.setString(name2 + (show_cursor ? '_' : ' '));
-        cout << player1.name << endl << endl<<player2.name << endl;
+        if (!name_)
+            text1.setString(name1 + (show_cursor ? '_' : ' '));
+        if (name_)
+            text2.setString(name2 + (show_cursor ? '_' : ' '));
+        //cout << player1.name << endl << endl<<player2.name << endl;
         player1.name = name1;
         player2.name = name2;
         namewindow.clear();
+        namewindow.draw(namebackground);
+        for (int i = 0; i < 3; i++) {
+            namewindow.draw(frame[i]);
+            namewindow.draw(start[i]);
+        }
         namewindow.draw(text1);
         namewindow.draw(text2);
-        namewindow.draw(text3);
+        for (int j = 0; j < 4; j++) {
+            namewindow.draw(text[j]);
+        }
         cur.draw(namewindow);
         namewindow.display();
     }
@@ -814,6 +1028,7 @@ int main()
         else if (pagenum == 3) { get_window.close(); }
     }
     return 0;
+
 }
 
 //function definition above
@@ -844,6 +1059,9 @@ void init_health_bar()
 
 int update_healthbar(int health)
 {
+    if (health == 100) {
+        return 5;
+    }
     if (health == 80)
     {
         return 4;
@@ -875,7 +1093,12 @@ void setprop(Sprite& x, Texture& y, int z, int l, int m) {
     x.setTextureRect(IntRect(0, 0, 120, 80));
     x.setScale(z, 3);
 }
-
+void setprop2(RectangleShape& x, Texture& y, float z, float b, float l, float m) {
+    x.setTexture(&y);
+    x.setOrigin(60, 40);
+    x.setPosition(l, m);
+    x.setScale(z, b);
+}
 bool intersection(RectangleShape& x, RectangleShape& y) {
     if (x.getGlobalBounds().intersects(y.getGlobalBounds()))
         return true;
@@ -898,8 +1121,16 @@ bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& pl
 
 void game(int win1, int win2, RenderWindow& window)
 {
+    int attackpow1 = 0;
+    int attackpow2 = 0;
+    int healthpow = 0;
+    bool toucher = false;
+    bool toucher2 = false;
+    bool toucher3 = false;
+    bool toucher4 = false;
+    bool toucherhealthp1 = false;
     int arr_index = 5;
-
+    bool toucherhealthp2 = false;
     srand(time(0));
 
     //Textures
@@ -927,6 +1158,7 @@ void game(int win1, int win2, RenderWindow& window)
     Texture plateform_3;
     Texture plateform_4;
     Texture plateform_round3;
+
 
     // call init_health_bar once in the beginning of the game
     init_health_bar();
@@ -959,6 +1191,7 @@ void game(int win1, int win2, RenderWindow& window)
     Sprite background(Back[win1 + win2]);
 
     //setting prop to plates
+
     plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
     plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
     plt3.plat_set(plateform_1, plt3.platrec, 150, 50, 100, 450, 1, 1);
@@ -996,24 +1229,38 @@ void game(int win1, int win2, RenderWindow& window)
     p2_healthBar.setTexture(&P2_HealthBar_Texture);
 
     //Players initial prop
+    power_draw();
+    if (timerpow.getElapsedTime().asSeconds() >= 6) {
+
+    }
     if (win1 + win2 == 0) {
         setprop(player1.sprite, Idle, 3, 320, 480);
         setprop(player2.sprite, Idle2, -3, 960, 480);
+        setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1075, 425);
+        setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 630, 375);
+        setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 175, 425);
+
     }
     else if (win1 + win2 == 1) {
         setprop(player1.sprite, Idle, 3, 180, 350);
         setprop(player2.sprite, Idle2, -3, 1050, 350);
+        setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 175, 275);
+        setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 635, 375);
+        setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 1075, 275);
     }
     else {
         setprop(player1.sprite, Idle, 3, 330, 150);
         setprop(player2.sprite, Idle2, -3, 900, 150);
+        setprop2(Powers_sp[0], Powers_tex[0], 0, 0, rand() % window.getSize().x, rand() % window.getSize().y);
+        setprop2(Powers_sp[1], Powers_tex[1], 0, 0, rand() % window.getSize().x, rand() % window.getSize().y);
+        setprop2(Powers_sp[2], Powers_tex[2], 0, 0, rand() % window.getSize().x, rand() % window.getSize().y);
     }
 
     //Hitboxes initial prop
     player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
     player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Yellow);
-    player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 30.f, 115.f, Color::Blue);
-    player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 30.f, 115.f, Color::Blue);
+    player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
+    player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 50.f, 115.f, Color::Blue);
     player1.hitbox.attack.setOrigin(0, 0);
     player2.hitbox.attack.setOrigin(0, 0);
 
@@ -1022,12 +1269,13 @@ void game(int win1, int win2, RenderWindow& window)
     window.setFramerateLimit(60);
 
 
+    power_draw();
     while (window.isOpen()) {
         gameclock.restart();
         if (name__) {
             name(player1, window);
         }
-       
+
         if (!PAUSE) {
             while (window.pollEvent(e)) {
                 if (e.type == Event::Closed)
@@ -1061,8 +1309,14 @@ void game(int win1, int win2, RenderWindow& window)
                         attacktimer = 0;
                         attackindex = 0;
                         //Attacksound.play();
-                        if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool) {
-                            player2.health -= 20;
+                        if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool) {
+
+                            if (toucher2 == true) {
+                                player2.health -= attackpow1;
+                            }
+                            else {
+                                player2.health -= 10;
+                            }
                             player2.hitbool = true;
                             hittimer2 = 0.3f;
                             arr_index = update_healthbar(player2.health);
@@ -1110,6 +1364,7 @@ void game(int win1, int win2, RenderWindow& window)
                         player2.sprite.move(0, player2.velocity.y - Jumpheight);
                     }
 
+
                     //Player 2 Attacking button
                     if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans) {
                         player2.attackbool = true;
@@ -1117,8 +1372,14 @@ void game(int win1, int win2, RenderWindow& window)
                         attackindex2 = 0;
                         //Attacksound.play();
                         if (intersection(player2.hitbox.attack, player1.hitbox.player) && player2.attackbool) {
-                            player1.health -= 20;
+                            if (toucher == false) {
+                                player1.health -= 10;
+                            }
+                            else {
+                                player1.health -= attackpow2;
+                            }
                             player1.hitbool = true;
+
                             hittimer = 0.3f;
                             arr_index = update_healthbar(player1.health);
                             if (arr_index != -1)
@@ -1163,7 +1424,63 @@ void game(int win1, int win2, RenderWindow& window)
                         timer2 -= deltatime;
                 }
             }
+            for (int i = 0; i < 2; i++) {
+                if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds())) {
+                    toucher2 = true;
+                    attackpow1 = 20;
+                    Powers_sp[i].setPosition(1000, 1000);
+                    cout << attackpow1;
+                }
+            }
 
+            if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[1].getGlobalBounds())) {
+                toucherhealthp1 = true;
+                player1.health += 20;
+                cout << "TOUCH heal";
+                arr_index = update_healthbar(player1.health);
+                if (arr_index != -1)
+                {
+                    P1_HealthBar_Texture = hp_bar[arr_index];
+                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                }
+            }
+            for (int i = 0; i < 2; i++) {
+                if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds()))
+                {
+                    toucher = true;
+                    attackpow2 = 20;
+                    Powers_sp[i].setPosition(10000, 10000);
+                    cout << "TOUCH";
+                }
+            }
+
+            if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
+                toucherhealthp2 = true;
+                player2.health += 20;
+                cout << "TOUCH heal";
+                Powers_sp[2].setPosition(1000, 1000);
+                cout << player2.health;
+                arr_index = update_healthbar(player2.health);
+                if (arr_index != -1)
+                {
+                    P2_HealthBar_Texture = hp_bar[arr_index];
+                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                }
+            }
+            if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
+                toucherhealthp1 = true;
+                player1.health += 20;
+                cout << "TOUCH heal";
+                Powers_sp[2].setPosition(1000, 1000);
+                cout << player1.health;
+                arr_index = update_healthbar(player1.health);
+                if (arr_index != -1)
+                {
+                    P1_HealthBar_Texture = hp_bar[arr_index];
+                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                }
+            }
+            //PLAYER 1
             //PLAYER 1
 
             //Gravity movement
@@ -1494,10 +1811,10 @@ void game(int win1, int win2, RenderWindow& window)
             }
 
             window.clear();
-            window.draw(player1.hitbox.attack);
-            window.draw(player2.hitbox.attack);
             window.draw(player1.hitbox.player);
             window.draw(player2.hitbox.player);
+            window.draw(player1.hitbox.attack);
+            window.draw(player2.hitbox.attack);
             window.draw(background);
             window.draw(plt1.platrec);
             window.draw(plt2.platrec);
@@ -1508,6 +1825,11 @@ void game(int win1, int win2, RenderWindow& window)
             window.draw(p2_healthBar);
             window.draw(player1.sprite);
             window.draw(player2.sprite);
+            if (timerpow.getElapsedTime().asSeconds() >= 4.0f) {
+                for (int i = 0; i < 3; i++) {
+                    window.draw(Powers_sp[i]);
+                }
+            }
             window.display();
             deltatime = gameclock.getElapsedTime().asSeconds();
         }
