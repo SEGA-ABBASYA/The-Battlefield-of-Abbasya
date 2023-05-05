@@ -146,7 +146,7 @@ private:
         arr[2] = "I am delighted to be here";
         arr[3] = "You may not indure the \nslays of my mighty sword";
         arr[4] = "May the odds be in your \nfavor";
-        arr[5] = "";
+        arr[5] = "I'm not a king \n I'm not a god \n I AM WORSE";
         arr[6] = "";
         arr[7] = "";
         arr[8] = "";
@@ -156,7 +156,7 @@ private:
     }
 
 public:
-    int no_of_interactions = 5;
+    int no_of_interactions = 6;
     int max_letters_per_line = 27;
     float timer_per_letter = 0.1;
 
@@ -1558,11 +1558,15 @@ void game(int win1, int win2, RenderWindow &window)
     {
         setprop(player1.sprite, Idle, 3, 180, 350);
         setprop(player2.sprite, Idle2, -3, 1050, 350);
+        interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
+        interactionWindow2.interactionSetProp(arrayOfInteractions, player2.name, 1000, 200);
     }
-    else
+    else if(win1 + win2 == 2)
     {
         setprop(player1.sprite, Idle, 3, 330, 150);
         setprop(player2.sprite, Idle2, -3, 900, 150);
+        interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
+        interactionWindow2.interactionSetProp(arrayOfInteractions, player2.name, 1000, 200);
     }
 
     // Hitboxes initial prop
