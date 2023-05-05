@@ -51,7 +51,7 @@ int win1 = 0;
 int win2 = 0;
 bool PAUSE = false;
 bool Round_Trans = false;
-bool Round_Trans2 = false;
+bool Round_Interacting = false;
 int volume_ = 100;
 bool name__ = false;
 Sprite vol_arr[11];
@@ -146,7 +146,7 @@ private:
         arr[2] = "I am delighted to be here";
         arr[3] = "You may not indure the \nslays of my mighty sword";
         arr[4] = "May the odds be in your \nfavor";
-        arr[5] = "I'm not a king \n I'm not a god \n I AM WORSE";
+        arr[5] = "I'm not a king \nI'm not a god \nI AM WORSE";
         arr[6] = "";
         arr[7] = "";
         arr[8] = "";
@@ -204,8 +204,8 @@ public:
 
         // takes a random interaction out of the interactions array
         int randomNumb = rand() % no_of_interactions;
-        final_string = plyr_nam + "\n" + interactions[randomNumb];
-        // textToBeDisplayed.setString(final_string);
+        final_string = plyr_nam + ' ' + ':' + "\n" + interactions[randomNumb];
+        // textToBeDisplayed.setString(final_string); 
         textToBeDisplayed.setString(displayed_text);
     }
 
@@ -705,6 +705,8 @@ void Credits(RenderWindow& creditswindow) {
 }
 
 void game(int win1, int win2, RenderWindow& window);
+
+void game2(int win1, int win2, RenderWindow& game2window);
 
 void Volume(RenderWindow& volumewindow)
 {
@@ -1558,15 +1560,12 @@ void game(int win1, int win2, RenderWindow &window)
     {
         setprop(player1.sprite, Idle, 3, 180, 350);
         setprop(player2.sprite, Idle2, -3, 1050, 350);
-        interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
-        interactionWindow2.interactionSetProp(arrayOfInteractions, player2.name, 1000, 200);
+
     }
     else if(win1 + win2 == 2)
     {
         setprop(player1.sprite, Idle, 3, 330, 150);
         setprop(player2.sprite, Idle2, -3, 900, 150);
-        interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
-        interactionWindow2.interactionSetProp(arrayOfInteractions, player2.name, 1000, 200);
     }
 
     // Hitboxes initial prop
@@ -1598,18 +1597,18 @@ void game(int win1, int win2, RenderWindow &window)
 
         if (!interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
         {
-            Round_Trans2 = true;
+            Round_Interacting = true;
             // cout << "interaction mode on\n";
             interactionwindow1.update(deltatime, window);
         }
         else if (interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
         {
-            Round_Trans2 = true;
+            Round_Interacting = true;
             interactionWindow2.update(deltatime, window);
         }
         else if (interactionwindow1.finishedInteracting and interactionWindow2.finishedInteracting)
         {
-            Round_Trans2 = false;
+            Round_Interacting = false;
             // interactionwindow1.destroyInteractionWindow();
             // cout << "interaction off\n";
         }
@@ -1637,7 +1636,7 @@ void game(int win1, int win2, RenderWindow &window)
                     }
 
                     //player 1 Jumping button
-                    if (e.key.code == Keyboard::W && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans && !Round_Trans2) {
+                    if (e.key.code == Keyboard::W && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans && !Round_Interacting) {
                         timer = 0;
                         playerindex = 0;
                         player1.velocity.y = -10;
@@ -1645,7 +1644,7 @@ void game(int win1, int win2, RenderWindow &window)
                     }
 
                     //Player 1 Attacking button
-                    if (e.key.code == Keyboard::X && player1.grounded == true && !player1.attackbool && !Round_Trans && !Round_Trans && !Round_Trans2) {
+                    if (e.key.code == Keyboard::X && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans && !Round_Interacting) {
                         player1.attackbool = true;
                         attacktimer = 0;
                         attackindex = 0;
@@ -1693,7 +1692,7 @@ void game(int win1, int win2, RenderWindow &window)
                     }
 
                     // player 2 Jumping button
-                    if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Trans2)
+                    if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting)
                     {
                         timer2 = 0;
                         index2 = 0;
@@ -1702,7 +1701,7 @@ void game(int win1, int win2, RenderWindow &window)
                     }
 
                     //Player 2 Attacking button
-                    if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Trans2) {
+                    if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting) {
                         player2.attackbool = true;
                         attacktimer2 = 0;
                         attackindex2 = 0;
@@ -1888,7 +1887,7 @@ void game(int win1, int win2, RenderWindow &window)
                 else
                 {
                     //Moving right
-                    if (Keyboard::isKeyPressed(Keyboard::D) && player1.sprite.getPosition().x < (window.getSize().x - player1.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Trans2) {
+                    if (Keyboard::isKeyPressed(Keyboard::D) && player1.sprite.getPosition().x < (window.getSize().x - player1.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Interacting) {
                         player1.sprite.setScale(3, 3);
                         player1.hitbox.attack.setScale(1, 1);
                         if (player1.grounded == true) {
@@ -1906,7 +1905,7 @@ void game(int win1, int win2, RenderWindow &window)
                         player1.sprite.move(500 * deltatime, 0);
                     }
                     //Moving left
-                    if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0 && !Round_Trans && !Round_Trans2) {
+                    if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0 && !Round_Trans && !Round_Interacting) {
                         player1.sprite.setScale(-3, 3);
                         player1.hitbox.attack.setScale(-1, 1);
                         if (player1.grounded == true) {
@@ -2054,7 +2053,7 @@ void game(int win1, int win2, RenderWindow &window)
                 else
                 {
                     //Moving right
-                    if (Keyboard::isKeyPressed(Keyboard::Right) && player2.sprite.getPosition().x < (window.getSize().x - player2.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Trans2) {
+                    if (Keyboard::isKeyPressed(Keyboard::Right) && player2.sprite.getPosition().x < (window.getSize().x - player2.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Interacting) {
                         player2.sprite.setScale(3, 3);
                         player2.hitbox.attack.setScale(1, 1);
                         if (player2.grounded == true) {
@@ -2072,7 +2071,7 @@ void game(int win1, int win2, RenderWindow &window)
                         player2.sprite.move(500 * deltatime, 0);
                     }
                     //Moving left
-                    if (Keyboard::isKeyPressed(Keyboard::Left) && player2.sprite.getPosition().x > 0 && !Round_Trans && !Round_Trans2) {
+                    if (Keyboard::isKeyPressed(Keyboard::Left) && player2.sprite.getPosition().x > 0 && !Round_Trans && !Round_Interacting) {
                         player2.sprite.setScale(-3, 3);
                         player2.hitbox.attack.setScale(-1, 1);
                         if (player2.grounded == true) {
@@ -2118,4 +2117,7 @@ void game(int win1, int win2, RenderWindow &window)
             deltatime = gameclock.getElapsedTime().asSeconds();
         }
     }
+}
+void game2(int win1, int win2, RenderWindow& game2window) {
+
 }
