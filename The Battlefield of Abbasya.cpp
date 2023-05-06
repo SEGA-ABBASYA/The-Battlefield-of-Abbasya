@@ -1325,7 +1325,7 @@ bool intersection(RectangleShape &, RectangleShape &);
 // function for checking the colliding the hitbox of player and the plates
 bool platecoliode_1(RectangleShape &, RectangleShape &);
 
-Texture hp_bar[6];
+Texture hp_bar[12];
 
 int main()
 {
@@ -1371,43 +1371,56 @@ int main()
 
 void init_health_bar()
 {
-    Texture Hp100;
-    Texture Hp80;
-    Texture Hp60;
-    Texture Hp40;
-    Texture Hp20;
-    Texture Hp00;
+    
+    hp_bar[10].loadFromFile(path + "health_bar/100health.png");
+    hp_bar[9].loadFromFile(path + "health_bar/90health.png");
+    hp_bar[8].loadFromFile(path + "health_bar/80health.png");
+    hp_bar[7].loadFromFile(path + "health_bar/70health.png");
+    hp_bar[6].loadFromFile(path + "health_bar/60health.png");
+    hp_bar[5].loadFromFile(path + "health_bar/50health.png");
+    hp_bar[4].loadFromFile(path + "health_bar/40health.png");
+    hp_bar[3].loadFromFile(path + "health_bar/30health.png");
+    hp_bar[2].loadFromFile(path + "health_bar/20health.png");
+    hp_bar[1].loadFromFile(path + "health_bar/10health.png");
+    hp_bar[0].loadFromFile(path + "health_bar/0health.png");
 
-    Hp100.loadFromFile(path + "health_bar/health100.png");
-    Hp80.loadFromFile(path + "health_bar/health80.png");
-    Hp60.loadFromFile(path + "health_bar/health60.png");
-    Hp40.loadFromFile(path + "health_bar/health40.png");
-    Hp20.loadFromFile(path + "health_bar/health20.png");
-    Hp00.loadFromFile(path + "health_bar/health00.png");
-
-    hp_bar[0] = Hp00;
-    hp_bar[1] = Hp20;
-    hp_bar[2] = Hp40;
-    hp_bar[3] = Hp60;
-    hp_bar[4] = Hp80;
-    hp_bar[5] = Hp100;
 }
 
 int update_healthbar(int health)
 {
-    if (health == 80)
+    if (health == 90)
     {
-        return 4;
+        return 9;
+    }
+    else if (health == 80)
+    {
+        return 8;
+    }
+    else if (health == 70)
+    {
+        return 7;
     }
     else if (health == 60)
     {
-        return 3;
+        return 6;
+    }
+    else if (health == 50)
+    {
+        return 5;
     }
     else if (health == 40)
     {
-        return 2;
+        return 4;
+    }
+    else if (health == 30)
+    {
+        return 3;
     }
     else if (health == 20)
+    {
+        return 2;
+    }
+    else if (health == 10)
     {
         return 1;
     }
@@ -1452,7 +1465,7 @@ bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& pl
 
 void game(int win1, int win2, RenderWindow &window)
 {
-    int arr_index = 5;
+    int arr_index = 10;
 
     srand(time(0));
 
@@ -1651,7 +1664,7 @@ void game(int win1, int win2, RenderWindow &window)
                         // Attacksound.play();
                         if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
                         {
-                            player2.health -= 20;
+                            player2.health -= 10;
                             player2.hitbool = true;
                             hittimer2 = 0.3f;
                             arr_index = update_healthbar(player2.health);
@@ -1707,7 +1720,7 @@ void game(int win1, int win2, RenderWindow &window)
                         attackindex2 = 0;
                         //Attacksound.play();
                         if (intersection(player2.hitbox.attack, player1.hitbox.player) && player2.attackbool) {
-                            player1.health -= 20;
+                            player1.health -= 10;
                             player1.hitbool = true;
                             hittimer = 0.3f;
                             arr_index = update_healthbar(player1.health);
