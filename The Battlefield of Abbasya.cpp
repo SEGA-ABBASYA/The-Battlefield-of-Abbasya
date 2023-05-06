@@ -15,14 +15,12 @@ using namespace std;
 // string path = resourcePath();
  string path = "";
 
-// 0 -> MainMenu
-// 1 -> Choose Your Hero 
-// 2 -> Options
-// 3 -> Credits 
-// Esc -> PauseMen
-// 4 -> Close
-
-
+// 0  -> MainMenu
+// 1  -> Choose Your Hero
+// 2  -> Options
+// 3  -> Credits
+// ESC  -> PauseMen
+// 4  -> Close
 
 //Global Variables
 Clock gameclock;
@@ -123,7 +121,61 @@ struct plates {
     }
 } plt1, plt2, plt3, plt4, plt5, plt6;
 
-struct interactionWindow
+
+//powerups
+
+RectangleShape Powers_sp[3];
+Texture Powers_tex[3];
+Clock timerpow;
+void power_draw()
+{
+    Powers_sp[0].setSize(Vector2f(100, 100));
+    Powers_sp[1].setSize(Vector2f(100, 100));
+    Powers_sp[2].setSize(Vector2f(100, 100));
+
+    Powers_tex[0].loadFromFile("attack.png");
+    Powers_tex[1].loadFromFile("attack.png");
+    Powers_tex[2].loadFromFile("heal.png");
+
+
+    for (int i = 0; i < 3; i++)
+    {
+        Powers_sp[i].setTexture(&Powers_tex[i]);
+    }
+    Powers_sp[0].setOrigin(50, 50);
+    Powers_sp[1].setOrigin(50, 50);
+    Powers_sp[2].setOrigin(50, 50);
+
+}
+/*bool powercoliodeattack(Sprite& player, RectangleShape& player_x, Sprite& Powers)
+{
+    if (player_x.getGlobalBounds().intersects(Powers.getGlobalBounds()))
+    {
+        toucher=false;
+        return true;
+
+    }
+    else {
+        return false;
+    }
+}*/
+bool powercoliodeheal(Sprite& player, RectangleShape& player_x, Sprite& Powers)
+{
+    if (player_x.getGlobalBounds().intersects(Powers.getGlobalBounds()))
+    {
+        Powers.setScale(0, 0);
+        return true;
+
+    }
+    else {
+        return false;
+    }
+}
+
+// power end
+
+
+struct interactionWindow 
 {
 private:
     Vector2f frameScale;
@@ -793,7 +845,7 @@ void MainMenu(RenderWindow& mainwindow)
         mainwindow.draw(Mainmenu_background);
 
         // Draw the buttons
-        for (int i = 1;i < 5;i++) {
+        for (int i = 1; i < 5; i++) {
             mainwindow.draw(buttons[i]);
         }
 
@@ -1509,9 +1561,6 @@ void name(struct player, RenderWindow& namewindow) {
                  
                 }
 
-                
-               
-                
             }
         }
 
@@ -1644,6 +1693,9 @@ void init_health_bar()
 
 int update_healthbar(int health)
 {
+    if (health == 100) {
+        return 5;
+    }
     if (health == 80)
     {
         return 4;
@@ -1676,9 +1728,13 @@ void setprop(Sprite &x, Texture &y, int z, int l, int m)
     x.setTextureRect(IntRect(0, 0, 120, 80));
     x.setScale(z, 3);
 }
-
-bool intersection(RectangleShape &x, RectangleShape &y)
-{
+void setprop2(RectangleShape& x, Texture& y, float z, float b, float l, float m) {
+    x.setTexture(&y);
+    x.setOrigin(60, 40);
+    x.setPosition(l, m);
+    x.setScale(z, b);
+}
+bool intersection(RectangleShape& x, RectangleShape& y) {
     if (x.getGlobalBounds().intersects(y.getGlobalBounds()))
         return true;
     else
@@ -1689,7 +1745,7 @@ bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& pl
     if (player_x.getGlobalBounds().intersects(plat_y1.getGlobalBounds()) &&
         player_x.getGlobalBounds().top + player_x.getGlobalBounds().height - 20 < plat_y1.getGlobalBounds().top)
     {
-        // cout << plat_y1.getGlobalBounds().top << endl;
+        //cout << plat_y1.getGlobalBounds().top << endl;
         player.setPosition(player.getPosition().x, plat_y1.getGlobalBounds().top - player.getGlobalBounds().height / 2);
         return true;
     }
@@ -1701,8 +1757,14 @@ bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& pl
 
 void game(int win1, int win2, RenderWindow &window)
 {
+    int attackpow1 = 0;
+    int attackpow2 = 0;
+    int healthpow = 0;
+    bool toucher = false;
+    bool toucher2 = false;
+    bool toucherhealthp1 = false;
     int arr_index = 5;
-
+    bool toucherhealthp2 = false;
     srand(time(0));
 
     // Textures
@@ -1730,6 +1792,7 @@ void game(int win1, int win2, RenderWindow &window)
     Texture plateform_3;
     Texture plateform_4;
     Texture plateform_round3;
+
 
     // call init_health_bar once in the beginning of the game
     init_health_bar();
@@ -1799,36 +1862,50 @@ void game(int win1, int win2, RenderWindow &window)
     P2_HealthBar_Texture = hp_bar[arr_index];
     p2_healthBar.setTexture(&P2_HealthBar_Texture);
 
-    // Players initial prop
-    if (win1 + win2 == 0)
-    {
+    //Players initial prop
+    power_draw();
+    if (timerpow.getElapsedTime().asSeconds() >= 6) {
+
+    }
+    if (win1 + win2 == 0) {
         setprop(player1.sprite, Idle, 3, 320, 480);
         setprop(player2.sprite, Idle2, -3, 960, 480);
+        setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1075, 425);
+        setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 630, 375);
+        setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 175, 425);
+
     }
     else if (win1 + win2 == 1)
     {
         setprop(player1.sprite, Idle, 3, 180, 350);
         setprop(player2.sprite, Idle2, -3, 1050, 350);
-
+        setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 175, 275);
+        setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 635, 375);
+        setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 1075, 275);
     }
     else if(win1 + win2 == 2)
     {
         setprop(player1.sprite, Idle, 3, 330, 150);
         setprop(player2.sprite, Idle2, -3, 900, 150);
+        setprop2(Powers_sp[0], Powers_tex[0], 0, 0, rand() % window.getSize().x, rand() % window.getSize().y);
+        setprop2(Powers_sp[1], Powers_tex[1], 0, 0, rand() % window.getSize().x, rand() % window.getSize().y);
+        setprop2(Powers_sp[2], Powers_tex[2], 0, 0, rand() % window.getSize().x, rand() % window.getSize().y);
     }
 
     // Hitboxes initial prop
     player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
     player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Yellow);
-    player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 30.f, 115.f, Color::Blue);
-    player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 30.f, 115.f, Color::Blue);
+    player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
+    player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 50.f, 115.f, Color::Blue);
     player1.hitbox.attack.setOrigin(0, 0);
     player2.hitbox.attack.setOrigin(0, 0);
 
     window.setFramerateLimit(60);
 
-    while (window.isOpen())
-    {
+
+    power_draw();
+    while (window.isOpen()) {
+
         gameclock.restart();
         if (name__) {
             name(player1, window);
@@ -1897,10 +1974,15 @@ void game(int win1, int win2, RenderWindow &window)
                         player1.attackbool = true;
                         attacktimer = 0;
                         attackindex = 0;
-                        // Attacksound.play();
-                        if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
-                        {
-                            player2.health -= 20;
+                        //Attacksound.play();
+                        if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool) {
+
+                            if (toucher2 == true) {
+                                player2.health -= attackpow1;
+                            }
+                            else {
+                                player2.health -= 10;
+                            }
                             player2.hitbool = true;
                             hittimer2 = 0.3f;
                             arr_index = update_healthbar(player2.health);
@@ -1949,6 +2031,7 @@ void game(int win1, int win2, RenderWindow &window)
                         player2.sprite.move(0, player2.velocity.y - Jumpheight);
                     }
 
+
                     //Player 2 Attacking button
                     if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting) {
                         player2.attackbool = true;
@@ -1956,8 +2039,14 @@ void game(int win1, int win2, RenderWindow &window)
                         attackindex2 = 0;
                         //Attacksound.play();
                         if (intersection(player2.hitbox.attack, player1.hitbox.player) && player2.attackbool) {
-                            player1.health -= 20;
+                            if (toucher == false) {
+                                player1.health -= 10;
+                            }
+                            else {
+                                player1.health -= attackpow2;
+                            }
                             player1.hitbool = true;
+
                             hittimer = 0.3f;
                             arr_index = update_healthbar(player1.health);
                             if (arr_index != -1)
@@ -2017,7 +2106,63 @@ void game(int win1, int win2, RenderWindow &window)
                         timer2 -= deltatime;
                 }
             }
+            for (int i = 0; i < 2; i++) {
+                if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds())) {
+                    toucher2 = true;
+                    attackpow1 = 20;
+                    Powers_sp[i].setPosition(1000, 1000);
+                    cout << attackpow1;
+                }
+            }
 
+            if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[1].getGlobalBounds())) {
+                toucherhealthp1 = true;
+                player1.health += 20;
+                cout << "TOUCH heal";
+                arr_index = update_healthbar(player1.health);
+                if (arr_index != -1)
+                {
+                    P1_HealthBar_Texture = hp_bar[arr_index];
+                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                }
+            }
+            for (int i = 0; i < 2; i++) {
+                if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds()))
+                {
+                    toucher = true;
+                    attackpow2 = 20;
+                    Powers_sp[i].setPosition(10000, 10000);
+                    cout << "TOUCH";
+                }
+            }
+
+            if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
+                toucherhealthp2 = true;
+                player2.health += 20;
+                cout << "TOUCH heal";
+                Powers_sp[2].setPosition(1000, 1000);
+                cout << player2.health;
+                arr_index = update_healthbar(player2.health);
+                if (arr_index != -1)
+                {
+                    P2_HealthBar_Texture = hp_bar[arr_index];
+                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                }
+            }
+            if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
+                toucherhealthp1 = true;
+                player1.health += 20;
+                cout << "TOUCH heal";
+                Powers_sp[2].setPosition(1000, 1000);
+                cout << player1.health;
+                arr_index = update_healthbar(player1.health);
+                if (arr_index != -1)
+                {
+                    P1_HealthBar_Texture = hp_bar[arr_index];
+                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                }
+            }
+            //PLAYER 1
             //PLAYER 1
 
             //Gravity movement
@@ -2341,10 +2486,10 @@ void game(int win1, int win2, RenderWindow &window)
             }
 
             window.clear();
-            window.draw(player1.hitbox.attack);
-            window.draw(player2.hitbox.attack);
             window.draw(player1.hitbox.player);
             window.draw(player2.hitbox.player);
+            window.draw(player1.hitbox.attack);
+            window.draw(player2.hitbox.attack);
             window.draw(background);
             window.draw(plt1.platrec);
             window.draw(plt2.platrec);
@@ -2355,6 +2500,11 @@ void game(int win1, int win2, RenderWindow &window)
             window.draw(p2_healthBar);
             window.draw(player1.sprite);
             window.draw(player2.sprite);
+            if (timerpow.getElapsedTime().asSeconds() >= 4.0f) {
+                for (int i = 0; i < 3; i++) {
+                    window.draw(Powers_sp[i]);
+                }
+            }
             interactionwindow1.draw(window);
             interactionWindow2.draw(window);
             for (int i = 0;i < 3;i++)
