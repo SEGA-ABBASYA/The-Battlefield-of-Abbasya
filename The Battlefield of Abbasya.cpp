@@ -50,6 +50,7 @@ int win2 = 0;
 bool PAUSE = false;
 bool Round_Trans = false;
 bool Round_Interacting = false;
+bool Deathfall = true;
 int volume_ = 100;
 bool name__ = false;
 Sprite vol_arr[11];
@@ -2002,8 +2003,12 @@ void game(int win1, int win2, RenderWindow& window)
                                 else {
                                     player2.health -= attackpow1;
                                 }
-
                                 player2.hitbool = true;
+                                if (player2.health == 0)
+                                {
+                                    win1++;
+                                    Round_Trans = true;
+                                }
                                 hittimer2 = 0.3f;
                                 arr_index = update_healthbar(player2.health);
                                 if (arr_index != -1)
@@ -2018,20 +2023,18 @@ void game(int win1, int win2, RenderWindow& window)
                         //Death Animation & Round transition
                         if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
                         {
-                            Round_Trans = true;
                             if (roundelay < 0 && e.key.code == Keyboard::Enter)
                             {
                                 Deathindex = 0;
                                 if (player2.health == 0) {
-                                    player1.Round_won[win1 + win2].setPosition(player2.Round_won[win1 + win2].getPosition());
-                                    win1++;
+                                    player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
                                 }
                                 else if (player1.health == 0) {
-                                    player2.Round_won[win1 + win2].setPosition(player1.Round_won[win1 + win2].getPosition());
-                                    win2++;
+                                    player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
                                 }
                                 roundelay = 1.0f;
                                 Round_Trans = false;
+                                Deathfall = true;
                                 player1.health = 100;
                                 player2.health = 100;
                                 player1.sprite.setColor(Color::White);
@@ -2066,6 +2069,11 @@ void game(int win1, int win2, RenderWindow& window)
                                     player1.health -= attackpow2;
                                 }
                                 player1.hitbool = true;
+                                if(player1.health == 0)
+                                {
+                                    win2++;
+                                    Round_Trans = true;
+                                }
 
                                 hittimer = 0.3f;
                                 arr_index = update_healthbar(player1.health);
@@ -2091,12 +2099,12 @@ void game(int win1, int win2, RenderWindow& window)
                     }
                 }
                 // Round Transition & Death
-                if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
+                if (player2.health == 0 || player1.health == 0)
                 {
                     roundelay -= deltatime;
                     if (player1.health == 0) {
-                        if (player2.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
-                            player2.Round_won[win1 + win2].move(0, 5);
+                        if (player2.Round_won[win1 + win2 - 1].getPosition().y < window.getSize().y / 4)
+                            player2.Round_won[win1 + win2 - 1].move(0, 5);
                         player1.sprite.setTexture(Death);
                         player1.sprite.setColor(Color(128, 0, 0));
                         if (timer <= 0) {
@@ -2110,8 +2118,8 @@ void game(int win1, int win2, RenderWindow& window)
                             timer -= deltatime;
                     }
                     if (player2.health == 0) {
-                        if (player1.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
-                            player1.Round_won[win1 + win2].move(0, 5);
+                        if (player1.Round_won[win1 + win2 - 1].getPosition().y < window.getSize().y / 4)
+                            player1.Round_won[win1 + win2 - 1].move(0, 5);
                         player2.sprite.setColor(Color(128, 0, 0));
                         player2.sprite.setTexture(Death2);
                         if (timer2 <= 0) {
@@ -2186,7 +2194,6 @@ void game(int win1, int win2, RenderWindow& window)
                     }
                 }
                 //PLAYER 1
-                //PLAYER 1
 
                 //Gravity movement
                 player1.sprite.move(0, player1.velocity.y);
@@ -2202,6 +2209,11 @@ void game(int win1, int win2, RenderWindow& window)
                 //Death if Fell
                 if (player1.hitbox.player.getPosition().y > window.getSize().y)
                 {
+                    if (Deathfall) {
+                        win2++;
+                        Round_Trans = true;
+                        Deathfall = false;
+                    }
                     player1.health = 0;
                     arr_index = update_healthbar(player1.health);
                     if (arr_index != -1)
@@ -2210,7 +2222,7 @@ void game(int win1, int win2, RenderWindow& window)
                         p1_healthBar.setTexture(&P1_HealthBar_Texture);
                     }
                 }
-
+                
                 // Gravity and Plates
                 if (((platecoliode_1(player1.sprite, player1.hitbox.player, plt1.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt2.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt3.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt4.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt5.platrec)) || player1.hitbox.player.getPosition().y > window.getSize().y) && player1.velocity.y >= 0)
                 {
@@ -2253,7 +2265,7 @@ void game(int win1, int win2, RenderWindow& window)
                     else
                         timer -= deltatime;
                 }
-
+                cout << win1 << ' ' << win2 << endl;
                 //Falling animation
                 if (player1.velocity.y >= 0 && !player1.grounded) {
                     player1.sprite.setTexture(Fall);
@@ -2361,6 +2373,11 @@ void game(int win1, int win2, RenderWindow& window)
                 //Death if Fell
                 if (player2.hitbox.player.getPosition().y > window.getSize().y)
                 {
+                    if (Deathfall) {
+                        Round_Trans = true;
+                        win1++;
+                        Deathfall = false;
+                    }
                     player2.health = 0;
                     arr_index = update_healthbar(player2.health);
                     if (arr_index != -1)
