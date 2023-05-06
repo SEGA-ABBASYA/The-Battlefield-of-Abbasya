@@ -440,8 +440,8 @@ void Controlls(RenderWindow& controllswindow)
 
     frames[0].loadFromFile("Controlls/controlls_banner.png");
     frames[1].loadFromFile("Controlls/controlls_main.png");
-    idle1.loadFromFile("_Idle1 1.png");
-    idle2.loadFromFile("_Idle2 1.png");
+    idle1.loadFromFile("Name Entry/_Idle1 1.png");
+    idle2.loadFromFile("Name Entry/_Idle2 1.png");
     buttons[0].loadFromFile("Controlls/A.png");
     buttons[1].loadFromFile("Controlls/D.png");
     buttons[2].loadFromFile("Controlls/W.png");
@@ -686,13 +686,6 @@ void MainMenu(RenderWindow& mainwindow)
     Texture BorderTex;
     Texture controll1;
     Texture controll2;
-
-
-    ButtonTexture.loadFromFile(path + "Main Menu/silver_button.png");
-    BorderTex.loadFromFile(path + "Main Menu/border.png");
-    Menuback.loadFromFile(path + "Main Menu/background main menu.png");
-    optionButton.loadFromFile(path + "Main Menu/option1.png");
-    optionButton2.loadFromFile(path + "Main Menu/option2.png");
 
     ButtonTexture.loadFromFile("Main Menu/silver_button.png");
     BorderTex.loadFromFile("Main Menu/border.png");
