@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
@@ -11,9 +11,9 @@
 
 using namespace sf;
 using namespace std;
-// string path = "/Users/yoyo/#COLLEGE/The-Battlefield-of-Abbasya/";
+string path = "/Users/yoyo/#COLLEGE/The-Battlefield-of-Abbasya/";
 // string path = resourcePath();
- string path = "";
+ //string path = "";
 
 // 0  -> MainMenu
 // 1  -> Choose Your Hero
@@ -133,10 +133,9 @@ void power_draw()
     Powers_sp[1].setSize(Vector2f(100, 100));
     Powers_sp[2].setSize(Vector2f(100, 100));
 
-    Powers_tex[0].loadFromFile("attack.png");
-    Powers_tex[1].loadFromFile("attack.png");
-    Powers_tex[2].loadFromFile("heal.png");
-
+    Powers_tex[0].loadFromFile(path + "attack.png");
+    Powers_tex[1].loadFromFile(path + "attack.png");
+    Powers_tex[2].loadFromFile(path + "heal.png");
 
     for (int i = 0; i < 3; i++)
     {
@@ -198,7 +197,7 @@ private:
         arr[2] = "I am delighted to be here";
         arr[3] = "You may not indure the \nslays of my mighty sword";
         arr[4] = "May the odds be in your \nfavor";
-        arr[5] = "I'm not a king \nI'm not a god \nI AM WORSE";
+        arr[5] = "";
         arr[6] = "";
         arr[7] = "";
         arr[8] = "";
@@ -208,20 +207,26 @@ private:
     }
 
 public:
-    int no_of_interactions = 6;
+    int no_of_interactions = 5;
     int max_letters_per_line = 27;
     float timer_per_letter = 0.1;
 
     bool finishedInteracting = false;
     bool deletingWindow = false;
     bool isActive = false;
-    // constructor
-    void interactionSetProp(string interactions[], string plyr_nam, float xPos, float yPos)
-    {
-        //cout << "constructed" << endl;
-        // the constructor initiates the window at a zero size, then it enlarged in the update function
 
-        // initialize the array of text interactions
+    // constructor
+    void interactionSetProp(string interactions[],string plyr_nam, float xPos, float yPos)
+    {
+        text_index = 0;
+        lettersPerLine = 0;
+        textTimer = 0.1;
+        pauseTimer = 2.5;
+        aborted = false;
+        deletingWindow = false;
+        finishedInteracting = false;
+        xpos = xPos;
+        ypos = yPos;
         setInteractions(interactions);
 
         // loads textures
@@ -245,7 +250,7 @@ public:
         frameScale = {1, 1};
 
         // loads font and initial/Applications/Visual Studio Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.htmlizes text
-        arcadeClassic.loadFromFile(path + "Canterbury.ttf");
+        arcadeClassic.loadFromFile(path + "ArcadeClassic.ttf");
         textToBeDisplayed.setFont(arcadeClassic);
         pressSpaceToSkip.setFont(arcadeClassic);
         pressSpaceToSkip.setString("Press Space To Skip");
@@ -256,8 +261,7 @@ public:
 
         // takes a random interaction out of the interactions array
         int randomNumb = rand() % no_of_interactions;
-        final_string = plyr_nam + ' ' + ':' + "\n" + interactions[randomNumb];
-        // textToBeDisplayed.setString(final_string); 
+        final_string = player_name + ' ' + ':' + "\n" + interactions[randomNumb]; 
         textToBeDisplayed.setString(displayed_text);
     }
 
@@ -270,12 +274,13 @@ private:
     int flutter_timer = 20;
     bool isSkipTextShown = true;
 
+    // properties set by user using set prop function
+    float xpos;
+    float ypos;
+    string inter_arr[100];
 public:
     void update(float deltatime, RenderWindow &window)
     {
-
-
-
         // cout << "update of interaction got called\n";
         float scale_offset = 2;
         float descale_offset = 2;
@@ -288,6 +293,7 @@ public:
         // if the window isnt big enough yet, it gets scaled
         if (frameSprite.getScale().x < frameScale.x and frameSprite.getScale().y < frameScale.y and !deletingWindow and !aborted)
         {
+            //cout << "scaling" << endl;
             // cout << "deltatime: " << deltatime << endl;
             // cout << "frame current scale: " << frameSprite.getScale().x;
             // adds a slight increase to the scale every frame relative to delatatime
@@ -298,19 +304,21 @@ public:
         // if both window is scaled, we start displaying the text gradually
         else
         {
+            //cout << "displaying text" << endl;
             // if not all of string have been displayed
             if (text_index < final_string.length() and !aborted)
             {
+                //cout << "typing letter      ";   
                 if (textTimer <= 0)
                 {
                     displayed_text = displayed_text + final_string[text_index];
                     textToBeDisplayed.setString(displayed_text);
+                    cout << displayed_text << endl;
                     text_index++;
                     lettersPerLine++;
 
                     // resets timer
                     textTimer = timer_per_letter;
-
                 }
                 else
                     textTimer -= deltatime;
@@ -318,12 +326,17 @@ public:
             // if all has been displayed, starts timer, and when it ends, it destroys the window
             else
             {
+                if(pauseTimer > 0)
+                {
+                    //cout << "pausing before destruction     ";
+                }
                 if (pauseTimer <= 0 or aborted)
                 {
                     deletingWindow = true;
                     // if not , plays reverse animation for shrinking
                     if (frameSprite.getScale().x > 0 and frameSprite.getScale().y > 0 and !finishedInteracting)
                     {
+                        //cout << "descaling" << endl;
                         frameSprite.setScale({frameSprite.getScale().x - descale_offset * deltatime, frameSprite.getScale().y - descale_offset * deltatime});
                         // cout << "  frame new scale: " << frameSprite.getScale().x << "  delatatime: " << deltatime << endl;
 
@@ -333,7 +346,8 @@ public:
                     // if finished shrinking, destroys and marks the bool as true for external use
                     else if (frameSprite.getScale().x <= 0 or frameSprite.getScale().y <= 0)
                     {
-                        frameSprite.setScale(0, 0);
+                        //cout << "destroyed" << endl;
+                         frameSprite.setScale(0, 0);
                         // playerIconSprite.setScale(0, 0);
                         textToBeDisplayed.setScale(0, 0);
                         finishedInteracting = true;
@@ -343,10 +357,6 @@ public:
                     pauseTimer -= deltatime;
             }
         }
-
-        // window.draw(frameSprite);
-        // window.draw(playerIconSprite);
-        // window.draw(textToBeDisplayed);
     }
     void draw(RenderWindow &window)
     {
@@ -395,6 +405,11 @@ public:
         textToBeDisplayed.setScale(0, 0);
         // finishedInteracting = true;
     }
+    // void setName(string plyr_nam)
+    // {
+    //     player_name = plyr_nam;
+    //     interactionSetProp(inter_arr, xpos, ypos);
+    // }
 }interactionwindow1,interactionWindow2;
 
 int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
@@ -438,7 +453,7 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
 }
 
 void setTextprop(Text& text , int x,int y) {
-    menufont.loadFromFile("Canterbury.ttf");
+    menufont.loadFromFile(path + "Canterbury.ttf");
     text.setCharacterSize(x);
     text.setFillColor(Color(187, 220, 244));
     text.setFont(menufont);
@@ -478,11 +493,11 @@ int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywi
 void Controlls(RenderWindow& controllswindow)
 {
     Texture controll_back;
-    controll_back.loadFromFile("controlls back.png");
+    controll_back.loadFromFile(path + "controlls back.png");
     Sprite back;
     back.setTexture(controll_back);
     Texture Pause;
-    Pause.loadFromFile("Controlls/pause.png");
+    Pause.loadFromFile(path + "Controlls/pause.png");
     Sprite pause;
     pause.setTexture(Pause);
     pause.setScale(0.1, 0.1);
@@ -490,25 +505,25 @@ void Controlls(RenderWindow& controllswindow)
 
     Texture Jumping,Jumping2,Running2,Running,Attacking,Attacking2,idle1,idle2,frames[2],buttons[9];
 
-    frames[0].loadFromFile("Controlls/controlls_banner.png");
-    frames[1].loadFromFile("Controlls/controlls_main.png");
-    idle1.loadFromFile("Name Entry/_Idle1 1.png");
-    idle2.loadFromFile("Name Entry/_Idle2 1.png");
-    buttons[0].loadFromFile("Controlls/A.png");
-    buttons[1].loadFromFile("Controlls/D.png");
-    buttons[2].loadFromFile("Controlls/W.png");
-    buttons[3].loadFromFile("Controlls/X.png");
-    buttons[4].loadFromFile("Controlls/up.png");
-    buttons[5].loadFromFile("Controlls/J.png");
-    buttons[6].loadFromFile("Controlls/right.png");
-    buttons[7].loadFromFile("Controlls/left.png");
-    buttons[8].loadFromFile("Controlls/ESC.png");
-    Running2.loadFromFile("Player 2/Run2.png");
-    Running.loadFromFile("Player 1/Running Animation.png");
-    Jumping.loadFromFile("Player 1/_Jump.png");
-    Jumping2.loadFromFile("Player 2/Jump2.png");
-    Attacking.loadFromFile("Player 1/_Attack.png");
-    Attacking2.loadFromFile("Player 2/Attack2.png");
+    frames[0].loadFromFile(path + "Controlls/controlls_banner.png");
+    frames[1].loadFromFile(path + "Controlls/controlls_main.png");
+    idle1.loadFromFile(path + "Name Entry/_Idle1 1.png");
+    idle2.loadFromFile(path + "Name Entry/_Idle2 1.png");
+    buttons[0].loadFromFile(path + "Controlls/A.png");
+    buttons[1].loadFromFile(path + "Controlls/D.png");
+    buttons[2].loadFromFile(path + "Controlls/W.png");
+    buttons[3].loadFromFile(path + "Controlls/X.png");
+    buttons[4].loadFromFile(path + "Controlls/up.png");
+    buttons[5].loadFromFile(path + "Controlls/J.png");
+    buttons[6].loadFromFile(path + "Controlls/right.png");
+    buttons[7].loadFromFile(path + "Controlls/left.png");
+    buttons[8].loadFromFile(path + "Controlls/ESC.png");
+    Running2.loadFromFile(path + "Player 2/Run2.png");
+    Running.loadFromFile(path + "Player 1/Running Animation.png");
+    Jumping.loadFromFile(path + "Player 1/_Jump.png");
+    Jumping2.loadFromFile(path + "Player 2/Jump2.png");
+    Attacking.loadFromFile(path + "Player 1/_Attack.png");
+    Attacking2.loadFromFile(path + "Player 2/Attack2.png");
 
     Sprite jumping1, attacking1, running1r, jumping2, attacking2, running2r, running2l, running1l, Idle1, Idle2;
     Sprite button[9];
@@ -589,7 +604,7 @@ void Controlls(RenderWindow& controllswindow)
     Idle2.setPosition(650, 70);
     
     Font controllsfont;
-    controllsfont.loadFromFile("Canterbury.ttf");
+    controllsfont.loadFromFile(path + "Canterbury.ttf");
     Text controlls[13];
 
     controlls[0].setFont(controllsfont);
@@ -739,13 +754,13 @@ void MainMenu(RenderWindow& mainwindow)
     Texture controll1;
     Texture controll2;
 
-    ButtonTexture.loadFromFile("Main Menu/silver_button.png");
-    BorderTex.loadFromFile("Main Menu/border.png");
-    Menuback.loadFromFile("Main Menu/background main menu.png");
-    optionButton.loadFromFile("Main Menu/option1.png");
-    optionButton2.loadFromFile("Main Menu/option2.png");
-    controll1.loadFromFile("Main Menu/controller_blue.png");
-    controll2.loadFromFile("Main Menu/controller_grey.png");
+    ButtonTexture.loadFromFile(path + "Main Menu/silver_button.png");
+    BorderTex.loadFromFile(path + "Main Menu/border.png");
+    Menuback.loadFromFile(path + "Main Menu/background main menu.png");
+    optionButton.loadFromFile(path + "Main Menu/option1.png");
+    optionButton2.loadFromFile(path + "Main Menu/option2.png");
+    controll1.loadFromFile(path + "Main Menu/controller_blue.png");
+    controll2.loadFromFile(path + "Main Menu/controller_grey.png");
 
 
     Text select[6];
@@ -929,15 +944,15 @@ void credits_text(Text* arr,RenderWindow& textwindow) {
 
 void Credits(RenderWindow& creditswindow) {
     Font Credits;
-    Credits.loadFromFile("Canterbury.ttf");
+    Credits.loadFromFile(path + "Canterbury.ttf");
 
     Texture group;
-    group.loadFromFile("credit_pic1 1.png");
+    group.loadFromFile(path + "credit_pic1 1.png");
     Sprite pic;
     pic.setTexture(group);
 
     Texture frame;
-    frame.loadFromFile("main frame1.png");
+    frame.loadFromFile(path + "main frame1.png");
     Sprite mainframe;
     mainframe.setTexture(frame);
 
@@ -1044,7 +1059,7 @@ void Volume(RenderWindow& volumewindow)
 {
     Mouse mouse;
     Font volumefont;
-    volumefont.loadFromFile("Canterbury.ttf");
+    volumefont.loadFromFile(path + "Canterbury.ttf");
     Text volume[2];
     volume[0].setFont(volumefont);
     volume[0].setString("Volume");
@@ -1059,17 +1074,17 @@ void Volume(RenderWindow& volumewindow)
     volume[1].setPosition(590, 580);
 
     Texture volume_back;
-    volume_back.loadFromFile("Volume Bar/volume background.png");
+    volume_back.loadFromFile(path + "Volume Bar/volume background.png");
     Sprite Back;
     Back.setTexture(volume_back);
 
 
     Texture buttons[5];
-    buttons[0].loadFromFile("Volume Bar/back frame.png");
-    buttons[1].loadFromFile("Volume Bar/mute-.png");
-    buttons[2].loadFromFile("Volume Bar/volume frame.png");
-    buttons[3].loadFromFile("Volume Bar/volume++-.png");
-    buttons[4].loadFromFile("Volume Bar/volume--- 1.png");
+    buttons[0].loadFromFile(path + "Volume Bar/back frame.png");
+    buttons[1].loadFromFile(path + "Volume Bar/mute-.png");
+    buttons[2].loadFromFile(path + "Volume Bar/volume frame.png");
+    buttons[3].loadFromFile(path + "Volume Bar/volume++-.png");
+    buttons[4].loadFromFile(path + "Volume Bar/volume--- 1.png");
 
  
     Sprite button[5];
@@ -1096,17 +1111,17 @@ void Volume(RenderWindow& volumewindow)
 
     Texture vol[11];
     
-    vol[10].loadFromFile("Volume Bar/New_HealthBar100.png");
-    vol[9].loadFromFile("Volume Bar/New_HealthBar90.png");
-    vol[8].loadFromFile("Volume Bar/New_HealthBar80.png");
-    vol[7].loadFromFile("Volume Bar/New_HealthBar70.png");
-    vol[6].loadFromFile("Volume Bar/New_HealthBar60.png");
-    vol[5].loadFromFile("Volume Bar/New_HealthBar50.png");
-    vol[4].loadFromFile("Volume Bar/New_HealthBar40.png");
-    vol[3].loadFromFile("Volume Bar/New_HealthBar30.png");
-    vol[2].loadFromFile("Volume Bar/New_HealthBar20.png");
-    vol[1].loadFromFile("Volume Bar/New_HealthBar10.png");
-    vol[0].loadFromFile("Volume Bar/New_HealthBar00.png");
+    vol[10].loadFromFile(path + "Volume Bar/New_HealthBar100.png");
+    vol[9].loadFromFile(path + "Volume Bar/New_HealthBar90.png");
+    vol[8].loadFromFile(path + "Volume Bar/New_HealthBar80.png");
+    vol[7].loadFromFile(path + "Volume Bar/New_HealthBar70.png");
+    vol[6].loadFromFile(path + "Volume Bar/New_HealthBar60.png");
+    vol[5].loadFromFile(path + "Volume Bar/New_HealthBar50.png");
+    vol[4].loadFromFile(path + "Volume Bar/New_HealthBar40.png");
+    vol[3].loadFromFile(path + "Volume Bar/New_HealthBar30.png");
+    vol[2].loadFromFile(path + "Volume Bar/New_HealthBar20.png");
+    vol[1].loadFromFile(path + "Volume Bar/New_HealthBar10.png");
+    vol[0].loadFromFile(path + "Volume Bar/New_HealthBar00.png");
 
     for (int i = 0; i < 11; i++) {
         vol_arr[i].setTexture(vol[i]);
@@ -1265,15 +1280,15 @@ int PauseMenu(RenderWindow &pausewindow)
     Font pausefont;
     
     //PAUSE = true;
-    pausefont.loadFromFile("Canterbury.ttf");
+    pausefont.loadFromFile(path + "Canterbury.ttf");
 
     Texture Pauseback;
     Texture Pauseborder;
     Texture Buttontex;
 
-    Pauseback.loadFromFile("Pause Menu/Pause Menu Background.png");
-    Pauseborder.loadFromFile("Pause Menu/Logo Frame.png");
-    Buttontex.loadFromFile("Pause Menu/Gold Button.png");
+    Pauseback.loadFromFile(path + "Pause Menu/Pause Menu Background.png");
+    Pauseborder.loadFromFile(path + "Pause Menu/Logo Frame.png");
+    Buttontex.loadFromFile(path + "Pause Menu/Gold Button.png");
 
     RectangleShape buttons[4];
 
@@ -1382,16 +1397,16 @@ void name(struct player, RenderWindow& namewindow) {
 
 
     Texture nameback;
-    nameback.loadFromFile("Name Entry/name enternce.png");
+    nameback.loadFromFile(path + "Name Entry/name enternce.png");
     Sprite namebackground;
     namebackground.setTexture(nameback);
 
     Texture frames[5];
-    frames[0].loadFromFile("Name Entry/Game_text_boxes.png");
-    frames[1].loadFromFile("Name Entry/name-box.png");
-    frames[2].loadFromFile("Name Entry/_Idle1 1.png");
-    frames[3].loadFromFile("Name Entry/_Idle2 1.png");
-    frames[4].loadFromFile("Name Entry/start1.png");
+    frames[0].loadFromFile(path + "Name Entry/Game_text_boxes.png");
+    frames[1].loadFromFile(path + "Name Entry/name-box.png");
+    frames[2].loadFromFile(path + "Name Entry/_Idle1 1.png");
+    frames[3].loadFromFile(path + "Name Entry/_Idle2 1.png");
+    frames[4].loadFromFile(path + "Name Entry/start1.png");
 
     RectangleShape start[3];
 
@@ -1432,7 +1447,7 @@ void name(struct player, RenderWindow& namewindow) {
     bool name_ = false;
 
     Font font;
-    font.loadFromFile("Canterbury.ttf");
+    font.loadFromFile(path + "Canterbury.ttf");
 
     Text text1("", font);
     Text text2("", font);
@@ -1635,7 +1650,11 @@ int main()
     {
         
         MainMenu(get_window);
-        if (pagenum == 0) { MainMenu(get_window); }
+        if (pagenum == 0)
+        {
+            MainMenu(get_window);
+            
+        }
         else if (pagenum == 1) {
             player1.name.clear();
             player2.name.clear();
@@ -1779,6 +1798,8 @@ void game(int win1, int win2, RenderWindow& window)
     bool toucherhealthp1 = false;
     bool toucherhealthp2 = false;
     int arr_index = 10;
+    interactionwindow1.finishedInteracting = false;
+    interactionWindow2.finishedInteracting = false;
     srand(time(0));
 
     // Textures
@@ -1810,29 +1831,29 @@ void game(int win1, int win2, RenderWindow& window)
 
     // call init_health_bar once in the beginning of the game
     init_health_bar();
-    ourFont.loadFromFile("ArcadeClassic.ttf");
-    Back[0].loadFromFile("Background.jpg");
-    Back[1].loadFromFile("background2.jpg");
-    Back[2].loadFromFile("Round3_Background.jpg");
-    Idle.loadFromFile("Player 1/_Idle.png");
-    Idle2.loadFromFile("Player 2/Idle2.png");
-    Running2.loadFromFile("Player 2/Run2.png");
-    Running.loadFromFile("Player 1/Running Animation.png");
-    Jumping.loadFromFile("Player 1/_Jump.png");
-    Jumping2.loadFromFile("Player 2/Jump2.png");
-    Fall.loadFromFile("Player 1/_Fall.png");
-    Fall2.loadFromFile("Player 2/_Fall2.png");
-    Hit.loadFromFile("Player 1/_Hit.png");
-    Hit2.loadFromFile("Player 2/Hit2.png");
-    Attacking.loadFromFile("Player 1/_Attack.png");
-    Attacking2.loadFromFile("Player 2/Attack2.png");
-    Death.loadFromFile("Player 1/_Death.png");
-    Death2.loadFromFile("Player 2/_Death.png");
-    plateform_1.loadFromFile("Plates/firstplate.png");
-    plateform_2.loadFromFile("Plates/secondplate.png");
-    plateform_3.loadFromFile("Plates/thirdplate.png");
-    plateform_round3.loadFromFile("Plates/plate_Round3.png");
-    plateform_4.loadFromFile("Plates/fourthplate.png");
+    ourFont.loadFromFile(path + "ArcadeClassic.ttf");
+    Back[0].loadFromFile(path + "Background.jpg");
+    Back[1].loadFromFile(path + "background2.jpg");
+    Back[2].loadFromFile(path + "Round3_Background.jpg");
+    Idle.loadFromFile(path + "Player 1/_Idle.png");
+    Idle2.loadFromFile(path + "Player 2/Idle2.png");
+    Running2.loadFromFile(path + "Player 2/Run2.png");
+    Running.loadFromFile(path + "Player 1/Running Animation.png");
+    Jumping.loadFromFile(path + "Player 1/_Jump.png");
+    Jumping2.loadFromFile(path + "Player 2/Jump2.png");
+    Fall.loadFromFile(path + "Player 1/_Fall.png");
+    Fall2.loadFromFile(path + "Player 2/_Fall2.png");
+    Hit.loadFromFile(path + "Player 1/_Hit.png");
+    Hit2.loadFromFile(path + "Player 2/Hit2.png");
+    Attacking.loadFromFile(path + "Player 1/_Attack.png");
+    Attacking2.loadFromFile(path + "Player 2/Attack2.png");
+    Death.loadFromFile(path + "Player 1/_Death.png");
+    Death2.loadFromFile(path + "Player 2/_Death.png");
+    plateform_1.loadFromFile(path + "Plates/firstplate.png");
+    plateform_2.loadFromFile(path + "Plates/secondplate.png");
+    plateform_3.loadFromFile(path + "Plates/thirdplate.png");
+    plateform_round3.loadFromFile(path + "Plates/plate_Round3.png");
+    plateform_4.loadFromFile(path + "Plates/fourthplate.png");
 
     Event e;
 
@@ -1917,15 +1938,28 @@ void game(int win1, int win2, RenderWindow& window)
     window.setFramerateLimit(60);
 
 
+
     power_draw();
-    while (window.isOpen()) {
 
+    if(interactionwindow1.finishedInteracting)
+        cout << "not interacting\n";
+    else 
+        cout << "interacting\n";
+
+    cout << "entered\n";
+
+    while (window.isOpen())
+    {
         gameclock.restart();
-        if (name__) {
-            name(player1, window);
 
-            interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
-            interactionWindow2.interactionSetProp(arrayOfInteractions, player2.name, 1000, 200);
+        if (name__)
+        {
+            name(player1, window);
+            interactionwindow1.interactionSetProp(arrayOfInteractions,player1.name ,300, 200);
+            interactionWindow2.interactionSetProp(arrayOfInteractions,player2.name, 1000, 200);
+            // interactionwindow1.setName(player1.name);
+            // interactionWindow2.setName(player2.name);
+
             for (int i = 0;i < 3;i++)
             {
                 setTextprop(player1.Round_won[i], 96, 2);
@@ -1935,13 +1969,13 @@ void game(int win1, int win2, RenderWindow& window)
             }
         }
 
-        if (!interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
+        if (!interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting)// and player1.health > 0 and player2.health > 0)
         {
             Round_Interacting = true;
             // cout << "interaction mode on\n";
             interactionwindow1.update(deltatime, window);
         }
-        else if (interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
+        else if (interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting)// and player1.health > 0 and player2.health > 0)
         {
             Round_Interacting = true;
             interactionWindow2.update(deltatime, window);
@@ -2541,6 +2575,7 @@ void game(int win1, int win2, RenderWindow& window)
         }
     }
 }
-void game2(int win1, int win2, RenderWindow& game2window) {
+void game2(int win1, int win2, RenderWindow& game2window)
+{
 
 }
