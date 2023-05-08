@@ -27,6 +27,7 @@ Clock gameclock;
 float Gravity = -20.0f;
 float Jumpheight = 150.0f;
 float deltatime = 0.0f;
+
 int playerindex = 0;
 int Deathindex = 0;
 float timer = 0.0f;
@@ -35,21 +36,28 @@ float roundelay = 1.0f;
 int attackindex = 0;
 float attacktimer = 0.0f;
 float attackdelay = 0.1f;
+float hittimer = 0.0f;
+
 int index2 = 0;
 float timer2 = 0.0f;
 float delay2 = 0.15f;
 int attackindex2 = 0;
 float attacktimer2 = 0.0f;
 float attackdelay2 = 0.1f;
-float hittimer = 0.0f;
 float hittimer2 = 0.0f;
+
+int hitindex3 = 0;
+float hittimer3 = 0.0f;
+
 int pagenum = 0;
 int page = 0;
 int win1 = 0;
 int win2 = 0;
 bool PAUSE = false;
+bool level = true;
 bool Round_Trans = false;
 bool Round_Interacting = false;
+bool mute = true;
 int volume_ = 100;
 bool name__ = false;
 Sprite vol_arr[11];
@@ -102,12 +110,13 @@ struct player
 {
     string name;
     int health = 100;
-    Vector2f velocity{0, 0};
+    Vector2f velocity{ 0, 0 };
     Sprite sprite;
     Hitbox hitbox;
     bool grounded = false, attackbool = false, hitbool = false, timereset = false;
     Text Round_won[3];
 }player1, player2;
+
 struct plates {
     RectangleShape platrec;
 
@@ -147,18 +156,7 @@ void power_draw()
     Powers_sp[2].setOrigin(50, 50);
 
 }
-/*bool powercoliodeattack(Sprite& player, RectangleShape& player_x, Sprite& Powers)
-{
-    if (player_x.getGlobalBounds().intersects(Powers.getGlobalBounds()))
-    {
-        toucher=false;
-        return true;
 
-    }
-    else {
-        return false;
-    }
-}*/
 bool powercoliodeheal(Sprite& player, RectangleShape& player_x, Sprite& Powers)
 {
     if (player_x.getGlobalBounds().intersects(Powers.getGlobalBounds()))
@@ -400,7 +398,7 @@ public:
 int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
 {
     Mouse mouse;
-    for (int i = 1; i < 5; i++)
+    for (int i = 1; i < 6; i++)
     {
 
         if (Buttonarr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
@@ -414,6 +412,9 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
             else
                 Buttonarr[i].setScale(1.05f, 1.05f);
             arr[i].setFillColor(Color::White);
+            if (i == 5) {
+                arr[6].setFillColor(Color::White);
+            }
 
             if (Mouse::isButtonPressed(Mouse::Left))
             {
@@ -432,8 +433,12 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
             else
                 Buttonarr[i].setScale(1.f, 1.f);
             arr[i].setFillColor(Color(187, 220, 244));
+            if (i == 5) {
+                arr[6].setFillColor(Color(187, 220, 244));
+            }
         }
     }
+    
     return 0;
 }
 
@@ -449,7 +454,8 @@ void setTextprop(Text& text , int x,int y) {
 
 int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
-    Mouse mouse;
+    Mouse mouse; 
+    Event e;
     for (int i = 0; i < 4; i++)
     {
 
@@ -457,12 +463,11 @@ int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywi
         {
             arr[i+1].setFillColor(Color::White);
             Buttonarr[i].setScale(1.1f, 1.1f);
-
-
+           
             if (Mouse::isButtonPressed(Mouse::Left))
             {
                 Buttonarr[i].setScale(1.f, 1.f);
-                arr[i+1].setFillColor(Color{ 245,176,38 });
+                arr[i + 1].setFillColor(Color{ 245,176,38 });
                 return i;
             }
         }
@@ -748,9 +753,9 @@ void MainMenu(RenderWindow& mainwindow)
     controll2.loadFromFile("Main Menu/controller_grey.png");
 
 
-    Text select[6];
+    Text select[7];
 
-    RectangleShape buttons[5];
+    RectangleShape buttons[6];
 
     Sprite Border;
     Sprite Mainmenu_background;
@@ -771,6 +776,10 @@ void MainMenu(RenderWindow& mainwindow)
     buttons[4].setOrigin(buttons[4].getSize() / 2.f);
     buttons[4].setPosition(mainwindow.getSize().x - 60.f, 650);
 
+    buttons[5].setTexture(&ButtonTexture);
+    buttons[5].setSize(Vector2f(300.f, 81.f));
+    buttons[5].setOrigin(buttons[5].getSize() / 2.f);
+    buttons[5].setPosition(800, 319);
     Sprite controllbutton;
 
     
@@ -779,8 +788,8 @@ void MainMenu(RenderWindow& mainwindow)
     controllbutton.setPosition(70, 620);
 
 
-    buttons[1].setPosition(640, 319);
-
+    buttons[1].setPosition(470, 319);
+    
     buttons[2].setPosition(640, 447);
 
     buttons[3].setPosition(640, 575);
@@ -803,9 +812,13 @@ void MainMenu(RenderWindow& mainwindow)
     select[3].setString("Exit");
     select[3].setPosition(buttons[3].getPosition().x, buttons[3].getPosition().y);
 
+    select[6].setString("Survival!!");
+    select[6].setPosition(buttons[5].getPosition().x, buttons[5].getPosition().y);
+
     for (int i = 1;i < 5;i++) {
         setTextprop(select[i],48,1);
     }
+    setTextprop(select[6], 48, 1);
 
     while (mainwindow.isOpen())
     {
@@ -845,7 +858,7 @@ void MainMenu(RenderWindow& mainwindow)
         mainwindow.draw(Mainmenu_background);
 
         // Draw the buttons
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < 6; i++) {
             mainwindow.draw(buttons[i]);
         }
 
@@ -853,11 +866,11 @@ void MainMenu(RenderWindow& mainwindow)
         mainwindow.draw(Border);
         mainwindow.draw(controllbutton);
         // Draw the menu items
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 7; i++)
         {
             mainwindow.draw(select[i]);
         }
-
+        
         // Draw the cursor sprite in the struct;
         cur.draw(mainwindow);
 
@@ -1038,14 +1051,12 @@ void Credits(RenderWindow& creditswindow) {
 
 void game(int win1, int win2, RenderWindow& window);
 
-void game2(int win1, int win2, RenderWindow& game2window);
-
 void Volume(RenderWindow& volumewindow)
 {
     Mouse mouse;
     Font volumefont;
     volumefont.loadFromFile("Canterbury.ttf");
-    Text volume[2];
+    Text volume[4];
     volume[0].setFont(volumefont);
     volume[0].setString("Volume");
     volume[0].setCharacterSize(60);
@@ -1056,7 +1067,20 @@ void Volume(RenderWindow& volumewindow)
     volume[1].setString("Back");
     volume[1].setCharacterSize(60);
     volume[1].setFillColor(Color::Black);
-    volume[1].setPosition(590, 580);
+    volume[1].setPosition(590, 630);
+
+    volume[2].setFont(volumefont);
+    volume[2].setString("Sound");
+    volume[2].setCharacterSize(60);
+    volume[2].setFillColor(Color::Black);
+    volume[2].setPosition(volumewindow.getSize().x / 2 -465, (volumewindow.getSize().y / 2) + 60);
+
+    volume[3].setFont(volumefont);
+    volume[3].setString("SFX");
+    volume[3].setCharacterSize(60);
+    volume[3].setFillColor(Color::Black);
+    volume[3].setPosition(volumewindow.getSize().x / 2 + 325, (volumewindow.getSize().y / 2) + 60);
+
 
     Texture volume_back;
     volume_back.loadFromFile("Volume Bar/volume background.png");
@@ -1064,27 +1088,31 @@ void Volume(RenderWindow& volumewindow)
     Back.setTexture(volume_back);
 
 
-    Texture buttons[5];
+    Texture buttons[7];
     buttons[0].loadFromFile("Volume Bar/back frame.png");
     buttons[1].loadFromFile("Volume Bar/mute-.png");
     buttons[2].loadFromFile("Volume Bar/volume frame.png");
     buttons[3].loadFromFile("Volume Bar/volume++-.png");
     buttons[4].loadFromFile("Volume Bar/volume--- 1.png");
+    buttons[5].loadFromFile("Volume Bar/mute_frame.png");
+    buttons[6].loadFromFile("Volume Bar/sfx mute.png");
 
  
-    Sprite button[5];
-    for (int i = 0; i < 5; i++) {
+    Sprite button[8];
+    for (int i = 0; i < 7; i++) {
         button[i].setTexture(buttons[i]);
     }
+    button[7].setTexture(buttons[5]);
 
     button[0].setOrigin(150, 0);
     button[0].setPosition((volumewindow.getSize().x / 2)+10, 20);
     
     button[1].setOrigin(0, 0);
-    button[1].setPosition(volumewindow.getSize().x / 2-50, (volumewindow.getSize().y / 2)+50);
+    button[1].setScale(0.8, 0.8);
+    button[1].setPosition(volumewindow.getSize().x / 2-150, (volumewindow.getSize().y / 2)+50);
 
     button[2].setOrigin(140, 0);
-    button[2].setPosition(volumewindow.getSize().x / 2, 550);
+    button[2].setPosition(volumewindow.getSize().x / 2, 600);
 
     button[3].setOrigin(0, 0);
     button[3].setPosition((volumewindow.getSize().x / 2) + 420, (volumewindow.getSize().y / 2) - 90);
@@ -1093,6 +1121,15 @@ void Volume(RenderWindow& volumewindow)
     button[4].setOrigin(44, 0);
     button[4].setPosition((volumewindow.getSize().x / 2) - 500, (volumewindow.getSize().y / 2) - 90);
 
+    button[5].setScale(0.3, 0.3);
+    button[5].setPosition(volumewindow.getSize().x / 2 - 500, (volumewindow.getSize().y / 2) + 55);
+
+    button[6].setOrigin(225, 0);
+    button[6].setScale(0.2, 0.2);
+    button[6].setPosition(volumewindow.getSize().x / 2 + 100, (volumewindow.getSize().y / 2) + 60);
+
+    button[7].setScale(-0.3, 0.3);
+    button[7].setPosition(volumewindow.getSize().x / 2 +500, (volumewindow.getSize().y / 2) + 55);
 
     Texture vol[11];
     
@@ -1157,6 +1194,22 @@ void Volume(RenderWindow& volumewindow)
             {
                 button[3].setScale(0.9, 0.9);
             }
+            if (button[6].getGlobalBounds().contains(mouse.getPosition(volumewindow).x, mouse.getPosition(volumewindow).y)) {
+
+                button[6].setOrigin(225, 0);
+                button[6].setScale(0.25, 0.25);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    if (!mute)
+                        mute = true;
+                    else
+                        mute = false;
+                }
+            }
+            else
+            {
+                button[6].setScale(0.2, 0.2);
+            }
 
             if (button[1].getGlobalBounds().contains(mouse.getPosition(volumewindow).x, mouse.getPosition(volumewindow).y)) {
 
@@ -1188,17 +1241,16 @@ void Volume(RenderWindow& volumewindow)
                 volume[1].setFillColor(Color::Black);
             }
         }
-        
 
         volumewindow.clear();
 
         volumewindow.draw(Back);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 8; i++) {
             volumewindow.draw(button[i]);
         }
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 4; i++) {
             volumewindow.draw(volume[i]);
         }
 
@@ -1637,6 +1689,7 @@ int main()
         MainMenu(get_window);
         if (pagenum == 0) { MainMenu(get_window); }
         else if (pagenum == 1) {
+            level = false;
             player1.name.clear();
             player2.name.clear();
             name__ = true;
@@ -1660,6 +1713,21 @@ int main()
         else if (pagenum == 3)
         {
             get_window.close();
+        }
+        else if (pagenum == 5) {
+            level = true;
+            player1.name.clear();
+            player2.name.clear();
+            name__ = true;
+            roundelay = 1.0f;
+            Round_Trans = false;
+            player1.health = 100;
+            player2.health = 100;
+            player1.sprite.setColor(Color::White);
+            player2.sprite.setColor(Color::White);
+            Deathindex = 0;
+            game(win1, win2, get_window);
+
         }
     }
     return 0;
@@ -1742,12 +1810,22 @@ void setprop(Sprite &x, Texture &y, int z, int l, int m)
     x.setTextureRect(IntRect(0, 0, 120, 80));
     x.setScale(z, 3);
 }
+void setprop3(Sprite& x, Texture& y, float z, int l, int m)
+{
+
+    x.setTexture(y);
+    x.setOrigin(64, 64);
+    x.setPosition(l, m);
+    x.setTextureRect(IntRect(0, 0, 128, 128));
+    x.setScale(z, 1.7);
+}
 void setprop2(RectangleShape& x, Texture& y, float z, float b, float l, float m) {
     x.setTexture(&y);
     x.setOrigin(60, 40);
     x.setPosition(l, m);
     x.setScale(z, b);
 }
+
 bool intersection(RectangleShape& x, RectangleShape& y) {
     if (x.getGlobalBounds().intersects(y.getGlobalBounds()))
         return true;
@@ -1771,6 +1849,8 @@ bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& pl
 
 void game(int win1, int win2, RenderWindow& window)
 {
+
+
     int attackpow1 = 0;
     int attackpow2 = 0;
     int healthpow = 0;
@@ -1806,7 +1886,7 @@ void game(int win1, int win2, RenderWindow& window)
     Texture plateform_3;
     Texture plateform_4;
     Texture plateform_round3;
-
+    Texture Run1, Idle1, Attack1, Death1, Hit1, Jump1, Fall1;
 
     // call init_health_bar once in the beginning of the game
     init_health_bar();
@@ -1824,6 +1904,13 @@ void game(int win1, int win2, RenderWindow& window)
     Fall2.loadFromFile("Player 2/_Fall2.png");
     Hit.loadFromFile("Player 1/_Hit.png");
     Hit2.loadFromFile("Player 2/Hit2.png");
+    Run1.loadFromFile("Wanderer/Run.png");
+    Idle1.loadFromFile("Wanderer/Idle.png");
+    Attack1.loadFromFile("Wanderer/Attack_2.png");
+    Death1.loadFromFile("Wanderer/Dead.png");
+    Hit1.loadFromFile("Wanderer/Hurt.png");
+    Fall1.loadFromFile("Wanderer/Walk.png");
+    Jump1.loadFromFile("Wanderer/Jump.png");
     Attacking.loadFromFile("Player 1/_Attack.png");
     Attacking2.loadFromFile("Player 2/Attack2.png");
     Death.loadFromFile("Player 1/_Death.png");
@@ -1878,20 +1965,25 @@ void game(int win1, int win2, RenderWindow& window)
 
     //Players initial prop
     power_draw();
-    if (timerpow.getElapsedTime().asSeconds() >= 6) {
-
-    }
+   
     if (win1 + win2 == 0) {
-        setprop(player1.sprite, Idle, 3, 320, 480);
+        if(!level)
+            setprop(player1.sprite, Idle, 3, 320, 480);
+        else
+            setprop3(player1.sprite, Idle1, 1.7, 320, 480);
+
         setprop(player2.sprite, Idle2, -3, 960, 480);
-        setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1075, 425);
+        setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1070, 425);
         setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 630, 375);
         setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 175, 425);
-
+        
     }
     else if (win1 + win2 == 1)
     {
-        setprop(player1.sprite, Idle, 3, 180, 350);
+        if (!level)
+            setprop(player1.sprite, Idle, 3, 180, 350);
+        else
+            setprop3(player1.sprite, Idle1, 1.7, 180, 350);
         setprop(player2.sprite, Idle2, -3, 1050, 350);
         setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 175, 275);
         setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 635, 375);
@@ -1899,7 +1991,10 @@ void game(int win1, int win2, RenderWindow& window)
     }
     else if (win1 + win2 == 2)
     {
-        setprop(player1.sprite, Idle, 3, 330, 150);
+        if (!level)
+            setprop(player1.sprite, Idle, 3, 330, 150);
+        else
+            setprop(player1.sprite, Idle1, 1.7, 330, 150);
         setprop(player2.sprite, Idle2, -3, 900, 150);
         setprop2(Powers_sp[0], Powers_tex[0], 0, 0, rand() % window.getSize().x, rand() % window.getSize().y);
         setprop2(Powers_sp[1], Powers_tex[1], 0, 0, rand() % window.getSize().x, rand() % window.getSize().y);
@@ -1907,9 +2002,13 @@ void game(int win1, int win2, RenderWindow& window)
     }
 
     // Hitboxes initial prop
-    player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
+    if (!level)
+        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
     player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Yellow);
-    player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
+    if(!level)
+        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
+    else 
+        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
     player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 50.f, 115.f, Color::Blue);
     player1.hitbox.attack.setOrigin(0, 0);
     player2.hitbox.attack.setOrigin(0, 0);
@@ -1974,7 +2073,11 @@ void game(int win1, int win2, RenderWindow& window)
                             return;
                         }
                     }
-
+                    if (e.key.code == Keyboard::N)
+                    {
+                        level = true;
+                    }
+                    
                     //player 1 Jumping button
                     if (e.key.code == Keyboard::W && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans && !Round_Interacting) {
                         timer = 0;
@@ -2097,17 +2200,35 @@ void game(int win1, int win2, RenderWindow& window)
                     if (player1.health == 0) {
                         if (player2.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
                             player2.Round_won[win1 + win2].move(0, 5);
-                        player1.sprite.setTexture(Death);
-                        player1.sprite.setColor(Color(128, 0, 0));
-                        if (timer <= 0) {
-                            if (Deathindex != 9)
-                                Deathindex++;
-                            Deathindex = Deathindex % 10;
-                            player1.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
-                            timer = delay;
+                        if (!level) {
+                            player1.sprite.setTexture(Death);
+                            player1.sprite.setColor(Color(128, 0, 0));
+                            if (timer <= 0) {
+                                if (Deathindex != 9)
+                                    Deathindex++;
+                                Deathindex = Deathindex % 10;
+                                player1.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
+                                timer = delay;
+                            }
+                            else
+                                timer -= deltatime;
                         }
-                        else
-                            timer -= deltatime;
+                        
+                        else {
+                            player1.sprite.setTexture(Death1);
+                            player1.sprite.setColor(Color(128, 0, 0));
+                            if (timer <= 0) {
+                                if(Deathindex<3)
+                                Deathindex++;
+
+                                Deathindex = Deathindex % 4;
+                                player1.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
+                                timer = delay+0.15;
+                            }
+                            else
+                                timer -= deltatime;
+                        
+                        }
                     }
                     if (player2.health == 0) {
                         if (player1.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
@@ -2218,15 +2339,29 @@ void game(int win1, int win2, RenderWindow& window)
                     player1.velocity.y = 0;
                     player1.grounded = true;
                     if (player1.health > 0 && !player1.attackbool) {
-                        player1.sprite.setTexture(Idle);
-                        if (timer <= 0) {
-                            playerindex++;
-                            playerindex = playerindex % 10;
-                            player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                            timer = delay;
+                        if (!level) {
+                            player1.sprite.setTexture(Idle);
+                            if (timer <= 0) {
+                                playerindex++;
+                                playerindex = playerindex % 10;
+                                player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                                timer = delay;
+                            }
+                            else
+                                timer -= deltatime;
                         }
-                        else
-                            timer -= deltatime;
+                        else {
+                            player1.sprite.setTexture(Idle1);
+                            if (timer <= 0) {
+                                playerindex++;
+                                playerindex = playerindex % 8;
+                                player1.sprite.setTextureRect(IntRect((playerindex * 128), 0, 128, 128));
+                                timer = delay;
+                            }
+                            else
+                                timer -= deltatime;
+
+                        }
                     }
                 }
                 else if (!PAUSE && player1.hitbox.player.getPosition().y <= window.getSize().y) {
@@ -2243,41 +2378,90 @@ void game(int win1, int win2, RenderWindow& window)
 
                 //Jumping animation
                 if (player1.velocity.y < 0) {
-                    player1.sprite.setTexture(Jumping);
-                    if (timer <= 0) {
-                        playerindex++;
-                        playerindex = playerindex % 3;
-                        player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                        timer = delay + 0.15f;
+                    if (!level) {
+                        player1.sprite.setTexture(Jumping);
+                        if (timer <= 0) {
+                            playerindex++;
+                            playerindex = playerindex % 3;
+                            player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                            timer = delay + 0.15f;
+                        }
+                        else
+                            timer -= deltatime;
                     }
-                    else
-                        timer -= deltatime;
+                    else {
+                        player1.sprite.setTexture(Jump1);
+                        if (timer <= 0) {
+                            
+                           
+                            player1.sprite.setTextureRect(IntRect((4 * 128), 0, 128, 128));
+                            
+                        }
+                        else
+                            timer -= deltatime;
+
+                    }
                 }
 
                 //Falling animation
                 if (player1.velocity.y >= 0 && !player1.grounded) {
-                    player1.sprite.setTexture(Fall);
-                    if (timer <= 0) {
-                        playerindex++;
-                        playerindex = playerindex % 3;
-                        player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                        timer = delay + 0.15f;
+                    if (!level) {
+                        player1.sprite.setTexture(Fall);
+                        if (timer <= 0) {
+                            playerindex++;
+                            playerindex = playerindex % 3;
+                            player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                            timer = delay + 0.15f;
+                        }
+                        else
+                            timer -= deltatime;
                     }
-                    else
-                        timer -= deltatime;
+                    else {
+                        player1.sprite.setTexture(Jump1);
+                        if (timer <= 0) {
+                    
+                            player1.sprite.setTextureRect(IntRect((5 * 128), 0, 128, 128));
+                            
+                        }
+                        else
+                            timer -= deltatime;
+
+                    }
                 }
 
                 //Being Hit
                 if (player1.hitbool == true) {
-                    player1.sprite.setTexture(Hit);
+                    if (!level) {
+                        player1.sprite.setTexture(Hit);
+                        player1.sprite.setColor(Color::Red);
+                        player1.sprite.setTextureRect(IntRect(0, 0, 120, 80));
+                        if (hittimer <= 0)
+                        {
+                            player1.hitbool = false;
+                        }
+                        else
+                            hittimer -= deltatime;
+                    }
+                    
+                    else {
+                        
+                    player1.sprite.setTexture(Hit1);
                     player1.sprite.setColor(Color::Red);
-                    player1.sprite.setTextureRect(IntRect(0, 0, 120, 80));
+                    player1.sprite.setTextureRect(IntRect(0, 0, 128, 128));
                     if (hittimer <= 0)
                     {
+                        hitindex3++;
+                        hitindex3 = hitindex3 % 4;
+                        player1.sprite.setTextureRect(IntRect((hitindex3 * 128), 0, 128, 128));
                         player1.hitbool = false;
+                        hittimer = delay;
                     }
                     else
                         hittimer -= deltatime;
+
+                
+
+                    }
                 }
 
                 //I put everything in else so it cannot be done at the same time
@@ -2285,19 +2469,37 @@ void game(int win1, int win2, RenderWindow& window)
                 {
                     //Attack & Movement
                     if (player1.attackbool == true) {
-                        player1.sprite.setTexture(Attacking);
+                        if (!level) {
+                            player1.sprite.setTexture(Attacking);
 
-                        //Attacking Animation
-                        if (attacktimer <= 0) {
-                            attackindex++;
-                            attackindex = attackindex % 4;
-                            player1.sprite.setTextureRect(IntRect((attackindex * 120), 0, 120, 80));
-                            attacktimer = attackdelay;
-                            if (attackindex == 0)
-                                player1.attackbool = false;
+                            //Attacking Animation
+                            if (attacktimer <= 0) {
+                                attackindex++;
+                                attackindex = attackindex % 4;
+                                player1.sprite.setTextureRect(IntRect((attackindex * 120), 0, 120, 80));
+                                attacktimer = attackdelay;
+                                if (attackindex == 0)
+                                    player1.attackbool = false;
+                            }
+                            else {
+                                attacktimer -= deltatime;
+                            }
                         }
                         else {
-                            attacktimer -= deltatime;
+                            player1.sprite.setTexture(Attack1);
+
+                            //Attacking Animation
+                            if (attacktimer <= 0) {
+                                attackindex++;
+                                attackindex = attackindex % 9;
+                                player1.sprite.setTextureRect(IntRect((attackindex * 128), 0, 128, 128));
+                                attacktimer = attackdelay;
+                                if (attackindex == 0)
+                                    player1.attackbool = false;
+                            }
+                            else {
+                                attacktimer -= deltatime;
+                            }
                         }
                     }
                     //I put everything in else so it cannot be done at the same time
@@ -2305,39 +2507,82 @@ void game(int win1, int win2, RenderWindow& window)
                     {
                         //Moving right
                         if (Keyboard::isKeyPressed(Keyboard::D) && player1.sprite.getPosition().x < (window.getSize().x - player1.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Interacting) {
-                            player1.sprite.setScale(3, 3);
-                            player1.hitbox.attack.setScale(1, 1);
-                            if (player1.grounded == true) {
-                                player1.sprite.setTexture(Running);
-                                if (timer <= 0)
-                                {
-                                    playerindex++;
-                                    playerindex = playerindex % 10;
-                                    player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                                    timer = delay - 0.05f;
+                            if (!level) {
+                                player1.sprite.setScale(3, 3);
+                                player1.hitbox.attack.setScale(1, 1);
+                                if (player1.grounded == true) {
+                                    player1.sprite.setTexture(Running);
+                                    if (timer <= 0)
+                                    {
+                                        playerindex++;
+                                        playerindex = playerindex % 10;
+                                        player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                                        timer = delay - 0.05f;
+                                    }
+                                    else
+                                        timer -= deltatime;
                                 }
-                                else
-                                    timer -= deltatime;
+                                player1.sprite.move(500 * deltatime, 0);
                             }
-                            player1.sprite.move(500 * deltatime, 0);
+                            else {
+                                player1.sprite.setScale(1.7, 1.7);
+                                player1.hitbox.attack.setScale(1, 1);
+                                if (player1.grounded == true) {
+                                    player1.sprite.setTexture(Run1);
+                                    if (timer <= 0)
+                                    {
+                                        playerindex++;
+                                        playerindex = playerindex % 8;
+                                        player1.sprite.setTextureRect(IntRect((playerindex * 128), 0, 128, 128));
+                                        timer = delay - 0.05f;
+                                    }
+                                    else
+                                        timer -= deltatime;
+                                }
+                                player1.sprite.move(500 * deltatime, 0);
+
+                            }
                         }
                         //Moving left
                         if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0 && !Round_Trans && !Round_Interacting) {
-                            player1.sprite.setScale(-3, 3);
-                            player1.hitbox.attack.setScale(-1, 1);
-                            if (player1.grounded == true) {
-                                player1.sprite.setTexture(Running);
-                                if (timer <= 0)
-                                {
-                                    playerindex++;
-                                    playerindex = playerindex % 10;
-                                    player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                                    timer = delay - 0.05f;
+                            if (!level) { 
+                                player1.sprite.setScale(-3, 3);
+                                player1.hitbox.attack.setScale(-1, 1);
+
+                                if (player1.grounded == true) {
+                                    player1.sprite.setTexture(Running);
+                                    if (timer <= 0)
+                                    {
+                                        playerindex++;
+                                        playerindex = playerindex % 10;
+                                        player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                                        timer = delay - 0.05f;
+                                    }
+                                    else
+                                        timer -= deltatime;
                                 }
-                                else
-                                    timer -= deltatime;
+                                player1.sprite.move(-500 * deltatime, 0);
+
                             }
-                            player1.sprite.move(-500 * deltatime, 0);
+                            else
+                            {
+                                player1.sprite.setScale(-1.7, 1.7);
+                                player1.hitbox.attack.setScale(-1, 1);
+                                if (player1.grounded == true) {
+                                    player1.sprite.setTexture(Run1);
+                                    if (timer <= 0)
+                                    {
+                                        playerindex++;
+                                        playerindex = playerindex % 8;
+                                        player1.sprite.setTextureRect(IntRect((playerindex * 128), 0, 128, 128));
+                                        timer = delay - 0.05f;
+                                    }
+                                    else
+                                        timer -= deltatime;
+                                }
+                                player1.sprite.move(-500 * deltatime, 0);
+                            }
+                            
                         }
                     }
                 }
@@ -2509,6 +2754,7 @@ void game(int win1, int win2, RenderWindow& window)
                 }
 
                 window.clear();
+                
                 window.draw(player1.hitbox.player);
                 window.draw(player2.hitbox.player);
                 window.draw(player1.hitbox.attack);
@@ -2540,7 +2786,4 @@ void game(int win1, int win2, RenderWindow& window)
          
         }
     }
-}
-void game2(int win1, int win2, RenderWindow& game2window) {
-
 }
