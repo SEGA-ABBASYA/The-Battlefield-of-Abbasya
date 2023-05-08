@@ -59,6 +59,10 @@ Texture optionButton;
 Texture optionButton2;
 string arrayOfInteractions[100];
 
+//sounds
+Music Roundmusic[3];
+Music MainmenuMusic;
+
 struct cursor
 {
     Texture texture;
@@ -148,18 +152,7 @@ void power_draw()
     Powers_sp[2].setOrigin(50, 50);
 
 }
-/*bool powercoliodeattack(Sprite& player, RectangleShape& player_x, Sprite& Powers)
-{
-    if (player_x.getGlobalBounds().intersects(Powers.getGlobalBounds()))
-    {
-        toucher=false;
-        return true;
 
-    }
-    else {
-        return false;
-    }
-}*/
 bool powercoliodeheal(Sprite& player, RectangleShape& player_x, Sprite& Powers)
 {
     if (player_x.getGlobalBounds().intersects(Powers.getGlobalBounds()))
@@ -418,6 +411,7 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
 
             if (Mouse::isButtonPressed(Mouse::Left))
             {
+                MainmenuMusic.stop();
                 Buttonarr[i].setScale(1.f, 1.f);
                 arr[i].setFillColor(Color(187, 220, 244));
                 return i;
@@ -747,6 +741,8 @@ void MainMenu(RenderWindow& mainwindow)
     optionButton2.loadFromFile("Main Menu/option2.png");
     controll1.loadFromFile("Main Menu/controller_blue.png");
     controll2.loadFromFile("Main Menu/controller_grey.png");
+    MainmenuMusic.openFromFile("Sounds/Round Robin Inn (LOOP).wav");
+    MainmenuMusic.setLoop(true);
 
 
     Text select[6];
@@ -779,6 +775,7 @@ void MainMenu(RenderWindow& mainwindow)
     controllbutton.setOrigin(40,0);
     controllbutton.setPosition(70, 620);
 
+    MainmenuMusic.play();
 
     buttons[1].setPosition(640, 319);
 
@@ -1189,7 +1186,10 @@ void Volume(RenderWindow& volumewindow)
                 volume[1].setFillColor(Color::Black);
             }
         }
-        
+        Roundmusic[0].setVolume(volume_);
+        Roundmusic[1].setVolume(volume_);
+        Roundmusic[2].setVolume(volume_);
+        MainmenuMusic.setVolume(volume_);
 
         volumewindow.clear();
 
@@ -1352,6 +1352,9 @@ int PauseMenu(RenderWindow &pausewindow)
             return 1;
         }//return 
         else if (page == 2) {
+            for (int i = 0;i < 3;i++) {
+                Roundmusic[i].stop();
+            }
             Round_Trans = false;
             win1 = 0;
             win2 = 0;
@@ -1518,6 +1521,7 @@ void name(struct player, RenderWindow& namewindow) {
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     name__ = false;
+                    Roundmusic[0].play();
                     return;
                 }
             }
@@ -1743,12 +1747,14 @@ void setprop(Sprite &x, Texture &y, int z, int l, int m)
     x.setTextureRect(IntRect(0, 0, 120, 80));
     x.setScale(z, 3);
 }
+
 void setprop2(RectangleShape& x, Texture& y, float z, float b, float l, float m) {
     x.setTexture(&y);
     x.setOrigin(60, 40);
     x.setPosition(l, m);
     x.setScale(z, b);
 }
+
 bool intersection(RectangleShape& x, RectangleShape& y) {
     if (x.getGlobalBounds().intersects(y.getGlobalBounds()))
         return true;
@@ -1834,31 +1840,45 @@ void game(int win1, int win2, RenderWindow& window)
     plateform_3.loadFromFile("Plates/thirdplate.png");
     plateform_round3.loadFromFile("Plates/plate_Round3.png");
     plateform_4.loadFromFile("Plates/fourthplate.png");
+    Roundmusic[0].openFromFile("Sounds/Ludum Dare 38 - Track 4.wav");
+    Roundmusic[1].openFromFile("Sounds/Round 2 music.wav");
+    Roundmusic[2].openFromFile("Sounds/Round 3 Theme ELDEN RING.wav");
 
     Event e;
 
     Sprite background(Back[win1 + win2]);
 
     // setting prop to plates
-    plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
-    plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
-    plt3.plat_set(plateform_1, plt3.platrec, 150, 50, 100, 450, 1, 1);
-    plt5.plat_set(plateform_1, plt5.platrec, 150, 50, 1000, 300, 0, 0);
-    plt4.plat_set(plateform_2, plt4.platrec, 1280, 50, 0, 650, 1, 1);
-    if (win1 + win2 == 1) {
+    if(win1 + win2 == 0)
+    {
+        plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
+        plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
+        plt3.plat_set(plateform_1, plt3.platrec, 150, 50, 100, 450, 1, 1);
+        plt5.plat_set(plateform_1, plt5.platrec, 150, 50, 1000, 300, 0, 0);
+        plt4.plat_set(plateform_2, plt4.platrec, 1280, 50, 0, 650, 1, 1);
+        Roundmusic[0].play();
+        Roundmusic[0].setLoop(true);
+    }
+    else if (win1 + win2 == 1) 
+    {
         plt1.plat_set(plateform_3, plt1.platrec, 150, 50, 1000, 500, 1, 1);
         plt2.plat_set(plateform_4, plt2.platrec, 450, 50, 400, 400, 1, 1);
         plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 500, 1, 1);
         plt4.plat_set(plateform_4, plt4.platrec, 150, 50, 100, 300, 1, 1);
         plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 1, 1);
+        Roundmusic[1].play();
+        Roundmusic[1].setLoop(true);
     }
-    if (win1 + win2 == 2)
+    else if (win1 + win2 == 2)
     {
         plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 0, 0);
         plt2.plat_set(plateform_round3, plt2.platrec, 750, 70, 250, 450, 1, 1);
         plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 0, 0);
         plt4.plat_set(plateform_2, plt4.platrec, 150, 50, 100, 300, 0, 0);
         plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 0, 0);
+        Roundmusic[2].play();
+        Roundmusic[2].setPlayingOffset(seconds(20.f));
+        Roundmusic[2].setLoop(true);
     }
 
     // Player 1 health bar prop
@@ -1923,6 +1943,7 @@ void game(int win1, int win2, RenderWindow& window)
 
         gameclock.restart();
         if (name__) {
+            Roundmusic[0].pause();
             name(player1, window);
 
             interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
@@ -2026,6 +2047,7 @@ void game(int win1, int win2, RenderWindow& window)
                             if (roundelay < 0 && e.key.code == Keyboard::Enter)
                             {
                                 Deathindex = 0;
+                                Roundmusic[win1 + win2 - 1].stop();
                                 if (player2.health == 0) {
                                     player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
                                 }
@@ -2109,7 +2131,7 @@ void game(int win1, int win2, RenderWindow& window)
                         player1.sprite.setColor(Color(128, 0, 0));
                         if (timer <= 0) {
                             if (Deathindex != 9)
-                                Deathindex++;
+                                Deathindex++;   
                             Deathindex = Deathindex % 10;
                             player1.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
                             timer = delay;
@@ -2265,7 +2287,6 @@ void game(int win1, int win2, RenderWindow& window)
                     else
                         timer -= deltatime;
                 }
-                cout << win1 << ' ' << win2 << endl;
                 //Falling animation
                 if (player1.velocity.y >= 0 && !player1.grounded) {
                     player1.sprite.setTexture(Fall);
@@ -2558,6 +2579,7 @@ void game(int win1, int win2, RenderWindow& window)
         }
     }
 }
+
 void game2(int win1, int win2, RenderWindow& game2window) {
 
 }
