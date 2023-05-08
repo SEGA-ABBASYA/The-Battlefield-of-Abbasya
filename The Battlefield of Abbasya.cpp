@@ -7,6 +7,7 @@
 #include <time.h>
 #include <string>
 #include <cstdlib>
+#include <cmath>
 // #include "ResourcePath.hpp"
 
 using namespace sf;
@@ -108,16 +109,59 @@ struct player
     bool grounded = false, attackbool = false, hitbool = false, timereset = false;
     Text Round_won[3];
 }player1, player2;
-struct plates {
+
+struct plates
+{
+public:
+
     RectangleShape platrec;
 
     // function for setting the properties of the plates
-    void plat_set(Texture &imag, RectangleShape &sh_1, float x1, float x2, int x3, int x4, int x5, int x6)
+    void plat_set(Texture &imag, RectangleShape &sh_1, float sizeX, float sizeY, int posX, int posY, int scaleX, int scaleY)
     {
-        sh_1.setSize(Vector2f(x1, x2));
-        sh_1.setPosition(x3, x4);
+        sh_1.setSize(Vector2f(sizeX, sizeY));
+        sh_1.setPosition(posX, posY);
         sh_1.setTexture(&imag);
-        sh_1.setScale(x5, x6);
+        sh_1.setScale(scaleX, scaleY);
+    }
+
+    void updateVertical(float startY, float endY, float speed, float deltatime)
+    {
+        // if reached end 
+        if(platrec.getPosition().x > endY or platrec.getPosition().x < startY)
+            reverse();
+        else
+        {
+            platrec.setPosition(platrec.getPosition().x ,platrec.getPosition().y + speed * direction * deltatime);
+        }
+        
+    }
+
+    void updateHorizontal(float startX, float endX, float speed, float deltatime)
+    {
+        // if reached end 
+        if(platrec.getPosition().x > endX or platrec.getPosition().x < startX)
+            reverse();
+        else
+        {
+            platrec.setPosition(platrec.getPosition().x + speed * direction * deltatime, platrec.getPosition().y);
+        }
+    }
+
+    void updateCircular(float radius, float speed, float deltatime)
+    {
+        if(theta >= 6.28)
+            theta = 0;
+        platrec.setPosition(radius * cos(theta), radius * sin(theta));
+        theta += speed * deltatime;
+    }
+
+private:
+    float theta = 0;
+    float direction = 1;
+    void reverse()
+    {
+        direction *= -1;
     }
 } plt1, plt2, plt3, plt4, plt5, plt6;
 
@@ -219,7 +263,6 @@ public:
     void interactionSetProp(string interactions[],string plyr_nam, float xPos, float yPos)
     {
         text_index = 0;
-        lettersPerLine = 0;
         textTimer = 0.1;
         pauseTimer = 2.5;
         aborted = false;
@@ -249,12 +292,10 @@ public:
         // set final scales
         frameScale = {1, 1};
 
-        // loads font and initial/Applications/Visual Studio Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.htmlizes text
         arcadeClassic.loadFromFile(path + "ArcadeClassic.ttf");
         textToBeDisplayed.setFont(arcadeClassic);
         pressSpaceToSkip.setFont(arcadeClassic);
         pressSpaceToSkip.setString("Press Space To Skip");
-        // pressSpaceToSkip.setColor(Color::White);
         displayed_text = "";
 
         player_name = plyr_nam;
@@ -265,12 +306,10 @@ public:
         textToBeDisplayed.setString(displayed_text);
     }
 
-    // update functions: gradually scales window, then gradually scales icon, then gradually shows text
 private:
     int text_index = 0;
     float textTimer = 0.1;
     float pauseTimer = 2.5;
-    int lettersPerLine = 0;
     int flutter_timer = 20;
     bool isSkipTextShown = true;
 
@@ -278,7 +317,9 @@ private:
     float xpos;
     float ypos;
     string inter_arr[100];
+
 public:
+    // update functions: gradually scales window, then gradually scales icon, then gradually shows text
     void update(float deltatime, RenderWindow &window)
     {
         // cout << "update of interaction got called\n";
@@ -293,12 +334,7 @@ public:
         // if the window isnt big enough yet, it gets scaled
         if (frameSprite.getScale().x < frameScale.x and frameSprite.getScale().y < frameScale.y and !deletingWindow and !aborted)
         {
-            //cout << "scaling" << endl;
-            // cout << "deltatime: " << deltatime << endl;
-            // cout << "frame current scale: " << frameSprite.getScale().x;
-            // adds a slight increase to the scale every frame relative to delatatime
             frameSprite.setScale({frameSprite.getScale().x + scale_offset * deltatime, frameSprite.getScale().y + scale_offset * deltatime});
-            // cout << "  frame new scale: " << frameSprite.getScale().x << endl;
         }
 
         // if both window is scaled, we start displaying the text gradually
@@ -313,9 +349,12 @@ public:
                 {
                     displayed_text = displayed_text + final_string[text_index];
                     textToBeDisplayed.setString(displayed_text);
-                    cout << displayed_text << endl;
                     text_index++;
-                    lettersPerLine++;
+                    
+                    cout << displayed_text << endl;
+                    cout << textToBeDisplayed.getGlobalBounds().width << endl;
+                    // string s = textToBeDisplayed.getString();
+                    // cout << s << endl;
 
                     // resets timer
                     textTimer = timer_per_letter;
@@ -387,9 +426,7 @@ public:
             }
 
             window.draw(frameSprite);
-            // window.draw(playerIconSprite);
             window.draw(textToBeDisplayed);
-            // window.draw(pressSpaceToSkip);
         }
     }
 
@@ -1798,8 +1835,8 @@ void game(int win1, int win2, RenderWindow& window)
     bool toucherhealthp1 = false;
     bool toucherhealthp2 = false;
     int arr_index = 10;
-    interactionwindow1.finishedInteracting = false;
-    interactionWindow2.finishedInteracting = false;
+    // interactionwindow1.finishedInteracting = false;
+    // interactionWindow2.finishedInteracting = false;
     srand(time(0));
 
     // Textures
