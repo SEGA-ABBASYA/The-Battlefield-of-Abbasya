@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
@@ -43,6 +43,7 @@ float attacktimer2 = 0.0f;
 float attackdelay2 = 0.1f;
 float hittimer = 0.0f;
 float hittimer2 = 0.0f;
+int dancersindex = 0;
 int pagenum = 0;
 int page = 0;
 int win1 = 0;
@@ -725,6 +726,7 @@ void Controlls(RenderWindow& controllswindow)
         controllswindow.display();
     }
 }
+
 void MainMenu(RenderWindow& mainwindow)
 {
     // Create the menu items
@@ -864,6 +866,7 @@ void MainMenu(RenderWindow& mainwindow)
         mainwindow.display();
     }
 }
+
 void credits_text(Text* arr,RenderWindow& textwindow) {
     Mouse mouse;
 
@@ -1035,9 +1038,7 @@ void Credits(RenderWindow& creditswindow) {
     }
 }
 
-void game(int win1, int win2, RenderWindow& window);
-
-void game2(int win1, int win2, RenderWindow& game2window);
+void game(int& win1, int& win2, RenderWindow& window);
 
 void Volume(RenderWindow& volumewindow)
 {
@@ -1215,8 +1216,6 @@ void Volume(RenderWindow& volumewindow)
     }
 }
 
-
-
 void Options(RenderWindow &optionwindow)
 {
     Font optionfont;
@@ -1260,6 +1259,16 @@ void Options(RenderWindow &optionwindow)
         // Display the window
         optionwindow.display();
     }
+}
+
+void setpropdance(Sprite& x, Texture& y, int z, int l, int m)
+{
+
+    x.setTexture(y);
+    x.setOrigin(19.5, 26.5);
+    x.setPosition(l, m);
+    x.setTextureRect(IntRect(0, 0, 39, 53));
+    x.setScale(z, 3);
 }
 
 int PauseMenu(RenderWindow &pausewindow)
@@ -1614,6 +1623,152 @@ void name(struct player, RenderWindow& namewindow) {
     }
 }
 
+void WINNER(RenderWindow& mainwindow) {
+
+    Font Canterbury;
+    Text WinP1;
+    Text WinP2;
+
+    Texture idle1;
+    Texture idle2;
+
+    Sprite Player1;
+    Sprite Player2;
+
+    Sprite winscreen;
+
+    Texture winnscreen;
+
+    winnscreen.loadFromFile("yoy.png");
+
+    winscreen.setTexture(winnscreen);
+
+    idle1.loadFromFile("Name Entry/_Idle1 1.png");
+    idle2.loadFromFile("Name Entry/_Idle2 1.png");
+
+    Player1.setTexture(idle1);
+    Player2.setTexture(idle2);
+
+    Player1.setOrigin(112, 147.5);
+    Player2.setOrigin(112, 147.5);
+
+    Player1.setPosition(mainwindow.getSize().x / 2, 500);
+    Player2.setPosition(mainwindow.getSize().x / 2, 500);
+
+    string WinnP1;
+    string WinnP2;
+    Text WinningP1text;
+    Text WinningP2text;
+
+    Texture dancer_slide;
+    Texture dancer_snap;
+
+    Event e;
+
+    dancer_slide.loadFromFile("slide.png");
+    dancer_snap.loadFromFile("snap.png");
+
+    WinP1.setString(player1.name + " IS VICTORIOUS !");
+    WinP2.setString(player2.name + " IS VICTORIOUS !");
+
+    setTextprop(WinP1, 64, 2);
+    setTextprop(WinP2, 64, 2);
+
+    WinP1.setPosition(mainwindow.getSize().x / 2, mainwindow.getSize().y / 4);
+    WinP2.setPosition(mainwindow.getSize().x / 2, mainwindow.getSize().y / 4);
+
+    Sprite arrSpriteDancer[6];
+
+    Texture arrTexDancer[6];
+    arrTexDancer[0] = dancer_slide;
+    arrTexDancer[1] = dancer_slide;
+    arrTexDancer[2] = dancer_slide;
+    arrTexDancer[3] = dancer_snap;
+    arrTexDancer[4] = dancer_snap;
+    arrTexDancer[5] = dancer_snap;
+
+    for (int i = 0; i < 3; i++) {
+
+
+        setpropdance(arrSpriteDancer[i], arrTexDancer[i], 3, (mainwindow.getSize().x / 4 - 225 + (i * 100)), 600);
+
+    }
+    for (int i = 3; i < 6; i++) {
+
+        setpropdance(arrSpriteDancer[i], arrTexDancer[i], -3, (mainwindow.getSize().x * 3 / 4 - 225 + (i * 100)), 600);
+
+    }
+
+
+
+
+    while (mainwindow.isOpen()) {
+
+        cout << win1 << ' ' << win2 << endl;
+
+        while (mainwindow.pollEvent(e)) {
+
+            if (e.type == Event::Closed) {
+
+                mainwindow.close();
+            }
+            if (e.type == Event::KeyPressed) {
+
+                if (e.key.code == Keyboard::Enter) {
+                    
+                    return;
+                }
+            }
+        }
+
+        if (timer < 0)
+        {
+            for (int i = 0; i < 6; i++) {
+
+
+                dancersindex++;
+                dancersindex = dancersindex % 8;
+                arrSpriteDancer[i].setTextureRect(IntRect((dancersindex * 39), 0, 39, 53));
+                arrSpriteDancer[i].setScale(3, 3);
+
+                //عايز ال victory
+                //player
+            }
+            timer = delay;
+        }
+        else
+            timer -= deltatime;
+
+        mainwindow.clear();
+        mainwindow.draw(winscreen);
+
+
+
+        for (int i = 0; i < 6; i++) {
+
+
+            mainwindow.draw(arrSpriteDancer[i]);
+
+        }
+
+        if (win1 == 2)
+        {
+            mainwindow.draw(Player1);
+            mainwindow.draw(WinP1);
+        }
+        else if (win2 == 2)
+        {
+            mainwindow.draw(Player2);
+            mainwindow.draw(WinP2);
+        }
+
+
+        //mainwindow.draw(plt4.platrec);
+        mainwindow.display();
+
+    }
+};
+
 //function for defining health bar textures
 void init_health_bar();
 
@@ -1645,6 +1800,8 @@ int main()
         else if (pagenum == 1) {
             player1.name.clear();
             player2.name.clear();
+            win1 = 0;
+            win2 = 0;
             name__ = true;
             roundelay = 1.0f;
             Round_Trans = false;
@@ -1777,7 +1934,7 @@ bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& pl
     }
 }
 
-void game(int win1, int win2, RenderWindow& window)
+void game(int& win1, int& win2, RenderWindow& window)
 {
     int attackpow1 = 0;
     int attackpow2 = 0;
@@ -1814,6 +1971,7 @@ void game(int win1, int win2, RenderWindow& window)
     Texture plateform_3;
     Texture plateform_4;
     Texture plateform_round3;
+    Text PressEnter;
 
 
     // call init_health_bar once in the beginning of the game
@@ -1938,6 +2096,9 @@ void game(int win1, int win2, RenderWindow& window)
 
     window.setFramerateLimit(60);
 
+    PressEnter.setString("Press Enter to Continue");
+    setTextprop(PressEnter, 64, 2);
+    PressEnter.setPosition(window.getSize().x / 2, -70);
 
     power_draw();
     while (window.isOpen()) {
@@ -1975,7 +2136,6 @@ void game(int win1, int win2, RenderWindow& window)
             // interactionwindow1.destroyInteractionWindow();
             // cout << "interaction off\n";
         }
-        cout << interactionwindow1.finishedInteracting << endl;
         if (!PAUSE)
         {
             while (window.pollEvent(e))
@@ -2043,17 +2203,19 @@ void game(int win1, int win2, RenderWindow& window)
                     }
 
                         //Death Animation & Round transition
-                        if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
+                        if (roundelay < 0 && e.key.code == Keyboard::Enter)
                         {
-                            if (roundelay < 0 && e.key.code == Keyboard::Enter)
+                            if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
                             {
                                 Deathindex = 0;
                                 Roundmusic[win1 + win2 - 1].stop();
                                 if (player2.health == 0) {
                                     player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                                    PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
                                 }
                                 else if (player1.health == 0) {
                                     player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                                    PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
                                 }
                                 roundelay = 1.0f;
                                 Round_Trans = false;
@@ -2062,19 +2224,33 @@ void game(int win1, int win2, RenderWindow& window)
                                 player2.health = 100;
                                 player1.sprite.setColor(Color::White);
                                 player2.sprite.setColor(Color::White);
-                                interactionwindow1.aborted = false;
-                                interactionwindow1.finishedInteracting = false;
-                                interactionWindow2.finishedInteracting = false;
                                 game(win1, win2, window);
-                                //interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
-                                //interactionWindow2.interactionSetProp(arrayOfInteractions, player2.name, 1000, 200);
-                                interactionwindow1.update(deltatime, window);
-                                interactionWindow2.update(deltatime, window);
+                                Round_Trans = false;
+                                return;
+                            }
+                            else if ((player2.health == 0 && win2 < 2 && win1 == 2) || (player1.health == 0 && win2 == 2 && win1 < 2)) {
+                                Deathindex = 0;
+                                Roundmusic[win1 + win2 - 1].stop();
+                                if (player2.health == 0) {
+                                    player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                                    PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                                }
+                                else if (player1.health == 0) {
+                                    player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                                    PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                                }
+                                roundelay = 1.0f;
+                                Round_Trans = false;
+                                Deathfall = true;
+                                player1.health = 100;
+                                player2.health = 100;
+                                player1.sprite.setColor(Color::White);
+                                player2.sprite.setColor(Color::White);
+                                WINNER(window);
                                 Round_Trans = false;
                                 return;
                             }
                         }
-
                         // player 2 Jumping button
                         if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting)
                         {
@@ -2131,6 +2307,11 @@ void game(int win1, int win2, RenderWindow& window)
                 // Round Transition & Death
                 if (player2.health == 0 || player1.health == 0)
                 {
+                    if(roundelay < -1)
+                    {
+                        if (PressEnter.getPosition().y < window.getSize().y / 4 + 90)
+                            PressEnter.move(0, 5);
+                    }
                     roundelay -= deltatime;
                     if (player1.health == 0) {
                         if (player2.Round_won[win1 + win2 - 1].getPosition().y < window.getSize().y / 4)
@@ -2224,6 +2405,7 @@ void game(int win1, int win2, RenderWindow& window)
                     }
                 }
                 //PLAYER 1
+                cout << win1 << ' ' << win2 << endl;
 
                 //Gravity movement
                 player1.sprite.move(0, player1.velocity.y);
@@ -2581,13 +2763,10 @@ void game(int win1, int win2, RenderWindow& window)
                     window.draw(player1.Round_won[i]);
                     window.draw(player2.Round_won[i]);
                 }
+                window.draw(PressEnter);
                 window.display();
                 deltatime = gameclock.getElapsedTime().asSeconds();
          
         }
     }
-}
-
-void game2(int win1, int win2, RenderWindow& game2window) {
-
 }
