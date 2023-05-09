@@ -184,7 +184,6 @@ private:
     Text pressSpaceToSkip;
     string player_name;
 
-    bool aborted = false;
     void setInteractions(string arr[])
     {
         arr[0] = "el salamo 3alekom wa \nrahmat allah w barakato";
@@ -209,6 +208,8 @@ public:
     bool finishedInteracting = false;
     bool deletingWindow = false;
     bool isActive = false;
+    bool aborted = false;
+
     // constructor
     void interactionSetProp(string interactions[], string plyr_nam, float xPos, float yPos)
     {
@@ -1974,7 +1975,7 @@ void game(int win1, int win2, RenderWindow& window)
             // interactionwindow1.destroyInteractionWindow();
             // cout << "interaction off\n";
         }
-
+        cout << interactionwindow1.finishedInteracting << endl;
         if (!PAUSE)
         {
             while (window.pollEvent(e))
@@ -2061,7 +2062,14 @@ void game(int win1, int win2, RenderWindow& window)
                                 player2.health = 100;
                                 player1.sprite.setColor(Color::White);
                                 player2.sprite.setColor(Color::White);
+                                interactionwindow1.aborted = false;
+                                interactionwindow1.finishedInteracting = false;
+                                interactionWindow2.finishedInteracting = false;
                                 game(win1, win2, window);
+                                //interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
+                                //interactionWindow2.interactionSetProp(arrayOfInteractions, player2.name, 1000, 200);
+                                interactionwindow1.update(deltatime, window);
+                                interactionWindow2.update(deltatime, window);
                                 Round_Trans = false;
                                 return;
                             }
