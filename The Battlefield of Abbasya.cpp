@@ -127,42 +127,83 @@ public:
 
     void updateVertical(float startY, float endY, float speed, float deltatime)
     {
+        float halfway = (startY + endY) / 2;
+        // cancels reverse bool when passes by half distance 
+        if(approxEqual(platrec.getPosition().y ,halfway, 100))
+        {
+            reversedVert = false;
+        }
+
         // if reached end 
-        if(platrec.getPosition().x > endY or platrec.getPosition().x < startY)
-            reverse();
+        if((platrec.getPosition().y > endY or platrec.getPosition().y < startY) and !reversedVert)
+        {
+            reversedVert = true;
+            reverseVert();
+            platrec.move(0, speed * directionVert * deltatime);
+        }
         else
         {
-            platrec.setPosition(platrec.getPosition().x ,platrec.getPosition().y + speed * direction * deltatime);
+            // platrec.setPosition(platrec.getPosition().x ,platrec.getPosition().y + speed * directionVert * deltatime);
+            platrec.move(0, speed * directionVert * deltatime);
         }
-        
+
+        cout << directionVert << endl;
     }
 
     void updateHorizontal(float startX, float endX, float speed, float deltatime)
     {
+        float halfway = (startX + endX) / 2;
+        // cancels reverse bool when passes by half distance 
+        if(approxEqual(platrec.getPosition().x ,halfway, 100))
+        {
+            reversedHorz = false;
+        }
+
         // if reached end 
-        if(platrec.getPosition().x > endX or platrec.getPosition().x < startX)
-            reverse();
+        if((platrec.getPosition().x > endX or platrec.getPosition().x < startX ) and !reversedHorz)
+        {
+            cout << "reversed\n";
+            reversedHorz = true;
+            reverseHorz();
+            platrec.move(speed * directionHorz * deltatime, 0);
+        }
         else
         {
-            platrec.setPosition(platrec.getPosition().x + speed * direction * deltatime, platrec.getPosition().y);
+            cout << "moving horizontally\n";
+            // platrec.setPosition(platrec.getPosition().x + speed * direction * deltatime, platrec.getPosition().y);
+            platrec.move(speed * directionHorz * deltatime, 0);
         }
     }
 
-    void updateCircular(float radius, float speed, float deltatime)
+    void updateCircular(float defaultXPos, float defaultYPos, float radius, float speed, float deltatime)
     {
         if(theta >= 6.28)
             theta = 0;
-        platrec.setPosition(radius * cos(theta), radius * sin(theta));
+        platrec.setPosition(defaultXPos + radius * cos(theta), defaultYPos - radius * sin(theta));
+        // platrec.move(radius * cos(theta) * deltatime, -radius * sin(theta) * deltatime);
         theta += speed * deltatime;
     }
 
 private:
     float theta = 0;
-    float direction = 1;
-    void reverse()
+    float directionHorz = 1;
+    float directionVert = 1;
+    void reverseHorz()
     {
-        direction *= -1;
+        directionHorz *= -1;
     }
+    void reverseVert()
+    {
+        directionVert *= -1;
+    }
+    bool approxEqual(float a, float b, float accuracy)
+    {
+        if(abs(a - b) > accuracy)
+            return false;
+        else 
+            return true;
+    }
+    bool reversedVert, reversedHorz;
 } plt1, plt2, plt3, plt4, plt5, plt6;
 
 
@@ -326,6 +367,7 @@ public:
         float scale_offset = 2;
         float descale_offset = 2;
 
+        
         // if(finishedInteracting)
         //     cout << "finished interacting\n";
         // else
@@ -351,8 +393,8 @@ public:
                     textToBeDisplayed.setString(displayed_text);
                     text_index++;
                     
-                    cout << displayed_text << endl;
-                    cout << textToBeDisplayed.getGlobalBounds().width << endl;
+                    // cout << displayed_text << endl;
+                    // cout << textToBeDisplayed.getGlobalBounds().width << endl;
                     // string s = textToBeDisplayed.getString();
                     // cout << s << endl;
 
@@ -2026,6 +2068,10 @@ void game(int win1, int win2, RenderWindow& window)
 
         if (!PAUSE)
         {
+            // plt1.updateHorizontal(0, 1000, 400, deltatime);
+            // plt3.updateCircular(30, 360, 200, 1, deltatime);
+            plt2.updateVertical(50, 600, 100, deltatime);
+
             while (window.pollEvent(e))
             {
                 if (e.type == Event::Closed)
