@@ -263,7 +263,12 @@ bool powercoliodeheal(Sprite& player, RectangleShape& player_x, Sprite& Powers)
 
 // power end
 
-
+struct interaction
+{
+    string textInteraction;
+    SoundBuffer soundBuffer;
+    Sound soundInteraction;
+};
 struct interactionWindow 
 {
 private:
@@ -280,21 +285,29 @@ private:
     string player_name;
 
     bool aborted = false;
-    void setInteractions(string arr[])
+    void setInteractions(interaction arr[])
     {
-        arr[0] = "el salamo 3alekom wa \nrahmat allah w barakato";
-        arr[1] = "Aboos Edak Er7mny";
-        arr[2] = "I am delighted to be here";
-        arr[3] = "You may not indure the \nslays of my mighty sword";
-        arr[4] = "May the odds be in your \nfavor";
-        arr[5] = "I'm not a king \nI'm not a god \nI AM WORSE";
-        arr[6] = "";
-        arr[7] = "";
-        arr[8] = "";
-        arr[9] = "";
-        arr[10] = "";
-        arr[11] = "";
+        arr[0].textInteraction = "el salamo 3alekom wa \nrahmat allah w barakato";
+        arr[1].textInteraction = "Aboos Edak Er7mny";
+        arr[2].textInteraction = "I am delighted to be here";
+        arr[3].textInteraction = "You may not indure the \nslays of my mighty sword";
+        arr[4].textInteraction = "May the odds be in your \nfavor";
+        arr[5].textInteraction = "I'm not a king \nI'm not a god \nI AM WORSE";
+        arr[6].textInteraction = "";
+        arr[7].textInteraction = "";
+        arr[8].textInteraction = "";
+        arr[9].textInteraction = "";
+        arr[10].textInteraction = "";
+        arr[11].textInteraction = "";
+
+        // sound file name template: interactioni.wav , where i is the ith file
+        for (int i = 0; i < no_of_interactions; i++)
+        {
+            arr[i].soundBuffer.loadFromFile("interaction" + to_string(i) + ".wav");
+            arr[i].soundInteraction.setBuffer(arr[i].soundBuffer);
+        }
     }
+    interaction interactionsArray[30];
 
 public:
     int no_of_interactions = 6;
@@ -305,13 +318,13 @@ public:
     bool deletingWindow = false;
     bool isActive = false;
     // constructor
-    void interactionSetProp(string interactions[], string plyr_nam, float xPos, float yPos)
+    void interactionSetProp(string plyr_nam, float xPos, float yPos)
     {
         //cout << "constructed" << endl;
         // the constructor initiates the window at a zero size, then it enlarged in the update function
 
         // initialize the array of text interactions
-        setInteractions(interactions);
+        setInteractions(interactionsArray);
 
         // loads textures
         frameTexture.loadFromFile(path + "TextBox.png");
@@ -345,7 +358,8 @@ public:
 
         // takes a random interaction out of the interactions array
         int randomNumb = rand() % no_of_interactions;
-        final_string = plyr_nam + ' ' + ':' + "\n" + interactions[randomNumb];
+        interactionToBePlayed.soundInteraction = interactionsArray[randomNumb].soundInteraction;
+        final_string = plyr_nam + ' ' + "\n" + interactionsArray[randomNumb].textInteraction;
         // textToBeDisplayed.setString(final_string); 
         textToBeDisplayed.setString(displayed_text);
     }
@@ -358,13 +372,12 @@ private:
     int lettersPerLine = 0;
     int flutter_timer = 20;
     bool isSkipTextShown = true;
+    bool isInteractionSoundPlayed = false;
+    interaction interactionToBePlayed;
 
 public:
     void update(float deltatime, RenderWindow &window)
     {
-
-
-
         // cout << "update of interaction got called\n";
         float scale_offset = 2;
         float descale_offset = 2;
@@ -374,6 +387,12 @@ public:
         // else
         //     cout << "not finished interacting\n";
 
+        //plays interaction sound if not already played
+        if(!isInteractionSoundPlayed)
+        {
+            interactionToBePlayed.soundInteraction.play();
+            isInteractionSoundPlayed = true;
+        }
         // if the window isnt big enough yet, it gets scaled
         if (frameSprite.getScale().x < frameScale.x and frameSprite.getScale().y < frameScale.y and !deletingWindow and !aborted)
         {
@@ -2383,8 +2402,8 @@ void game(int& win1, int& win2, RenderWindow& window)
             Roundmusic[0].pause();
             name(player1, window);
 
-            interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
-            interactionWindow2.interactionSetProp(arrayOfInteractions, player2.name, 1000, 200);
+            interactionwindow1.interactionSetProp(player1.name, 300, 200);
+            interactionWindow2.interactionSetProp(player2.name, 1000, 200);
             for (int i = 0;i < 3;i++)
             {
                 setTextprop(player1.Round_won[i], 96, 2);
