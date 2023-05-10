@@ -65,6 +65,36 @@ int volume_ = 100;
 bool name__ = false;
 Sprite vol_arr[11];
 Font menufont;
+
+// Textures
+    Texture Floor;
+    Texture Jumping;
+    Texture Jumping2;
+    Texture Running2;
+    Texture Running;
+    Texture Idle;
+    Texture Idle2;
+    Texture Fall;
+    Texture Fall2;
+    Texture Back[3];
+    Texture Back1[3];
+    Texture Attacking;
+    Texture Attacking2;
+    Texture Hit;
+    Texture Hit2;
+    Texture Death;
+    Texture Death2;
+    Texture P1_HealthBar_Texture;
+    Texture P2_HealthBar_Texture;
+    Font ourFont;
+    Texture plateform_1;
+    Texture plateform_2;
+    Texture plateform_3;
+    Texture plateform_4;
+    Texture plateform_round3;
+    Texture Run1, Idle1, Attack1, Death1, Hit1, Jump1, Fall1;
+    Texture Run3, Idle3, Attack3, Death3, Hit3, Jump3;
+    Text PressEnter;
 Texture optionButton;
 Texture optionButton2;
 string arrayOfInteractions[100];
@@ -1877,7 +1907,8 @@ void WINNER(RenderWindow& mainwindow) {
 
                 if (e.key.code == Keyboard::Enter) {
                     Winning.stop();
-                    
+                    win1 = 0;
+                    win2 = 0;
                     return;
                 }
             }
@@ -1952,6 +1983,43 @@ int main()
 {
     RenderWindow get_window(VideoMode(1280, 720), "The Battlefield of Abbasya");
     
+    ourFont.loadFromFile("ArcadeClassic.ttf");
+    Back[0].loadFromFile("Background.jpg");
+    Back[1].loadFromFile("background2.jpg");
+    Back[2].loadFromFile("Round3_Background.jpg");
+    Idle.loadFromFile("Player 1/_Idle.png");
+    Idle2.loadFromFile("Player 2/Idle2.png");
+    Running2.loadFromFile("Player 2/Run2.png");
+    Running.loadFromFile("Player 1/Running Animation.png");
+    Jumping.loadFromFile("Player 1/_Jump.png");
+    Jumping2.loadFromFile("Player 2/Jump2.png");
+    Fall.loadFromFile("Player 1/_Fall.png");
+    Fall2.loadFromFile("Player 2/_Fall2.png");
+    Hit.loadFromFile("Player 1/_Hit.png");
+    Hit2.loadFromFile("Player 2/Hit2.png");
+    Run1.loadFromFile("Wanderer/Run.png");
+    Idle1.loadFromFile("Wanderer/Idle.png");
+    Attack1.loadFromFile("Wanderer/Attack_2.png");
+    Death1.loadFromFile("Wanderer/Dead.png");
+    Hit1.loadFromFile("Wanderer/Hurt.png");
+    Fall1.loadFromFile("Wanderer/Walk.png");
+    Jump1.loadFromFile("Wanderer/Jump.png");
+    Attacking.loadFromFile("Player 1/_Attack.png");
+    Attacking2.loadFromFile("Player 2/Attack2.png");
+    Death.loadFromFile("Player 1/_Death.png");
+    Death2.loadFromFile("Player 2/_Death.png");
+    plateform_1.loadFromFile("Plates/firstplate.png");
+    plateform_2.loadFromFile("Plates/secondplate.png");
+    plateform_3.loadFromFile("Plates/thirdplate.png");
+    plateform_round3.loadFromFile("Plates/plate_Round3.png");
+    plateform_4.loadFromFile("Plates/fourthplate.png");
+    Run3.loadFromFile("Wizard/Run.png");
+    Idle3.loadFromFile("Wizard/Idle.png");
+    Attack3.loadFromFile("Wizard/Fireball.png");
+    Death3.loadFromFile("Wizard/Dead.png");
+    Hit3.loadFromFile("Wizard/Hurt.png");
+    Jump3.loadFromFile("Wizard/Jump.png");
+
     get_window.setFramerateLimit(60);
 
     while (get_window.isOpen())
@@ -2149,75 +2217,12 @@ void game(int& win1, int& win2, RenderWindow& window)
     int arr_index = 10;
     srand(time(0));
 
-    // Textures
-    Texture Floor;
-    Texture Jumping;
-    Texture Jumping2;
-    Texture Running2;
-    Texture Running;
-    Texture Idle;
-    Texture Idle2;
-    Texture Fall;
-    Texture Fall2;
-    Texture Back[3];
-    Texture Back1[3];
-    Texture Attacking;
-    Texture Attacking2;
-    Texture Hit;
-    Texture Hit2;
-    Texture Death;
-    Texture Death2;
-    Texture P1_HealthBar_Texture;
-    Texture P2_HealthBar_Texture;
-    Font ourFont;
-    Texture plateform_1;
-    Texture plateform_2;
-    Texture plateform_3;
-    Texture plateform_4;
-    Texture plateform_round3;
-    Texture Run1, Idle1, Attack1, Death1, Hit1, Jump1, Fall1;
-    Texture Run3, Idle3, Attack3, Death3, Hit3, Jump3;
-    Text PressEnter;
+    
 
 
     // call init_health_bar once in the beginning of the game
     init_health_bar();
-    ourFont.loadFromFile("ArcadeClassic.ttf");
-    Back[0].loadFromFile("Background.jpg");
-    Back[1].loadFromFile("background2.jpg");
-    Back[2].loadFromFile("Round3_Background.jpg");
-    Idle.loadFromFile("Player 1/_Idle.png");
-    Idle2.loadFromFile("Player 2/Idle2.png");
-    Running2.loadFromFile("Player 2/Run2.png");
-    Running.loadFromFile("Player 1/Running Animation.png");
-    Jumping.loadFromFile("Player 1/_Jump.png");
-    Jumping2.loadFromFile("Player 2/Jump2.png");
-    Fall.loadFromFile("Player 1/_Fall.png");
-    Fall2.loadFromFile("Player 2/_Fall2.png");
-    Hit.loadFromFile("Player 1/_Hit.png");
-    Hit2.loadFromFile("Player 2/Hit2.png");
-    Run1.loadFromFile("Wanderer/Run.png");
-    Idle1.loadFromFile("Wanderer/Idle.png");
-    Attack1.loadFromFile("Wanderer/Attack_2.png");
-    Death1.loadFromFile("Wanderer/Dead.png");
-    Hit1.loadFromFile("Wanderer/Hurt.png");
-    Fall1.loadFromFile("Wanderer/Walk.png");
-    Jump1.loadFromFile("Wanderer/Jump.png");
-    Attacking.loadFromFile("Player 1/_Attack.png");
-    Attacking2.loadFromFile("Player 2/Attack2.png");
-    Death.loadFromFile("Player 1/_Death.png");
-    Death2.loadFromFile("Player 2/_Death.png");
-    plateform_1.loadFromFile("Plates/firstplate.png");
-    plateform_2.loadFromFile("Plates/secondplate.png");
-    plateform_3.loadFromFile("Plates/thirdplate.png");
-    plateform_round3.loadFromFile("Plates/plate_Round3.png");
-    plateform_4.loadFromFile("Plates/fourthplate.png");
-    Run3.loadFromFile("Wizard/Run.png");
-    Idle3.loadFromFile("Wizard/Idle.png");
-    Attack3.loadFromFile("Wizard/Fireball.png");
-    Death3.loadFromFile("Wizard/Dead.png");
-    Hit3.loadFromFile("Wizard/Hurt.png");
-    Jump3.loadFromFile("Wizard/Jump.png");
+    
     Texture rain_text;
     rain_text.loadFromFile("fireball.png");
     FireBall fireballs[7];
@@ -3357,6 +3362,8 @@ void game(int& win1, int& win2, RenderWindow& window)
                             fireballs[i].position(i);
                             //fireballs[i].theSprite.setPosition(fireballs[i].theSprite.getPosition().x, 0);
                             fireballs[i].velocity.y = 0;
+                            if (player1.health <= 0)
+                                win2++;
                         }
                         else if (fireballs[i].theSprite.getGlobalBounds().intersects(player2.hitbox.player.getGlobalBounds())&&!Round_Interacting) {
                             if (player2.health > 0)
@@ -3372,6 +3379,8 @@ void game(int& win1, int& win2, RenderWindow& window)
                             fireballs[i].position(i);
                             //fireballs[i].theSprite.setPosition(fireballs[i].theSprite.getPosition().x, 0);
                             fireballs[i].velocity.y = 0;
+                            if (player2.health <= 0)
+                                win1++;
                         }
                         else {
                             if(!Round_Interacting)
