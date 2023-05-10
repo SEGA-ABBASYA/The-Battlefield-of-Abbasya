@@ -7,13 +7,14 @@
 #include <time.h>
 #include <string>
 #include <cstdlib>
+#include <cmath>
 // #include "ResourcePath.hpp"
 
 using namespace sf;
 using namespace std;
-// string path = "/Users/yoyo/#COLLEGE/The-Battlefield-of-Abbasya/";
+string path = "/Users/yoyo/#COLLEGE/The-Battlefield-of-Abbasya/";
 // string path = resourcePath();
- string path = "";
+ //string path = "";
 
 // 0  -> MainMenu
 // 1  -> Choose Your Hero
@@ -107,6 +108,12 @@ Music NameEntry;
 Sound Test;
 SoundBuffer Tester;
 
+
+// function for checking the colliding the hitbox of player and the plates
+//bool platecoliode_1(RectangleShape &, RectangleShape &);
+bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& plat_y1);
+bool plateApproxCollide(Sprite& player, RectangleShape& player_x, RectangleShape& plat_y1);
+
 struct cursor
 {
     Texture texture;
@@ -156,21 +163,175 @@ struct player
     Vector2f velocity{ 0, 0 };
     Sprite sprite;
     Hitbox hitbox;
-    bool grounded = false, attackbool = false, hitbool = false, timereset = false;
+    bool grounded = false, attackbool = false, hitbool = false, timereset = false, isOnPlate = false;
     Text Round_won[3];
 }player1, player2;
 
-struct plates {
+struct plates
+{
+public:
+
     RectangleShape platrec;
 
     // function for setting the properties of the plates
-    void plat_set(Texture &imag, RectangleShape &sh_1, float x1, float x2, int x3, int x4, int x5, int x6)
+    void plat_set(Texture &imag, RectangleShape &sh_1, float sizeX, float sizeY, int posX, int posY, int scaleX, int scaleY)
     {
-        sh_1.setSize(Vector2f(x1, x2));
-        sh_1.setPosition(x3, x4);
+        sh_1.setSize(Vector2f(sizeX, sizeY));
+        sh_1.setPosition(posX, posY);
         sh_1.setTexture(&imag);
-        sh_1.setScale(x5, x6);
+        sh_1.setScale(scaleX, scaleY);
     }
+
+    // NOT WORKING YET !!!!
+    void updateVertical(float startY, float endY, float speed, float deltatime, player& player1, player& player2)
+    {
+        float halfway = (startY + endY) / 2;
+        // cancels reverse bool when passes by half distance 
+        if(approxEqual(platrec.getPosition().y ,halfway, 100))
+        {
+            reversedVert = false;
+        }
+
+        // if reached end 
+        if((platrec.getPosition().y > endY or platrec.getPosition().y < startY) and !reversedVert)
+        {
+            reversedVert = true;
+            reverseVert();
+            platrec.move(0, speed * directionVert * deltatime);
+        }
+        else
+        {
+            // platrec.setPosition(platrec.getPosition().x ,platrec.getPosition().y + speed * directionVert * deltatime);
+            platrec.move(0, speed * directionVert * deltatime);
+        }
+
+        // cout << directionVert << endl;
+
+        // if player is standing
+        if(playerStandingOnPlate(player1))
+        {   
+            player1.isOnPlate = true;
+            cout<< "player on plate\n";
+        }
+        else
+            player1.isOnPlate = false;
+
+        if(playerStandingOnPlate(player2))
+        {
+            player2.isOnPlate = true;
+            cout << "player on plate\n";
+        }
+        else    
+            player1.isOnPlate = false;
+    }
+
+    // WORKING :)
+    void updateHorizontal(float startX, float endX, float speed, float deltatime, player& player1, player& player2)
+    {
+
+        float halfway = (startX + endX) / 2;
+        // cancels reverse bool when passes by half distance 
+        if(approxEqual(platrec.getPosition().x ,halfway, 100))
+        {
+            reversedHorz = false;
+        }
+
+        // if reached end 
+        if((platrec.getPosition().x > endX or platrec.getPosition().x < startX ) and !reversedHorz)
+        {
+            cout << "reversed\n";
+            reversedHorz = true;
+            reverseHorz();
+            platrec.move(speed * directionHorz * deltatime, 0);
+        }
+        else
+        {
+            //cout << "moving horizontally\n";
+            // platrec.setPosition(platrec.getPosition().x + speed * direction * deltatime, platrec.getPosition().y);
+            platrec.move(speed * directionHorz * deltatime, 0);
+        }
+
+        // if player is standing
+        if(playerStandingOnPlate(player1))
+        {   
+            player1.grounded = true;
+            cout<< "player on plate\n";
+            player1.sprite.move(speed * directionHorz * deltatime, 0);
+            // player1.sprite.setPosition(player1.sprite.getPosition().x + speed * directionHorz * deltatime, 0);
+            // player1.sprite.setPosition(platrec.getPosition().x, player1.sprite.getPosition().y);
+        }
+        if(playerStandingOnPlate(player2))
+        {
+            player2.grounded = true;
+            cout << "player on plate\n";
+            player2.sprite.move(speed * directionHorz * deltatime, 0);
+        }
+    }
+
+    // NOT WORKING YET !!!!
+    void updateCircular(float defaultXPos, float defaultYPos, float radius, float speed, float deltatime, player& player1, player& player2)
+    {
+        if(theta >= 6.28)
+            theta = 0;
+        platrec.setPosition(defaultXPos + radius * cos(theta), defaultYPos - radius * sin(theta));
+        // platrec.move(radius * cos(theta) * deltatime, -radius * sin(theta) * deltatime);
+        theta += speed * deltatime;
+
+        // if player is standing
+        if(playerStandingOnPlate(player1))
+        {
+            // player1.sprite.move(speed * directionHorz * deltatime, 0);
+            // player1.sprite.setPosition(defaultXPos + radius * cos(theta), 0);
+            // player1.sprite.move(player2.sprite.getPosition().x - radius * cos(theta) * deltatime, 0);
+            // player1.sprite.setPosition(platrec.getPosition().x + abs(platrec.getPosition().x - player1.sprite.getPosition().x), player1.sprite.getPosition().y);
+            player1.isOnPlate = true;
+            cout << "player on plate\n";
+        }
+        else
+            player1.isOnPlate = true;
+
+        if(playerStandingOnPlate(player2))
+        {
+            // player2.sprite.move(speed * directionHorz * deltatime, 0);
+            // player2.sprite.move(player2.sprite.getPosition().x - radius * cos(theta), 0);
+            // player2.sprite.setPosition(defaultXPos + radius * cos(theta), 0);
+            //player2.sprite.setPosition(platrec.getPosition().x, player2.sprite.getPosition().y);
+            // player2.sprite.setPosition(platrec.getPosition().x + abs(platrec.getPosition().x - player2.sprite.getPosition().x), player2.sprite.getPosition().y);
+            player2.isOnPlate = true;
+            cout << "player on plate\n";
+        }
+        else 
+            player1.isOnPlate = true;
+    }
+
+private:
+    bool playerStandingOnPlate(player plyr)
+    {
+        // if(platecoliode_1(plyr.sprite, plyr.hitbox.player, platrec))
+        if(plateApproxCollide(plyr.sprite, plyr.hitbox.player, platrec))
+            return true;
+        else
+            return false;
+    }
+    float theta = 0;
+    float directionHorz = 1;
+    float directionVert = 1;
+    void reverseHorz()
+    {
+        directionHorz *= -1;
+    }
+    void reverseVert()
+    {
+        directionVert *= -1;
+    }
+    bool approxEqual(float a, float b, float accuracy)
+    {
+        if(abs(a - b) > accuracy)
+            return false;
+        else 
+            return true;
+    }
+    bool reversedVert, reversedHorz;
 } plt1, plt2, plt3, plt4, plt5, plt6;
 
 
@@ -233,10 +394,9 @@ void power_draw()
     Powers_sp[1].setSize(Vector2f(100, 100));
     Powers_sp[2].setSize(Vector2f(100, 100));
 
-    Powers_tex[0].loadFromFile("attack.png");
-    Powers_tex[1].loadFromFile("attack.png");
-    Powers_tex[2].loadFromFile("heal.png");
-
+    Powers_tex[0].loadFromFile(path + "attack.png");
+    Powers_tex[1].loadFromFile(path + "attack.png");
+    Powers_tex[2].loadFromFile(path + "heal.png");
 
     for (int i = 0; i < 3; i++)
     {
@@ -287,7 +447,7 @@ private:
         arr[2] = "I am delighted to be here";
         arr[3] = "You may not indure the \nslays of my mighty sword";
         arr[4] = "May the odds be in your \nfavor";
-        arr[5] = "I'm not a king \nI'm not a god \nI AM WORSE";
+        arr[5] = "";
         arr[6] = "";
         arr[7] = "";
         arr[8] = "";
@@ -297,20 +457,25 @@ private:
     }
 
 public:
-    int no_of_interactions = 6;
-    int max_letters_per_line = 27;
+    int no_of_interactions = 5;
+    // int max_letters_per_line = 27;
     float timer_per_letter = 0.1;
 
     bool finishedInteracting = false;
     bool deletingWindow = false;
     bool isActive = false;
-    // constructor
-    void interactionSetProp(string interactions[], string plyr_nam, float xPos, float yPos)
-    {
-        //cout << "constructed" << endl;
-        // the constructor initiates the window at a zero size, then it enlarged in the update function
 
-        // initialize the array of text interactions
+    // constructor
+    void interactionSetProp(string interactions[],string plyr_nam, float xPos, float yPos)
+    {
+        text_index = 0;
+        textTimer = 0.1;
+        pauseTimer = 2.5;
+        aborted = false;
+        deletingWindow = false;
+        finishedInteracting = false;
+        xpos = xPos;
+        ypos = yPos;
         setInteractions(interactions);
 
         // loads textures
@@ -329,46 +494,47 @@ public:
 
         // set initial scales
         frameSprite.setScale(0, 0);
+        
+        textToBeDisplayed.setScale(1, 1);
 
         // set final scales
         frameScale = {1, 1};
 
-        // loads font and initial/Applications/Visual Studio Code.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.htmlizes text
-        arcadeClassic.loadFromFile(path + "Canterbury.ttf");
+        arcadeClassic.loadFromFile(path + "ArcadeClassic.ttf");
         textToBeDisplayed.setFont(arcadeClassic);
         pressSpaceToSkip.setFont(arcadeClassic);
         pressSpaceToSkip.setString("Press Space To Skip");
-        // pressSpaceToSkip.setColor(Color::White);
         displayed_text = "";
 
         player_name = plyr_nam;
 
         // takes a random interaction out of the interactions array
         int randomNumb = rand() % no_of_interactions;
-        final_string = plyr_nam + ' ' + ':' + "\n" + interactions[randomNumb];
-        // textToBeDisplayed.setString(final_string); 
+        final_string = player_name + ' ' + ':' + "\n" + interactions[randomNumb]; 
         textToBeDisplayed.setString(displayed_text);
     }
 
-    // update functions: gradually scales window, then gradually scales icon, then gradually shows text
 private:
     int text_index = 0;
     float textTimer = 0.1;
     float pauseTimer = 2.5;
-    int lettersPerLine = 0;
     int flutter_timer = 20;
     bool isSkipTextShown = true;
 
+    // properties set by user using set prop function
+    float xpos;
+    float ypos;
+    string inter_arr[100];
+
 public:
+    // update functions: gradually scales window, then gradually scales icon, then gradually shows text
     void update(float deltatime, RenderWindow &window)
     {
-
-
-
         // cout << "update of interaction got called\n";
         float scale_offset = 2;
         float descale_offset = 2;
 
+        
         // if(finishedInteracting)
         //     cout << "finished interacting\n";
         // else
@@ -377,29 +543,30 @@ public:
         // if the window isnt big enough yet, it gets scaled
         if (frameSprite.getScale().x < frameScale.x and frameSprite.getScale().y < frameScale.y and !deletingWindow and !aborted)
         {
-            // cout << "deltatime: " << deltatime << endl;
-            // cout << "frame current scale: " << frameSprite.getScale().x;
-            // adds a slight increase to the scale every frame relative to delatatime
             frameSprite.setScale({frameSprite.getScale().x + scale_offset * deltatime, frameSprite.getScale().y + scale_offset * deltatime});
-            // cout << "  frame new scale: " << frameSprite.getScale().x << endl;
         }
 
         // if both window is scaled, we start displaying the text gradually
         else
         {
+            //cout << "displaying text" << endl;
             // if not all of string have been displayed
             if (text_index < final_string.length() and !aborted)
             {
+                //cout << "typing letter      ";   
                 if (textTimer <= 0)
                 {
                     displayed_text = displayed_text + final_string[text_index];
                     textToBeDisplayed.setString(displayed_text);
                     text_index++;
-                    lettersPerLine++;
+                    
+                    // cout << displayed_text << endl;
+                    // cout << textToBeDisplayed.getGlobalBounds().width << endl;
+                    // string s = textToBeDisplayed.getString();
+                    // cout << s << endl;
 
                     // resets timer
                     textTimer = timer_per_letter;
-
                 }
                 else
                     textTimer -= deltatime;
@@ -407,12 +574,17 @@ public:
             // if all has been displayed, starts timer, and when it ends, it destroys the window
             else
             {
+                if(pauseTimer > 0)
+                {
+                    //cout << "pausing before destruction     ";
+                }
                 if (pauseTimer <= 0 or aborted)
                 {
                     deletingWindow = true;
                     // if not , plays reverse animation for shrinking
                     if (frameSprite.getScale().x > 0 and frameSprite.getScale().y > 0 and !finishedInteracting)
                     {
+                        //cout << "descaling" << endl;
                         frameSprite.setScale({frameSprite.getScale().x - descale_offset * deltatime, frameSprite.getScale().y - descale_offset * deltatime});
                         // cout << "  frame new scale: " << frameSprite.getScale().x << "  delatatime: " << deltatime << endl;
 
@@ -422,6 +594,7 @@ public:
                     // if finished shrinking, destroys and marks the bool as true for external use
                     else if (frameSprite.getScale().x <= 0 or frameSprite.getScale().y <= 0)
                     {
+                        //cout << "destroyed" << endl;
                         frameSprite.setScale(0, 0);
                         // playerIconSprite.setScale(0, 0);
                         textToBeDisplayed.setScale(0, 0);
@@ -432,10 +605,6 @@ public:
                     pauseTimer -= deltatime;
             }
         }
-
-        // window.draw(frameSprite);
-        // window.draw(playerIconSprite);
-        // window.draw(textToBeDisplayed);
     }
     void draw(RenderWindow &window)
     {
@@ -466,9 +635,7 @@ public:
             }
 
             window.draw(frameSprite);
-            // window.draw(playerIconSprite);
             window.draw(textToBeDisplayed);
-            // window.draw(pressSpaceToSkip);
         }
     }
 
@@ -484,6 +651,11 @@ public:
         textToBeDisplayed.setScale(0, 0);
         // finishedInteracting = true;
     }
+    // void setName(string plyr_nam)
+    // {
+    //     player_name = plyr_nam;
+    //     interactionSetProp(inter_arr, xpos, ypos);
+    // }
 }interactionwindow1,interactionWindow2;
 
 int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
@@ -540,7 +712,7 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
 }
 
 void setTextprop(Text& text , int x,int y) {
-    menufont.loadFromFile("Canterbury.ttf");
+    menufont.loadFromFile(path + "Canterbury.ttf");
     text.setCharacterSize(x);
     text.setFillColor(Color(187, 220, 244));
     text.setFont(menufont);
@@ -579,11 +751,11 @@ int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywi
 void Controlls(RenderWindow& controllswindow)
 {
     Texture controll_back;
-    controll_back.loadFromFile("controlls back.png");
+    controll_back.loadFromFile(path + "controlls back.png");
     Sprite back;
     back.setTexture(controll_back);
     Texture Pause;
-    Pause.loadFromFile("Controlls/pause.png");
+    Pause.loadFromFile(path + "Controlls/pause.png");
     Sprite pause;
     pause.setTexture(Pause);
     pause.setScale(0.1, 0.1);
@@ -591,25 +763,25 @@ void Controlls(RenderWindow& controllswindow)
 
     Texture Jumping,Jumping2,Running2,Running,Attacking,Attacking2,idle1,idle2,frames[2],buttons[9];
 
-    frames[0].loadFromFile("Controlls/controlls_banner.png");
-    frames[1].loadFromFile("Controlls/controlls_main.png");
-    idle1.loadFromFile("Name Entry/_Idle1 1.png");
-    idle2.loadFromFile("Name Entry/_Idle2 1.png");
-    buttons[0].loadFromFile("Controlls/A.png");
-    buttons[1].loadFromFile("Controlls/D.png");
-    buttons[2].loadFromFile("Controlls/W.png");
-    buttons[3].loadFromFile("Controlls/X.png");
-    buttons[4].loadFromFile("Controlls/up.png");
-    buttons[5].loadFromFile("Controlls/J.png");
-    buttons[6].loadFromFile("Controlls/right.png");
-    buttons[7].loadFromFile("Controlls/left.png");
-    buttons[8].loadFromFile("Controlls/ESC.png");
-    Running2.loadFromFile("Player 2/Run2.png");
-    Running.loadFromFile("Player 1/Running Animation.png");
-    Jumping.loadFromFile("Player 1/_Jump.png");
-    Jumping2.loadFromFile("Player 2/Jump2.png");
-    Attacking.loadFromFile("Player 1/_Attack.png");
-    Attacking2.loadFromFile("Player 2/Attack2.png");
+    frames[0].loadFromFile(path + "Controlls/controlls_banner.png");
+    frames[1].loadFromFile(path + "Controlls/controlls_main.png");
+    idle1.loadFromFile(path + "Name Entry/_Idle1 1.png");
+    idle2.loadFromFile(path + "Name Entry/_Idle2 1.png");
+    buttons[0].loadFromFile(path + "Controlls/A.png");
+    buttons[1].loadFromFile(path + "Controlls/D.png");
+    buttons[2].loadFromFile(path + "Controlls/W.png");
+    buttons[3].loadFromFile(path + "Controlls/X.png");
+    buttons[4].loadFromFile(path + "Controlls/up.png");
+    buttons[5].loadFromFile(path + "Controlls/J.png");
+    buttons[6].loadFromFile(path + "Controlls/right.png");
+    buttons[7].loadFromFile(path + "Controlls/left.png");
+    buttons[8].loadFromFile(path + "Controlls/ESC.png");
+    Running2.loadFromFile(path + "Player 2/Run2.png");
+    Running.loadFromFile(path + "Player 1/Running Animation.png");
+    Jumping.loadFromFile(path + "Player 1/_Jump.png");
+    Jumping2.loadFromFile(path + "Player 2/Jump2.png");
+    Attacking.loadFromFile(path + "Player 1/_Attack.png");
+    Attacking2.loadFromFile(path + "Player 2/Attack2.png");
 
     Sprite jumping1, attacking1, running1r, jumping2, attacking2, running2r, running2l, running1l, Idle1, Idle2;
     Sprite button[9];
@@ -690,7 +862,7 @@ void Controlls(RenderWindow& controllswindow)
     Idle2.setPosition(650, 70);
     
     Font controllsfont;
-    controllsfont.loadFromFile("Canterbury.ttf");
+    controllsfont.loadFromFile(path + "Canterbury.ttf");
     Text controlls[13];
 
     controlls[0].setFont(controllsfont);
@@ -1045,15 +1217,15 @@ void credits_text(Text* arr,RenderWindow& textwindow) {
 
 void Credits(RenderWindow& creditswindow) {
     Font Credits;
-    Credits.loadFromFile("Canterbury.ttf");
+    Credits.loadFromFile(path + "Canterbury.ttf");
 
     Texture group;
-    group.loadFromFile("credit_pic1 1.png");
+    group.loadFromFile(path + "credit_pic1 1.png");
     Sprite pic;
     pic.setTexture(group);
 
     Texture frame;
-    frame.loadFromFile("main frame1.png");
+    frame.loadFromFile(path + "main frame1.png");
     Sprite mainframe;
     mainframe.setTexture(frame);
 
@@ -1158,7 +1330,7 @@ void Volume(RenderWindow& volumewindow)
 {
     Mouse mouse;
     Font volumefont;
-    volumefont.loadFromFile("Canterbury.ttf");
+    volumefont.loadFromFile(path + "Canterbury.ttf");
     Text volume[4];
     volume[0].setFont(volumefont);
     volume[0].setString("Volume");
@@ -1186,20 +1358,20 @@ void Volume(RenderWindow& volumewindow)
 
 
     Texture volume_back;
-    volume_back.loadFromFile("Volume Bar/volume background.png");
+    volume_back.loadFromFile(path + "Volume Bar/volume background.png");
     Sprite Back;
     Back.setTexture(volume_back);
 
 
     Texture buttons[8];
-    buttons[0].loadFromFile("Volume Bar/back frame.png");
-    buttons[1].loadFromFile("Volume Bar/mute-.png");
-    buttons[2].loadFromFile("Volume Bar/volume frame.png");
-    buttons[3].loadFromFile("Volume Bar/volume++-.png");
-    buttons[4].loadFromFile("Volume Bar/volume--- 1.png");
-    buttons[5].loadFromFile("Volume Bar/mute_frame.png");
-    buttons[6].loadFromFile("Volume Bar/sfx mute.png");
-    buttons[7].loadFromFile("Volume Bar/muted1.png");
+    buttons[0].loadFromFile(path + "Volume Bar/back frame.png");
+    buttons[1].loadFromFile(path + "Volume Bar/mute-.png");
+    buttons[2].loadFromFile(path + "Volume Bar/volume frame.png");
+    buttons[3].loadFromFile(path + "Volume Bar/volume++-.png");
+    buttons[4].loadFromFile(path + "Volume Bar/volume--- 1.png");
+    buttons[5].loadFromFile(path + "Volume Bar/mute_frame.png");
+    buttons[6].loadFromFile(path + "Volume Bar/sfx mute.png");
+    buttons[7].loadFromFile(path + "Volume Bar/muted1.png");
  
     Sprite button[8];
     for (int i = 0; i < 7; i++) {
@@ -1236,17 +1408,17 @@ void Volume(RenderWindow& volumewindow)
 
     Texture vol[11];
     
-    vol[10].loadFromFile("Volume Bar/New_HealthBar100.png");
-    vol[9].loadFromFile("Volume Bar/New_HealthBar90.png");
-    vol[8].loadFromFile("Volume Bar/New_HealthBar80.png");
-    vol[7].loadFromFile("Volume Bar/New_HealthBar70.png");
-    vol[6].loadFromFile("Volume Bar/New_HealthBar60.png");
-    vol[5].loadFromFile("Volume Bar/New_HealthBar50.png");
-    vol[4].loadFromFile("Volume Bar/New_HealthBar40.png");
-    vol[3].loadFromFile("Volume Bar/New_HealthBar30.png");
-    vol[2].loadFromFile("Volume Bar/New_HealthBar20.png");
-    vol[1].loadFromFile("Volume Bar/New_HealthBar10.png");
-    vol[0].loadFromFile("Volume Bar/New_HealthBar00.png");
+    vol[10].loadFromFile(path + "Volume Bar/New_HealthBar100.png");
+    vol[9].loadFromFile(path + "Volume Bar/New_HealthBar90.png");
+    vol[8].loadFromFile(path + "Volume Bar/New_HealthBar80.png");
+    vol[7].loadFromFile(path + "Volume Bar/New_HealthBar70.png");
+    vol[6].loadFromFile(path + "Volume Bar/New_HealthBar60.png");
+    vol[5].loadFromFile(path + "Volume Bar/New_HealthBar50.png");
+    vol[4].loadFromFile(path + "Volume Bar/New_HealthBar40.png");
+    vol[3].loadFromFile(path + "Volume Bar/New_HealthBar30.png");
+    vol[2].loadFromFile(path + "Volume Bar/New_HealthBar20.png");
+    vol[1].loadFromFile(path + "Volume Bar/New_HealthBar10.png");
+    vol[0].loadFromFile(path + "Volume Bar/New_HealthBar00.png");
 
     for (int i = 0; i < 11; i++) {
         vol_arr[i].setTexture(vol[i]);
@@ -1447,15 +1619,15 @@ int PauseMenu(RenderWindow &pausewindow)
     Font pausefont;
     
     //PAUSE = true;
-    pausefont.loadFromFile("Canterbury.ttf");
+    pausefont.loadFromFile(path + "Canterbury.ttf");
 
     Texture Pauseback;
     Texture Pauseborder;
     Texture Buttontex;
 
-    Pauseback.loadFromFile("Pause Menu/Pause Menu Background.png");
-    Pauseborder.loadFromFile("Pause Menu/Logo Frame.png");
-    Buttontex.loadFromFile("Pause Menu/Gold Button.png");
+    Pauseback.loadFromFile(path + "Pause Menu/Pause Menu Background.png");
+    Pauseborder.loadFromFile(path + "Pause Menu/Logo Frame.png");
+    Buttontex.loadFromFile(path + "Pause Menu/Gold Button.png");
 
     RectangleShape buttons[4];
 
@@ -1567,9 +1739,9 @@ void name(struct player, RenderWindow& namewindow) {
 
     Texture idles[2];
     Texture nameback;
-    nameback.loadFromFile("Name Entry/name enternce.png");
-    idles[0].loadFromFile("Name Entry/Idle3 1.png");
-    idles[1].loadFromFile("Name Entry/Idle4 1.png");
+    nameback.loadFromFile(path + "Name Entry/name enternce.png");
+    idles[0].loadFromFile(path + "Name Entry/Idle3 1.png");
+    idles[1].loadFromFile(path + "Name Entry/Idle4 1.png");
  
     NameEntry.openFromFile("Sounds/The-Nightingale.wav");
     NameEntry.play();
@@ -1578,11 +1750,11 @@ void name(struct player, RenderWindow& namewindow) {
     namebackground.setTexture(nameback);
 
     Texture frames[5];
-    frames[0].loadFromFile("Name Entry/Game_text_boxes.png");
-    frames[1].loadFromFile("Name Entry/name-box.png");
-    frames[2].loadFromFile("Name Entry/_Idle1 1.png");
-    frames[3].loadFromFile("Name Entry/_Idle2 1.png");
-    frames[4].loadFromFile("Name Entry/start1.png");
+    frames[0].loadFromFile(path + "Name Entry/Game_text_boxes.png");
+    frames[1].loadFromFile(path + "Name Entry/name-box.png");
+    frames[2].loadFromFile(path + "Name Entry/_Idle1 1.png");
+    frames[3].loadFromFile(path + "Name Entry/_Idle2 1.png");
+    frames[4].loadFromFile(path + "Name Entry/start1.png");
 
     RectangleShape start[3];
 
@@ -1636,7 +1808,7 @@ void name(struct player, RenderWindow& namewindow) {
     bool name_ = false;
 
     Font font;
-    font.loadFromFile("Canterbury.ttf");
+    font.loadFromFile(path + "Canterbury.ttf");
 
     Text text1("", font);
     Text text2("", font);
@@ -1974,8 +2146,8 @@ void setprop(Sprite &, Texture &, int, int, int);
 // function for checking the colliding the hitbox of attack with the hitbox of player
 bool intersection(RectangleShape &, RectangleShape &);
 
-// function for checking the colliding the hitbox of player and the plates
-bool platecoliode_1(RectangleShape &, RectangleShape &);
+// // function for checking the colliding the hitbox of player and the plates
+// bool platecoliode_1(RectangleShape &, RectangleShape &);
 
 Texture hp_bar[12];
 
@@ -2026,7 +2198,11 @@ int main()
     {
         
         MainMenu(get_window);
-        if (pagenum == 0) { MainMenu(get_window); }
+        if (pagenum == 0)
+        {
+            MainMenu(get_window);
+            
+        }
         else if (pagenum == 1) {
             level = false;
             player1.name.clear();
@@ -2201,6 +2377,20 @@ bool platecoliode_2(Sprite& player, RectangleShape& player_x, RectangleShape& pl
     }
 }
 
+bool plateApproxCollide(Sprite& player, RectangleShape& player_x, RectangleShape& plat_y1) {
+    if (player_x.getGlobalBounds().intersects(plat_y1.getGlobalBounds()) &&
+        player_x.getGlobalBounds().top + player_x.getGlobalBounds().height + 30 < plat_y1.getGlobalBounds().top)
+    {
+        //cout << plat_y1.getGlobalBounds().top << endl;
+        // player.setPosition(player.getPosition().x, plat_y1.getGlobalBounds().top - player.getGlobalBounds().height / 2);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void game(int& win1, int& win2, RenderWindow& window)
 {
     RectangleShape fire_reload(Vector2f(1280, 5));
@@ -2215,6 +2405,8 @@ void game(int& win1, int& win2, RenderWindow& window)
     bool toucherhealthp1 = false;
     bool toucherhealthp2 = false;
     int arr_index = 10;
+    // interactionwindow1.finishedInteracting = false;
+    // interactionWindow2.finishedInteracting = false;
     srand(time(0));
 
     
@@ -2374,17 +2566,26 @@ void game(int& win1, int& win2, RenderWindow& window)
     PressEnter.setString("Press Enter to Continue");
     setTextprop(PressEnter, 64, 2);
     PressEnter.setPosition(window.getSize().x / 2, -70);
-
     power_draw();
-    while (window.isOpen()) {
 
+    if(interactionwindow1.finishedInteracting)
+        cout << "not interacting\n";
+    else 
+        cout << "interacting\n";
+
+    cout << "entered\n";
+
+    while (window.isOpen())
+    {
         gameclock.restart();
         if (name__) {
             Roundmusic[0].pause();
             name(player1, window);
+            interactionwindow1.interactionSetProp(arrayOfInteractions,player1.name ,300, 200);
+            interactionWindow2.interactionSetProp(arrayOfInteractions,player2.name, 1000, 200);
+            // interactionwindow1.setName(player1.name);
+            // interactionWindow2.setName(player2.name);
 
-            interactionwindow1.interactionSetProp(arrayOfInteractions, player1.name, 300, 200);
-            interactionWindow2.interactionSetProp(arrayOfInteractions, player2.name, 1000, 200);
             for (int i = 0;i < 3;i++)
             {
                 setTextprop(player1.Round_won[i], 96, 2);
@@ -2394,13 +2595,13 @@ void game(int& win1, int& win2, RenderWindow& window)
             }
         }
 
-        if (!interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
+        if (!interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting)// and player1.health > 0 and player2.health > 0)
         {
             Round_Interacting = true;
             // cout << "interaction mode on\n";
             interactionwindow1.update(deltatime, window);
         }
-        else if (interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting and player1.health > 0 and player2.health > 0)
+        else if (interactionwindow1.finishedInteracting and !interactionWindow2.finishedInteracting)// and player1.health > 0 and player2.health > 0)
         {
             Round_Interacting = true;
             interactionWindow2.update(deltatime, window);
@@ -2413,6 +2614,11 @@ void game(int& win1, int& win2, RenderWindow& window)
         }
         if (!PAUSE)
         {
+            // plt2.updateHorizontal(0, 1000, 400, deltatime, player1, player2);
+            //plt3.updateCircular(30, 360, 200, 1, deltatime, player1, player2);
+            //plt2.updateCircular(400, 400, 200, 1, deltatime, player1, player2);
+            //plt2.updateVertical(50, 600, 100, deltatime, player1, player2);
+                
             while (window.pollEvent(e))
             {
                 if (e.type == Event::Closed)
