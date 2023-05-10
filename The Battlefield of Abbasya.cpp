@@ -3576,7 +3576,11 @@ void game(int& win1, int& win2, RenderWindow& window)
                             //fireballs[i].theSprite.setPosition(fireballs[i].theSprite.getPosition().x, 0);
                             fireballs[i].velocity.y = 0;
                             if (player1.health <= 0)
+                            {
                                 win2++;
+                                Round_Trans = true;
+
+                            }
                         }
                         else if (fireballs[i].theSprite.getGlobalBounds().intersects(player2.hitbox.player.getGlobalBounds())&&!Round_Interacting) {
                             if (player2.health > 0)
@@ -3593,7 +3597,10 @@ void game(int& win1, int& win2, RenderWindow& window)
                             //fireballs[i].theSprite.setPosition(fireballs[i].theSprite.getPosition().x, 0);
                             fireballs[i].velocity.y = 0;
                             if (player2.health <= 0)
+                            {
                                 win1++;
+                                Round_Trans = true;
+                            }
                         }
                         else {
                             if(!Round_Interacting)
