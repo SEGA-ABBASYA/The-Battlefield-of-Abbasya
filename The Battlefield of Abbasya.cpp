@@ -59,6 +59,12 @@ Texture optionButton;
 Texture optionButton2;
 string arrayOfInteractions[100];
 
+
+// function for checking the colliding the hitbox of player and the plates
+//bool platecoliode_1(RectangleShape &, RectangleShape &);
+bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& plat_y1);
+bool plateApproxCollide(Sprite& player, RectangleShape& player_x, RectangleShape& plat_y1);
+
 struct cursor
 {
     Texture texture;
@@ -106,7 +112,7 @@ struct player
     Vector2f velocity{0, 0};
     Sprite sprite;
     Hitbox hitbox;
-    bool grounded = false, attackbool = false, hitbool = false, timereset = false;
+    bool grounded = false, attackbool = false, hitbool = false, timereset = false, isOnPlate = false;
     Text Round_won[3];
 }player1, player2;
 
@@ -125,7 +131,8 @@ public:
         sh_1.setScale(scaleX, scaleY);
     }
 
-    void updateVertical(float startY, float endY, float speed, float deltatime)
+    // NOT WORKING YET !!!!
+    void updateVertical(float startY, float endY, float speed, float deltatime, player& player1, player& player2)
     {
         float halfway = (startY + endY) / 2;
         // cancels reverse bool when passes by half distance 
@@ -147,11 +154,30 @@ public:
             platrec.move(0, speed * directionVert * deltatime);
         }
 
-        cout << directionVert << endl;
+        // cout << directionVert << endl;
+
+        // if player is standing
+        if(playerStandingOnPlate(player1))
+        {   
+            player1.isOnPlate = true;
+            cout<< "player on plate\n";
+        }
+        else
+            player1.isOnPlate = false;
+
+        if(playerStandingOnPlate(player2))
+        {
+            player2.isOnPlate = true;
+            cout << "player on plate\n";
+        }
+        else    
+            player1.isOnPlate = false;
     }
 
-    void updateHorizontal(float startX, float endX, float speed, float deltatime)
+    // WORKING :)
+    void updateHorizontal(float startX, float endX, float speed, float deltatime, player& player1, player& player2)
     {
+
         float halfway = (startX + endX) / 2;
         // cancels reverse bool when passes by half distance 
         if(approxEqual(platrec.getPosition().x ,halfway, 100))
@@ -169,22 +195,73 @@ public:
         }
         else
         {
-            cout << "moving horizontally\n";
+            //cout << "moving horizontally\n";
             // platrec.setPosition(platrec.getPosition().x + speed * direction * deltatime, platrec.getPosition().y);
             platrec.move(speed * directionHorz * deltatime, 0);
         }
+
+        // if player is standing
+        if(playerStandingOnPlate(player1))
+        {   
+            player1.grounded = true;
+            cout<< "player on plate\n";
+            player1.sprite.move(speed * directionHorz * deltatime, 0);
+            // player1.sprite.setPosition(player1.sprite.getPosition().x + speed * directionHorz * deltatime, 0);
+            // player1.sprite.setPosition(platrec.getPosition().x, player1.sprite.getPosition().y);
+        }
+        if(playerStandingOnPlate(player2))
+        {
+            player2.grounded = true;
+            cout << "player on plate\n";
+            player2.sprite.move(speed * directionHorz * deltatime, 0);
+        }
     }
 
-    void updateCircular(float defaultXPos, float defaultYPos, float radius, float speed, float deltatime)
+    // NOT WORKING YET !!!!
+    void updateCircular(float defaultXPos, float defaultYPos, float radius, float speed, float deltatime, player& player1, player& player2)
     {
         if(theta >= 6.28)
             theta = 0;
         platrec.setPosition(defaultXPos + radius * cos(theta), defaultYPos - radius * sin(theta));
         // platrec.move(radius * cos(theta) * deltatime, -radius * sin(theta) * deltatime);
         theta += speed * deltatime;
+
+        // if player is standing
+        if(playerStandingOnPlate(player1))
+        {
+            // player1.sprite.move(speed * directionHorz * deltatime, 0);
+            // player1.sprite.setPosition(defaultXPos + radius * cos(theta), 0);
+            // player1.sprite.move(player2.sprite.getPosition().x - radius * cos(theta) * deltatime, 0);
+            // player1.sprite.setPosition(platrec.getPosition().x + abs(platrec.getPosition().x - player1.sprite.getPosition().x), player1.sprite.getPosition().y);
+            player1.isOnPlate = true;
+            cout << "player on plate\n";
+        }
+        else
+            player1.isOnPlate = true;
+
+        if(playerStandingOnPlate(player2))
+        {
+            // player2.sprite.move(speed * directionHorz * deltatime, 0);
+            // player2.sprite.move(player2.sprite.getPosition().x - radius * cos(theta), 0);
+            // player2.sprite.setPosition(defaultXPos + radius * cos(theta), 0);
+            //player2.sprite.setPosition(platrec.getPosition().x, player2.sprite.getPosition().y);
+            // player2.sprite.setPosition(platrec.getPosition().x + abs(platrec.getPosition().x - player2.sprite.getPosition().x), player2.sprite.getPosition().y);
+            player2.isOnPlate = true;
+            cout << "player on plate\n";
+        }
+        else 
+            player1.isOnPlate = true;
     }
 
 private:
+    bool playerStandingOnPlate(player plyr)
+    {
+        // if(platecoliode_1(plyr.sprite, plyr.hitbox.player, platrec))
+        if(plateApproxCollide(plyr.sprite, plyr.hitbox.player, platrec))
+            return true;
+        else
+            return false;
+    }
     float theta = 0;
     float directionHorz = 1;
     float directionVert = 1;
@@ -293,7 +370,7 @@ private:
 
 public:
     int no_of_interactions = 5;
-    int max_letters_per_line = 27;
+    // int max_letters_per_line = 27;
     float timer_per_letter = 0.1;
 
     bool finishedInteracting = false;
@@ -329,6 +406,8 @@ public:
 
         // set initial scales
         frameSprite.setScale(0, 0);
+        
+        textToBeDisplayed.setScale(1, 1);
 
         // set final scales
         frameScale = {1, 1};
@@ -428,7 +507,7 @@ public:
                     else if (frameSprite.getScale().x <= 0 or frameSprite.getScale().y <= 0)
                     {
                         //cout << "destroyed" << endl;
-                         frameSprite.setScale(0, 0);
+                        frameSprite.setScale(0, 0);
                         // playerIconSprite.setScale(0, 0);
                         textToBeDisplayed.setScale(0, 0);
                         finishedInteracting = true;
@@ -1714,8 +1793,8 @@ void setprop(Sprite &, Texture &, int, int, int);
 // function for checking the colliding the hitbox of attack with the hitbox of player
 bool intersection(RectangleShape &, RectangleShape &);
 
-// function for checking the colliding the hitbox of player and the plates
-bool platecoliode_1(RectangleShape &, RectangleShape &);
+// // function for checking the colliding the hitbox of player and the plates
+// bool platecoliode_1(RectangleShape &, RectangleShape &);
 
 Texture hp_bar[12];
 
@@ -1859,6 +1938,20 @@ bool platecoliode_1(Sprite& player, RectangleShape& player_x, RectangleShape& pl
     {
         //cout << plat_y1.getGlobalBounds().top << endl;
         player.setPosition(player.getPosition().x, plat_y1.getGlobalBounds().top - player.getGlobalBounds().height / 2);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool plateApproxCollide(Sprite& player, RectangleShape& player_x, RectangleShape& plat_y1) {
+    if (player_x.getGlobalBounds().intersects(plat_y1.getGlobalBounds()) &&
+        player_x.getGlobalBounds().top + player_x.getGlobalBounds().height + 30 < plat_y1.getGlobalBounds().top)
+    {
+        //cout << plat_y1.getGlobalBounds().top << endl;
+        // player.setPosition(player.getPosition().x, plat_y1.getGlobalBounds().top - player.getGlobalBounds().height / 2);
         return true;
     }
     else
@@ -2016,8 +2109,6 @@ void game(int win1, int win2, RenderWindow& window)
 
     window.setFramerateLimit(60);
 
-
-
     power_draw();
 
     if(interactionwindow1.finishedInteracting)
@@ -2068,10 +2159,11 @@ void game(int win1, int win2, RenderWindow& window)
 
         if (!PAUSE)
         {
-            // plt1.updateHorizontal(0, 1000, 400, deltatime);
-            // plt3.updateCircular(30, 360, 200, 1, deltatime);
-            plt2.updateVertical(50, 600, 100, deltatime);
-
+            // plt2.updateHorizontal(0, 1000, 400, deltatime, player1, player2);
+            //plt3.updateCircular(30, 360, 200, 1, deltatime, player1, player2);
+            //plt2.updateCircular(400, 400, 200, 1, deltatime, player1, player2);
+            //plt2.updateVertical(50, 600, 100, deltatime, player1, player2);
+                
             while (window.pollEvent(e))
             {
                 if (e.type == Event::Closed)
@@ -2372,7 +2464,7 @@ void game(int win1, int win2, RenderWindow& window)
                 }
 
                 //Falling animation
-                if (player1.velocity.y >= 0 && !player1.grounded) {
+                if (player1.velocity.y >= 0 && !player1.grounded and !player1.isOnPlate) {
                     player1.sprite.setTexture(Fall);
                     if (timer <= 0) {
                         playerindex++;
@@ -2537,7 +2629,7 @@ void game(int win1, int win2, RenderWindow& window)
                 }
 
                 //Falling animation
-                if (player2.velocity.y >= 0 && !player2.grounded) {
+                if (player2.velocity.y >= 0 && !player2.grounded and !player2.isOnPlate) {
                     player2.sprite.setTexture(Fall2);
                     if (timer2 <= 0) {
                         index2++;
