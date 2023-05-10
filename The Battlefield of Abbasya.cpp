@@ -2010,18 +2010,22 @@ int main()
 
 void init_health_bar()
 {
-    
-    hp_bar[10].loadFromFile(path + "health_bar/100health.png");
-    hp_bar[9].loadFromFile(path + "health_bar/90health.png");
-    hp_bar[8].loadFromFile(path + "health_bar/80health.png");
-    hp_bar[7].loadFromFile(path + "health_bar/70health.png");
-    hp_bar[6].loadFromFile(path + "health_bar/60health.png");
-    hp_bar[5].loadFromFile(path + "health_bar/50health.png");
-    hp_bar[4].loadFromFile(path + "health_bar/40health.png");
-    hp_bar[3].loadFromFile(path + "health_bar/30health.png");
-    hp_bar[2].loadFromFile(path + "health_bar/20health.png");
-    hp_bar[1].loadFromFile(path + "health_bar/10health.png");
-    hp_bar[0].loadFromFile(path + "health_bar/0health.png");
+    string health_bar_foldar = "";
+
+    if (!level) { health_bar_foldar = "health_bar"; }
+    else if (level) { health_bar_foldar = "health_bar_mode2"; }
+
+    hp_bar[10].loadFromFile(path + health_bar_foldar + "/100health.png");
+    hp_bar[9].loadFromFile(path + health_bar_foldar + "/90health.png");
+    hp_bar[8].loadFromFile(path + health_bar_foldar + "/80health.png");
+    hp_bar[7].loadFromFile(path + health_bar_foldar + "/70health.png");
+    hp_bar[6].loadFromFile(path + health_bar_foldar + "/60health.png");
+    hp_bar[5].loadFromFile(path + health_bar_foldar + "/50health.png");
+    hp_bar[4].loadFromFile(path + health_bar_foldar + "/40health.png");
+    hp_bar[3].loadFromFile(path + health_bar_foldar + "/30health.png");
+    hp_bar[2].loadFromFile(path + health_bar_foldar + "/20health.png");
+    hp_bar[1].loadFromFile(path + health_bar_foldar + "/10health.png");
+    hp_bar[0].loadFromFile(path + health_bar_foldar + "/0health.png");
 
 }
 
@@ -2282,6 +2286,7 @@ void game(int& win1, int& win2, RenderWindow& window)
     RectangleShape p1_healthBar(Vector2f(305.f, 100.f));
     p1_healthBar.setScale(1.f, 1.f);
     p1_healthBar.setOrigin(p1_healthBar.getPosition().x / 2, p1_healthBar.getPosition().y / 2);
+
     P1_HealthBar_Texture = hp_bar[arr_index];
     p1_healthBar.setTexture(&P1_HealthBar_Texture);
     p1_healthBar.setPosition(50, 30);
