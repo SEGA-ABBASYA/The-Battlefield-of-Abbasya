@@ -2475,6 +2475,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                     }
 
                         //Death Animation & Round transition
+                    if (!level) {
                         if (roundelay < 0 && e.key.code == Keyboard::Enter)
                         {
                             if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
@@ -2523,6 +2524,36 @@ void game(int& win1, int& win2, RenderWindow& window)
                                 return;
                             }
                         }
+                    }
+                    else {
+                        if ((player2.health <= 0 && win2 < 2 && win1 < 2) || (player1.health <= 0 && win2 < 2 && win1 < 2))
+                        {
+                            Round_Trans = true;
+                            if (roundelay < 0 && e.key.code == Keyboard::Enter)
+                            {
+                                Deathindex = 0;
+                                if (player2.health <= 0) {
+                                    player1.Round_won[win1 + win2].setPosition(player2.Round_won[win1 + win2].getPosition());
+                                    win1++;
+                                }
+                                else if (player1.health <= 0) {
+                                    player2.Round_won[win1 + win2].setPosition(player1.Round_won[win1 + win2].getPosition());
+                                    win2++;
+                                }
+                                roundelay = 1.0f;
+                                Round_Trans = false;
+                                player1.health = 100;
+                                player2.health = 100;
+                                player1.sprite.setColor(Color::White);
+                                player2.sprite.setColor(Color::White);
+                                game(win1, win2, window);
+                                Round_Trans = false;
+                                return;
+                            }
+                        }
+
+
+                    }
                         // player 2 Jumping button
                         if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting)
                         {
@@ -2655,7 +2686,75 @@ void game(int& win1, int& win2, RenderWindow& window)
                 }
             }
             else {
+                if ((player2.health <= 0 && win2 < 2 && win1 < 2) || (player1.health <= 0 && win2 < 2 && win1 < 2))
+                {
+                    roundelay -= deltatime;
+                    if (player1.health <= 0) {
+                        if (player2.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
+                            player2.Round_won[win1 + win2].move(0, 5);
+                        if (!level) {
+                            player1.sprite.setTexture(Death);
+                            player1.sprite.setColor(Color(128, 0, 0));
+                            if (timer <= 0) {
+                                if (Deathindex != 9)
+                                    Deathindex++;
+                                Deathindex = Deathindex % 10;
+                                player1.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
+                                timer = delay;
+                            }
+                            else
+                                timer -= deltatime;
+                        }
 
+                        else {
+                            player1.sprite.setTexture(Death1);
+                            player1.sprite.setColor(Color(128, 0, 0));
+                            if (timer <= 0) {
+                                if (Deathindex < 3)
+                                    Deathindex++;
+
+                                Deathindex = Deathindex % 4;
+                                player1.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
+                                timer = delay + 0.15;
+                            }
+                            else
+                                timer -= deltatime;
+
+                        }
+                    }
+                    if (player2.health <= 0) {
+                        if (player1.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
+                            player1.Round_won[win1 + win2].move(0, 5);
+                        if (!level) {
+                            player2.sprite.setColor(Color(128, 0, 0));
+                            player2.sprite.setTexture(Death2);
+                            if (timer2 <= 0) {
+                                if (Deathindex != 9)
+                                    Deathindex++;
+                                Deathindex = Deathindex % 10;
+                                player2.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
+                                timer2 = delay2;
+                            }
+                            else
+                                timer2 -= deltatime;
+                        }
+                        else {
+
+                            player2.sprite.setTexture(Death3);
+                            player2.sprite.setColor(Color(128, 0, 0));
+                            if (timer <= 0) {
+                                if (Deathindex < 5)
+                                    Deathindex++;
+
+                                Deathindex = Deathindex % 6;
+                                player2.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
+                                timer = delay + 0.15;
+                            }
+                            else
+                                timer -= deltatime;
+                        }
+                    }
+                }
             }
                 for (int i = 0; i < 2; i++) {
                     if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds())) {
