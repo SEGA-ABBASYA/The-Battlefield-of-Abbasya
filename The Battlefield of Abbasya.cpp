@@ -2578,9 +2578,10 @@ void game(int& win1, int& win2, RenderWindow& window)
                 }
 
                 // Round Transition & Death
+            if (!level) {
                 if (player2.health <= 0 || player1.health <= 0)
                 {
-                    if(roundelay < -1)
+                    if (roundelay < -1)
                     {
                         if (PressEnter.getPosition().y < window.getSize().y / 4 + 90)
                             PressEnter.move(0, 5);
@@ -2602,21 +2603,21 @@ void game(int& win1, int& win2, RenderWindow& window)
                             else
                                 timer -= deltatime;
                         }
-                        
+
                         else {
                             player1.sprite.setTexture(Death1);
                             player1.sprite.setColor(Color(128, 0, 0));
                             if (timer <= 0) {
-                                if(Deathindex<3)
-                                Deathindex++;
+                                if (Deathindex < 3)
+                                    Deathindex++;
 
                                 Deathindex = Deathindex % 4;
                                 player1.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
-                                timer = delay+0.15;
+                                timer = delay + 0.15;
                             }
                             else
                                 timer -= deltatime;
-                        
+
                         }
                     }
                     if (player2.health <= 0) {
@@ -2652,6 +2653,10 @@ void game(int& win1, int& win2, RenderWindow& window)
                         }
                     }
                 }
+            }
+            else {
+
+            }
                 for (int i = 0; i < 2; i++) {
                     if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds())) {
                         toucher2 = true;
