@@ -1325,7 +1325,7 @@ void Volume(RenderWindow& volumewindow)
         Winning.setVolume(volume_);
         NameEntry.setVolume(volume_);
 
-        if (SFX) {
+        if (!SFX) {
             
             button[1].setTexture(buttons[7]);
         }
