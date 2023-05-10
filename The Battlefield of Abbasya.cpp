@@ -12,9 +12,9 @@
 
 using namespace sf;
 using namespace std;
-string path = "/Users/yoyo/#COLLEGE/The-Battlefield-of-Abbasya/";
+//string path = "/Users/yoyo/#COLLEGE/The-Battlefield-of-Abbasya/";
 // string path = resourcePath();
- //string path = "";
+string path = "";
 
 // 0  -> MainMenu
 // 1  -> Choose Your Hero
@@ -68,34 +68,34 @@ Sprite vol_arr[11];
 Font menufont;
 
 // Textures
-    Texture Floor;
-    Texture Jumping;
-    Texture Jumping2;
-    Texture Running2;
-    Texture Running;
-    Texture Idle;
-    Texture Idle2;
-    Texture Fall;
-    Texture Fall2;
-    Texture Back[3];
-    Texture Back1[3];
-    Texture Attacking;
-    Texture Attacking2;
-    Texture Hit;
-    Texture Hit2;
-    Texture Death;
-    Texture Death2;
-    Texture P1_HealthBar_Texture;
-    Texture P2_HealthBar_Texture;
-    Font ourFont;
-    Texture plateform_1;
-    Texture plateform_2;
-    Texture plateform_3;
-    Texture plateform_4;
-    Texture plateform_round3;
-    Texture Run1, Idle1, Attack1, Death1, Hit1, Jump1, Fall1;
-    Texture Run3, Idle3, Attack3, Death3, Hit3, Jump3;
-    Text PressEnter;
+Texture Floor;
+Texture Jumping;
+Texture Jumping2;
+Texture Running2;
+Texture Running;
+Texture Idle;
+Texture Idle2;
+Texture Fall;
+Texture Fall2;
+Texture Back[3];
+Texture Back1[3];
+Texture Attacking;
+Texture Attacking2;
+Texture Hit;
+Texture Hit2;
+Texture Death;
+Texture Death2;
+Texture P1_HealthBar_Texture;
+Texture P2_HealthBar_Texture;
+Font ourFont;
+Texture plateform_1;
+Texture plateform_2;
+Texture plateform_3;
+Texture plateform_4;
+Texture plateform_round3;
+Texture Run1, Idle1, Attack1, Death1, Hit1, Jump1, Fall1;
+Texture Run3, Idle3, Attack3, Death3, Hit3, Jump3;
+Text PressEnter;
 Texture optionButton;
 Texture optionButton2;
 string arrayOfInteractions[100];
@@ -422,7 +422,10 @@ bool powercoliodeheal(Sprite& player, RectangleShape& player_x, Sprite& Powers)
 }
 
 // power end
-
+struct Interaction {
+    string textInteraction;
+    Sound voiceInteraction;
+};
 
 struct interactionWindow 
 {
