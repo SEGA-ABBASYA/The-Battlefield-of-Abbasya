@@ -2257,18 +2257,22 @@ int main()
 
 void init_health_bar()
 {
-    
-    hp_bar[10].loadFromFile(path + "health_bar/100health.png");
-    hp_bar[9].loadFromFile(path + "health_bar/90health.png");
-    hp_bar[8].loadFromFile(path + "health_bar/80health.png");
-    hp_bar[7].loadFromFile(path + "health_bar/70health.png");
-    hp_bar[6].loadFromFile(path + "health_bar/60health.png");
-    hp_bar[5].loadFromFile(path + "health_bar/50health.png");
-    hp_bar[4].loadFromFile(path + "health_bar/40health.png");
-    hp_bar[3].loadFromFile(path + "health_bar/30health.png");
-    hp_bar[2].loadFromFile(path + "health_bar/20health.png");
-    hp_bar[1].loadFromFile(path + "health_bar/10health.png");
-    hp_bar[0].loadFromFile(path + "health_bar/0health.png");
+    string health_bar_foldar = "";
+
+    if (!level) { health_bar_foldar = "health_bar"; }
+    else if (level) { health_bar_foldar = "health_bar_mode2"; }
+
+    hp_bar[10].loadFromFile(path + health_bar_foldar + "/100health.png");
+    hp_bar[9].loadFromFile(path + health_bar_foldar + "/90health.png");
+    hp_bar[8].loadFromFile(path + health_bar_foldar + "/80health.png");
+    hp_bar[7].loadFromFile(path + health_bar_foldar + "/70health.png");
+    hp_bar[6].loadFromFile(path + health_bar_foldar + "/60health.png");
+    hp_bar[5].loadFromFile(path + health_bar_foldar + "/50health.png");
+    hp_bar[4].loadFromFile(path + health_bar_foldar + "/40health.png");
+    hp_bar[3].loadFromFile(path + health_bar_foldar + "/30health.png");
+    hp_bar[2].loadFromFile(path + health_bar_foldar + "/20health.png");
+    hp_bar[1].loadFromFile(path + health_bar_foldar + "/10health.png");
+    hp_bar[0].loadFromFile(path + health_bar_foldar + "/0health.png");
 
 }
 
