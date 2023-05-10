@@ -1727,8 +1727,6 @@ void WINNER(RenderWindow& mainwindow) {
 
     while (mainwindow.isOpen()) {
 
-        cout << win1 << ' ' << win2 << endl;
-
         while (mainwindow.pollEvent(e)) {
 
             if (e.type == Event::Closed) {
