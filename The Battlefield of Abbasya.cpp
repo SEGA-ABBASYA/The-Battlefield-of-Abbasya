@@ -52,6 +52,7 @@ bool PAUSE = false;
 bool Round_Trans = false;
 bool Round_Interacting = false;
 bool Deathfall = true;
+bool SFX = true;
 int volume_ = 100;
 bool name__ = false;
 Sprite vol_arr[11];
@@ -63,6 +64,10 @@ string arrayOfInteractions[100];
 //sounds
 Music Roundmusic[3];
 Music MainmenuMusic;
+Music Winning;
+Music NameEntry;
+Sound Test;
+SoundBuffer Tester;
 
 struct cursor
 {
@@ -90,6 +95,7 @@ struct cursor
         window.draw(sprite);
     }
 } cur;
+
 struct Hitbox
 {
     RectangleShape attack;
@@ -104,6 +110,7 @@ struct Hitbox
         x.setOrigin(y / 2, -6);
     }
 };
+
 struct player
 {
     string name;
@@ -114,6 +121,7 @@ struct player
     bool grounded = false, attackbool = false, hitbool = false, timereset = false;
     Text Round_won[3];
 }player1, player2;
+
 struct plates {
     RectangleShape platrec;
 
@@ -401,6 +409,9 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
 
         if (Buttonarr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
         {
+            if (SFX)
+                Test.play();
+
             if (i == 4)
             {
                 Buttonarr[i].setScale(1.6f, 1.6f);
@@ -413,7 +424,9 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
 
             if (Mouse::isButtonPressed(Mouse::Left))
             {
-                MainmenuMusic.stop();
+                if(i!=4)
+                    MainmenuMusic.pause();
+
                 Buttonarr[i].setScale(1.f, 1.f);
                 arr[i].setFillColor(Color(187, 220, 244));
                 return i;
@@ -746,6 +759,8 @@ void MainMenu(RenderWindow& mainwindow)
     controll2.loadFromFile("Main Menu/controller_grey.png");
     MainmenuMusic.openFromFile("Sounds/Round Robin Inn (LOOP).wav");
     MainmenuMusic.setLoop(true);
+    Tester.loadFromFile("Sounds/Attacksound.wav");
+    Test.setBuffer(Tester);
 
 
     Text select[6];
@@ -1192,6 +1207,8 @@ void Volume(RenderWindow& volumewindow)
         Roundmusic[1].setVolume(volume_);
         Roundmusic[2].setVolume(volume_);
         MainmenuMusic.setVolume(volume_);
+        Winning.setVolume(volume_);
+        NameEntry.setVolume(volume_);
 
         volumewindow.clear();
 
@@ -1397,6 +1414,9 @@ void name(struct player, RenderWindow& namewindow) {
 
     Texture nameback;
     nameback.loadFromFile("Name Entry/name enternce.png");
+    NameEntry.openFromFile("Sounds/The-Nightingale.wav");
+    NameEntry.play();
+    NameEntry.setLoop(true);
     Sprite namebackground;
     namebackground.setTexture(nameback);
 
@@ -1531,6 +1551,7 @@ void name(struct player, RenderWindow& namewindow) {
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     name__ = false;
+                    NameEntry.stop();
                     Roundmusic[0].play();
                     return;
                 }
@@ -1625,7 +1646,6 @@ void name(struct player, RenderWindow& namewindow) {
 
 void WINNER(RenderWindow& mainwindow) {
 
-    Font Canterbury;
     Text WinP1;
     Text WinP2;
 
@@ -1671,6 +1691,9 @@ void WINNER(RenderWindow& mainwindow) {
     WinP1.setString(player1.name + " IS VICTORIOUS !");
     WinP2.setString(player2.name + " IS VICTORIOUS !");
 
+    Winning.openFromFile("Sounds/Intro__20th_Century_Fox.wav");
+    Winning.play();
+
     setTextprop(WinP1, 64, 2);
     setTextprop(WinP2, 64, 2);
 
@@ -1715,6 +1738,7 @@ void WINNER(RenderWindow& mainwindow) {
             if (e.type == Event::KeyPressed) {
 
                 if (e.key.code == Keyboard::Enter) {
+                    Winning.stop();
                     
                     return;
                 }
@@ -1999,7 +2023,7 @@ void game(int& win1, int& win2, RenderWindow& window)
     plateform_3.loadFromFile("Plates/thirdplate.png");
     plateform_round3.loadFromFile("Plates/plate_Round3.png");
     plateform_4.loadFromFile("Plates/fourthplate.png");
-    Roundmusic[0].openFromFile("Sounds/Ludum Dare 38 - Track 4.wav");
+    Roundmusic[0].openFromFile("Sounds/Round 1 music.wav");
     Roundmusic[1].openFromFile("Sounds/Round 2 music.wav");
     Roundmusic[2].openFromFile("Sounds/Round 3 Theme ELDEN RING.wav");
 
@@ -2026,6 +2050,7 @@ void game(int& win1, int& win2, RenderWindow& window)
         plt4.plat_set(plateform_4, plt4.platrec, 150, 50, 100, 300, 1, 1);
         plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 1, 1);
         Roundmusic[1].play();
+        Roundmusic[1].setPlayingOffset(seconds(2.f));
         Roundmusic[1].setLoop(true);
     }
     else if (win1 + win2 == 2)
@@ -2171,35 +2196,31 @@ void game(int& win1, int& win2, RenderWindow& window)
                         player1.attackbool = true;
                         attacktimer = 0;
                         attackindex = 0;
-                        //Attacksound.play();
-                        if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool) {
+                        // Attacksound.play();
+                        if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
+                        {
+                            if (toucher2 == false || player2.health == 10) {
+                                player2.health -= 10;
 
-
-                            // Attacksound.play();
-                            if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
+                            }
+                            else {
+                                player2.health -= attackpow1;
+                            }
+                            player2.hitbool = true;
+                            if (player2.health == 0)
                             {
-                                if (toucher2 == false || player2.health == 10) {
-                                    player2.health -= 10;
-
-                                }
-                                else {
-                                    player2.health -= attackpow1;
-                                }
-                                player2.hitbool = true;
-                                if (player2.health == 0)
-                                {
-                                    win1++;
-                                    Round_Trans = true;
-                                }
-                                hittimer2 = 0.3f;
-                                arr_index = update_healthbar(player2.health);
-                                if (arr_index != -1)
-                                {
-                                    P2_HealthBar_Texture = hp_bar[arr_index];
-                                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
-                                }
+                                win1++;
+                                Round_Trans = true;
+                            }
+                            hittimer2 = 0.3f;
+                            arr_index = update_healthbar(player2.health);
+                            if (arr_index != -1)
+                            {
+                                P2_HealthBar_Texture = hp_bar[arr_index];
+                                p2_healthBar.setTexture(&P2_HealthBar_Texture);
                             }
                         }
+                        
                     }
 
                         //Death Animation & Round transition
@@ -2344,6 +2365,8 @@ void game(int& win1, int& win2, RenderWindow& window)
                             timer2 -= deltatime;
                     }
                 }
+
+                //Power ups intersection Player 1
                 for (int i = 0; i < 2; i++) {
                     if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds())) {
                         toucher2 = true;
@@ -2366,6 +2389,8 @@ void game(int& win1, int& win2, RenderWindow& window)
                         p1_healthBar.setTexture(&P1_HealthBar_Texture);
                     }
                 }
+
+                //Power ups intersection Player 2
                 for (int i = 0; i < 2; i++) {
                     if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds()))
                     {
@@ -2405,7 +2430,6 @@ void game(int& win1, int& win2, RenderWindow& window)
                     }
                 }
                 //PLAYER 1
-                cout << win1 << ' ' << win2 << endl;
 
                 //Gravity movement
                 player1.sprite.move(0, player1.velocity.y);
