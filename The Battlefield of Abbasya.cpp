@@ -62,6 +62,7 @@ bool Round_Trans = false;
 bool Round_Interacting = false;
 bool Deathfall = true;
 bool SFX = true;
+bool isPlayingSFX = true;
 int volume_ = 100;
 bool name__ = false;
 Sprite vol_arr[11];
@@ -93,6 +94,8 @@ Texture plateform_2;
 Texture plateform_3;
 Texture plateform_4;
 Texture plateform_round3;
+Texture plateform_r3;
+Texture plateform_r1;
 Texture Run1, Idle1, Attack1, Death1, Hit1, Jump1, Fall1;
 Texture Run3, Idle3, Attack3, Death3, Hit3, Jump3;
 Text PressEnter;
@@ -105,8 +108,14 @@ Music Roundmusic[3];
 Music MainmenuMusic;
 Music Winning;
 Music NameEntry;
-Sound Test;
-SoundBuffer Tester;
+Sound Hover;
+Sound Click;
+Sound Attacksound;
+Sound BeingHit;
+SoundBuffer Clicker;
+SoundBuffer Hoverer;
+SoundBuffer Attacksoundd;
+SoundBuffer BeingHitt;
 
 
 // function for checking the colliding the hitbox of player and the plates
@@ -450,7 +459,7 @@ private:
         arr[2] = "I am delighted to be here";
         arr[3] = "You may not indure the \nslays of my mighty sword";
         arr[4] = "May the odds be in your \nfavor";
-        arr[5] = "";
+        arr[5] = "I'm not a king \nI'm not a god \nI AM WORSE";
         arr[6] = "";
         arr[7] = "";
         arr[8] = "";
@@ -460,7 +469,7 @@ private:
     }
 
 public:
-    int no_of_interactions = 5;
+    int no_of_interactions = 6;
     // int max_letters_per_line = 27;
     float timer_per_letter = 0.1;
 
@@ -503,7 +512,7 @@ public:
         // set final scales
         frameScale = {1, 1};
 
-        arcadeClassic.loadFromFile(path + "ArcadeClassic.ttf");
+        arcadeClassic.loadFromFile(path + "Canterbury.ttf");
         textToBeDisplayed.setFont(arcadeClassic);
         pressSpaceToSkip.setFont(arcadeClassic);
         pressSpaceToSkip.setString("Press Space To Skip");
@@ -669,18 +678,22 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
 
         if (Buttonarr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
         {
-            if (SFX)
-                Test.play();
+            //if (SFX && isPlayingSFX)
+            //{
+            //    Click.play();
+            //    isPlayingSFX = false;
+            //}
 
             if (i == 4)
             {
                 Buttonarr[i].setScale(1.6f, 1.6f);
                 Buttonarr[i].setTexture(&optionButton);
             }
-
             else
                 Buttonarr[i].setScale(1.05f, 1.05f);
+
             arr[i].setFillColor(Color::White);
+
             if (i == 5) {
                 arr[6].setFillColor(Color::White);
             }
@@ -695,8 +708,10 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
                 return i;
             }
         }
+        
         else
         {
+            //isPlayingSFX = true;
             if (i == 4)
             {
                 Buttonarr[i].setScale(1.5f, 1.5f);
@@ -727,6 +742,7 @@ void setTextprop(Text& text , int x,int y) {
 int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
     Mouse mouse;
+    Event e;
     for (int i = 0; i < 4; i++)
     {
 
@@ -1025,8 +1041,7 @@ void MainMenu(RenderWindow& mainwindow)
     controll2.loadFromFile("Main Menu/controller_grey.png");
     MainmenuMusic.openFromFile("Sounds/Round Robin Inn (LOOP).wav");
     MainmenuMusic.setLoop(true);
-    Tester.loadFromFile("Sounds/Attacksound.wav");
-    Test.setBuffer(Tester);
+
 
 
     Text select[7];
@@ -1339,7 +1354,7 @@ void Volume(RenderWindow& volumewindow)
     volume[0].setString("Volume");
     volume[0].setCharacterSize(60);
     volume[0].setFillColor(Color::Black);
-    volume[0].setPosition((volumewindow.getSize().x / 2)-85, 20);
+    volume[0].setPosition((volumewindow.getSize().x / 2) - 85, 20);
 
     volume[1].setFont(volumefont);
     volume[1].setString("Back");
@@ -1351,7 +1366,7 @@ void Volume(RenderWindow& volumewindow)
     volume[2].setString("Sound");
     volume[2].setCharacterSize(60);
     volume[2].setFillColor(Color::Black);
-    volume[2].setPosition(volumewindow.getSize().x / 2 -465, (volumewindow.getSize().y / 2) + 75);
+    volume[2].setPosition(volumewindow.getSize().x / 2 - 465, (volumewindow.getSize().y / 2) + 75);
 
     volume[3].setFont(volumefont);
     volume[3].setString("SFX");
@@ -1375,7 +1390,7 @@ void Volume(RenderWindow& volumewindow)
     buttons[5].loadFromFile(path + "Volume Bar/mute_frame.png");
     buttons[6].loadFromFile(path + "Volume Bar/sfx mute.png");
     buttons[7].loadFromFile(path + "Volume Bar/muted1.png");
- 
+
     Sprite button[8];
     for (int i = 0; i < 7; i++) {
         button[i].setTexture(buttons[i]);
@@ -1383,8 +1398,8 @@ void Volume(RenderWindow& volumewindow)
     button[7].setTexture(buttons[5]);
 
     button[0].setOrigin(150, 0);
-    button[0].setPosition((volumewindow.getSize().x / 2)+10, 20);
-    
+    button[0].setPosition((volumewindow.getSize().x / 2) + 10, 20);
+
     button[1].setOrigin(0, 0);
     button[1].setScale(0.9, 0.9);//sfx mute
     button[1].setPosition(volumewindow.getSize().x / 2 + 100, (volumewindow.getSize().y / 2) + 60);
@@ -1407,10 +1422,10 @@ void Volume(RenderWindow& volumewindow)
     button[6].setPosition(volumewindow.getSize().x / 2 - 150, (volumewindow.getSize().y / 2) + 70);
 
     button[7].setScale(-0.3, 0.3);//frame sfx
-    button[7].setPosition(volumewindow.getSize().x / 2 +500, (volumewindow.getSize().y / 2) + 70);
+    button[7].setPosition(volumewindow.getSize().x / 2 + 500, (volumewindow.getSize().y / 2) + 70);
 
     Texture vol[11];
-    
+
     vol[10].loadFromFile(path + "Volume Bar/New_HealthBar100.png");
     vol[9].loadFromFile(path + "Volume Bar/New_HealthBar90.png");
     vol[8].loadFromFile(path + "Volume Bar/New_HealthBar80.png");
@@ -1430,7 +1445,7 @@ void Volume(RenderWindow& volumewindow)
     for (int i = 0; i < 11; i++) {
         vol_arr[i].setScale(1, 1);
         vol_arr[i].setOrigin(vol[i].getSize().x / 2, vol[i].getSize().y / 2);
-        vol_arr[i].setPosition(volumewindow.getSize().x / 2, volumewindow.getSize().y / 2-47);
+        vol_arr[i].setPosition(volumewindow.getSize().x / 2, volumewindow.getSize().y / 2 - 47);
 
     }
 
@@ -1443,6 +1458,7 @@ void Volume(RenderWindow& volumewindow)
             {
                 volumewindow.close();
             }
+
             if (button[4].getGlobalBounds().contains(mouse.getPosition(volumewindow).x, mouse.getPosition(volumewindow).y)) {
 
                 button[4].setOrigin(44, 0);
@@ -1457,7 +1473,7 @@ void Volume(RenderWindow& volumewindow)
             {
                 button[4].setScale(1, 1);
             }
-            
+
             if (button[3].getGlobalBounds().contains(mouse.getPosition(volumewindow).x, mouse.getPosition(volumewindow).y)) {
 
                 button[3].setOrigin(0, 0);
@@ -1500,12 +1516,12 @@ void Volume(RenderWindow& volumewindow)
                     else
                         SFX = false;
                 }
-                
+
             }
             else
             {
                 button[1].setScale(0.9, 0.9);
-                
+
             }
             if (button[2].getGlobalBounds().contains(mouse.getPosition(volumewindow).x, mouse.getPosition(volumewindow).y)) {
 
@@ -1530,14 +1546,14 @@ void Volume(RenderWindow& volumewindow)
         Winning.setVolume(volume_);
         NameEntry.setVolume(volume_);
 
-        if (SFX) {
-            
+        if (!SFX) {
+
             button[1].setTexture(buttons[7]);
         }
         else {
-            
+
             button[1].setTexture(buttons[1]);
-            
+
         }
         volumewindow.clear();
 
@@ -1558,6 +1574,26 @@ void Volume(RenderWindow& volumewindow)
         cur.draw(volumewindow);
 
         volumewindow.display();
+    }
+}
+
+
+    
+
+// power movment for the survival
+bool fall = false;
+
+void powgame2(RectangleShape powers[3]) {
+    int x = rand() % 1280;
+    int index = rand() % 3;
+    if (timerpow.getElapsedTime().asSeconds() >= 12) {
+        powers[index].setPosition(x, -150);
+        fall = false;
+        timerpow.restart();
+    }
+    if (powers[index].getPosition().y > 800 && !fall) {
+        fall = true;
+        timerpow.restart();
 
     }
 }
@@ -2162,6 +2198,9 @@ int main()
     Back[0].loadFromFile("Background.jpg");
     Back[1].loadFromFile("background2.jpg");
     Back[2].loadFromFile("Round3_Background.jpg");
+    Back1[0].loadFromFile("backr11.png");
+    Back1[1].loadFromFile("backr2.png");
+    Back1[2].loadFromFile("backr3.png");
     Idle.loadFromFile("Player 1/_Idle.png");
     Idle2.loadFromFile("Player 2/Idle2.png");
     Running2.loadFromFile("Player 2/Run2.png");
@@ -2188,14 +2227,30 @@ int main()
     plateform_3.loadFromFile("Plates/thirdplate.png");
     plateform_round3.loadFromFile("Plates/plate_Round3.png");
     plateform_4.loadFromFile("Plates/fourthplate.png");
+    plateform_r1.loadFromFile("plat_g2_1.png");
+    plateform_r3.loadFromFile("k2.png");
     Run3.loadFromFile("Wizard/Run.png");
     Idle3.loadFromFile("Wizard/Idle.png");
     Attack3.loadFromFile("Wizard/Fireball.png");
     Death3.loadFromFile("Wizard/Dead.png");
     Hit3.loadFromFile("Wizard/Hurt.png");
     Jump3.loadFromFile("Wizard/Jump.png");
+    Attacksoundd.loadFromFile("Sounds/sword-slash-4.wav");
+    BeingHitt.loadFromFile("Sounds/Realistic-Hit-Sound-Effect-128.wav");
+    Clicker.loadFromFile("Sounds/zapsplat_multimedia_button_press_plastic_click_001_36868.wav");
+    Hoverer.loadFromFile("Sounds/zapsplat_multimedia_button_click_bright_002_92099.wav");
+
+    Click.setBuffer(Clicker);
+    Hover.setBuffer(Hoverer);
+    Attacksound.setBuffer(Attacksoundd);
+    BeingHit.setBuffer(BeingHitt);
 
     get_window.setFramerateLimit(60);
+    timerpow.restart();
+    for (int i = 0; i < 3; i++) {
+        Powers_sp[i].setScale(0.5f, 0.5f);
+        Powers_sp[i].setPosition(0, 1000);
+    }
 
     while (get_window.isOpen())
     {
@@ -2397,7 +2452,8 @@ bool plateApproxCollide(Sprite& player, RectangleShape& player_x, RectangleShape
         return false;
     }
 }
-
+bool powertim = false;
+bool powertim2 = false;
 void game(int& win1, int& win2, RenderWindow& window)
 {
     RectangleShape fire_reload(Vector2f(1280, 5));
@@ -2449,36 +2505,62 @@ void game(int& win1, int& win2, RenderWindow& window)
     Sprite background1(Back1[win1 + win2]);
 
     // setting prop to plates
-    if(win1 + win2 == 0)
-    {
-        plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
-        plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
-        plt3.plat_set(plateform_1, plt3.platrec, 150, 50, 100, 450, 1, 1);
-        plt5.plat_set(plateform_1, plt5.platrec, 150, 50, 1000, 300, 0, 0);
-        plt4.plat_set(plateform_2, plt4.platrec, 1280, 50, 0, 650, 1, 1);
+    if (win1 + win2 == 0) {
+        if (!level) {
+            plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
+            plt2.plat_set(plateform_2, plt2.platrec, 450, 50, 400, 400, 1, 1);
+            plt3.plat_set(plateform_1, plt3.platrec, 150, 50, 100, 450, 1, 1);
+            plt5.plat_set(plateform_1, plt5.platrec, 150, 50, 1000, 300, 0, 0);
+            plt4.plat_set(plateform_2, plt4.platrec, 1280, 50, 0, 650, 1, 1);
+        }
+        else {
+
+            plt1.plat_set(plateform_r1, plt1.platrec, 150, 50, 1000, 450, 1, 1);
+            plt2.plat_set(plateform_r1, plt2.platrec, 450, 50, 400, 400, 1, 1);
+            plt3.plat_set(plateform_r1, plt3.platrec, 150, 50, 100, 450, 1, 1);
+            plt5.plat_set(plateform_r1, plt5.platrec, 150, 50, 1000, 300, 0, 0);
+            plt4.plat_set(plateform_r1, plt4.platrec, 1280, 50, 0, 680, 1, 1);
+        }
         Roundmusic[0].play();
         Roundmusic[0].setLoop(true);
     }
-    else if (win1 + win2 == 1) 
-    {
-        plt1.plat_set(plateform_3, plt1.platrec, 150, 50, 1000, 500, 1, 1);
-        plt2.plat_set(plateform_4, plt2.platrec, 450, 50, 400, 400, 1, 1);
-        plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 500, 1, 1);
-        plt4.plat_set(plateform_4, plt4.platrec, 150, 50, 100, 300, 1, 1);
-        plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 1, 1);
+
+    if (win1 + win2 == 1) {
+        if (!level) {
+            plt1.plat_set(plateform_3, plt1.platrec, 150, 50, 1000, 500, 1, 1);
+            plt2.plat_set(plateform_4, plt2.platrec, 450, 50, 400, 400, 1, 1);
+            plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 500, 1, 1);
+            plt4.plat_set(plateform_4, plt4.platrec, 150, 50, 100, 300, 1, 1);
+            plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 1, 1);
+        }
+        else {
+            plt1.plat_set(plateform_r3, plt1.platrec, 150, 50, 1000, 500, 1, 1);
+            plt2.plat_set(plateform_r3, plt2.platrec, 450, 50, 400, 400, 1, 1);
+            plt3.plat_set(plateform_r3, plt3.platrec, 150, 50, 100, 500, 1, 1);
+            plt4.plat_set(plateform_r3, plt4.platrec, 150, 50, 100, 300, 1, 1);
+            plt5.plat_set(plateform_r3, plt5.platrec, 150, 50, 1000, 300, 1, 1);
+        }
         Roundmusic[1].play();
-        Roundmusic[1].setPlayingOffset(seconds(2.f));
         Roundmusic[1].setLoop(true);
     }
-    else if (win1 + win2 == 2)
+    if (win1 + win2 == 2)
     {
-        plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 0, 0);
-        plt2.plat_set(plateform_round3, plt2.platrec, 750, 70, 250, 450, 1, 1);
-        plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 0, 0);
-        plt4.plat_set(plateform_2, plt4.platrec, 150, 50, 100, 300, 0, 0);
-        plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 0, 0);
+        if (!level) {
+            plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 0, 0);
+            plt2.plat_set(plateform_round3, plt2.platrec, 750, 70, 250, 450, 1, 1);
+            plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 0, 0);
+            plt4.plat_set(plateform_2, plt4.platrec, 150, 50, 100, 300, 0, 0);
+            plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 0, 0);
+        }
+        else {
+            plt1.plat_set(plateform_1, plt1.platrec, 150, 50, 1000, 450, 0, 0);
+            plt2.plat_set(plateform_round3, plt2.platrec, 750, 50, 250, 450, 1, 1);
+            plt3.plat_set(plateform_3, plt3.platrec, 150, 50, 100, 450, 0, 0);
+            plt4.plat_set(plateform_2, plt4.platrec, 150, 50, 100, 300, 0, 0);
+            plt5.plat_set(plateform_3, plt5.platrec, 150, 50, 1000, 300, 0, 0);
+        }
         Roundmusic[2].play();
-        Roundmusic[2].setPlayingOffset(seconds(20.f));
+        Roundmusic[2].setPlayingOffset(seconds(18.f));
         Roundmusic[2].setLoop(true);
     }
 
@@ -2502,7 +2584,7 @@ void game(int& win1, int& win2, RenderWindow& window)
     power_draw();
    
     if (win1 + win2 == 0) {
-        if(!level)
+        if (!level)
             setprop(player1.sprite, Idle, 3, 320, 480);
         else
             setprop3(player1.sprite, Idle1, 1.7, 320, 480);
@@ -2510,10 +2592,22 @@ void game(int& win1, int& win2, RenderWindow& window)
             setprop(player2.sprite, Idle2, -3, 960, 480);
         else
             setprop3(player2.sprite, Idle, -1.7, 960, 480);
-        setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1070, 425);
-        setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 630, 375);
-        setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 175, 425);
-        
+        if (!level) {
+            setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 10700, 4250);
+            setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 6300, 3750);
+            setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 1750, 4250);
+            powertim = true;
+            timerpow.restart();
+        }
+        else {
+            power_draw();
+            /*setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1750, 275);
+            setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 6350, 375);
+            setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 10750, 275);*/
+            powgame2(Powers_sp);
+            powertim2 = true;
+            timerpow.restart();
+        }
     }
     else if (win1 + win2 == 1)
     {
@@ -2525,9 +2619,21 @@ void game(int& win1, int& win2, RenderWindow& window)
             setprop(player2.sprite, Idle2, -3, 1050, 350);
         else
             setprop3(player2.sprite, Idle3, -1.7, 1050, 350);
-        setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 175, 275);
-        setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 635, 375);
-        setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 1075, 275);
+        if (!level) {
+            setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1750, 275);
+            setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 6350, 375);
+            setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 10750, 275);
+            powertim = true;
+            timerpow.restart();
+        }
+        else {
+            setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1750, 275);
+            setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 6350, 375);
+            setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 10750, 275);
+            powgame2(Powers_sp);
+            powertim2 = true;
+            timerpow.restart();
+        }
     }
     else if (win1 + win2 == 2)
     {
@@ -2640,18 +2746,18 @@ void game(int& win1, int& win2, RenderWindow& window)
                         if (!PauseMenu(window))
                         {
                             PauseMenu(window);
-                            if(!level)
+                            if (!level)
                                 setprop(player1.sprite, Idle, 3, 320, 480);
                             else
                                 setprop3(player1.sprite, Idle1, 1.7, 320, 480);
-                            if(!level)
+                            if (!level)
                                 setprop(player2.sprite, Idle2, -3, 960, 480);
                             else
                                 setprop3(player2.sprite, Idle3, -1.7, 960, 480);
                             return;
                         }
                     }
-                    
+
                     //player 1 Jumping button
                     if (e.key.code == Keyboard::W && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans && !Round_Interacting) {
                         timer = 0;
@@ -2665,9 +2771,14 @@ void game(int& win1, int& win2, RenderWindow& window)
                         player1.attackbool = true;
                         attacktimer = 0;
                         attackindex = 0;
-                        // Attacksound.play();
+
+
+                        if(SFX && !level)
+                            Attacksound.play();
                         if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
                         {
+                            if(SFX)
+                                BeingHit.play();
                             if (toucher2 == false || player2.health == 10) {
                                 player2.health -= 10;
 
@@ -2675,12 +2786,12 @@ void game(int& win1, int& win2, RenderWindow& window)
                             else {
                                 player2.health -= attackpow1;
                             }
-                            player2.hitbool = true;
                             if (player2.health == 0)
                             {
                                 win1++;
                                 Round_Trans = true;
                             }
+                            player2.hitbool = true;
                             hittimer2 = 0.3f;
                             arr_index = update_healthbar(player2.health);
                             if (arr_index != -1)
@@ -2689,112 +2800,140 @@ void game(int& win1, int& win2, RenderWindow& window)
                                 p2_healthBar.setTexture(&P2_HealthBar_Texture);
                             }
                         }
-                        
+
+                    }
+                    //Death Animation & Round transition
+                    if (roundelay < 0 && e.key.code == Keyboard::Enter)
+                    {
+                        if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
+                        {
+                            Deathindex = 0;
+                            Roundmusic[win1 + win2 - 1].stop();
+                            if (player2.health == 0) {
+                                player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                                PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                            }
+                            else if (player1.health == 0) {
+                                player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                                PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                            }
+                            roundelay = 1.0f;
+                            Round_Trans = false;
+                            Deathfall = true;
+                            player1.health = 100;
+                            player2.health = 100;
+                            player1.sprite.setColor(Color::White);
+                            player2.sprite.setColor(Color::White);
+                            game(win1, win2, window);
+                            Round_Trans = false;
+                            return;
+                        }
+                        else if ((player2.health == 0 && win2 < 2 && win1 == 2) || (player1.health == 0 && win2 == 2 && win1 < 2)) {
+                            Deathindex = 0;
+                            Roundmusic[win1 + win2 - 1].stop();
+                            if (player2.health == 0) {
+                                player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                                PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                            }
+                            else if (player1.health == 0) {
+                                player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                                PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                            }
+                            roundelay = 1.0f;
+                            Round_Trans = false;
+                            Deathfall = true;
+                            player1.health = 100;
+                            player2.health = 100;
+                            player1.sprite.setColor(Color::White);
+                            player2.sprite.setColor(Color::White);
+                            WINNER(window);
+                            Round_Trans = false;
+                            return;
+                        }
+                    }
+                    // player 2 Jumping button
+                    if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting)
+                    {
+                        timer2 = 0;
+                        index2 = 0;
+                        player2.velocity.y = -10;
+                        player2.sprite.move(0, player2.velocity.y - Jumpheight);
                     }
 
-                        //Death Animation & Round transition
-                        if (roundelay < 0 && e.key.code == Keyboard::Enter)
-                        {
-                            if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
+
+                    //Player 2 Attacking button
+                    if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting) {
+                        player2.attackbool = true;
+                        attacktimer2 = 0;
+                        attackindex2 = 0;
+                        if(SFX && !level)
+                            Attacksound.play();
+                        if (intersection(player2.hitbox.attack, player1.hitbox.player) && player2.attackbool) {
+                            if(SFX)
+                                BeingHit.play();
+                            if (toucher == false || player1.health == 10) {
+                                player1.health -= 10;
+                            }
+                            else {
+                                player1.health -= attackpow2;
+                            }
+                            player1.hitbool = true;
+                            if (player1.health == 0)
                             {
-                                Deathindex = 0;
-                                Roundmusic[win1 + win2 - 1].stop();
-                                if (player2.health == 0) {
-                                    player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
-                                    PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
-                                }
-                                else if (player1.health == 0) {
-                                    player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
-                                    PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
-                                }
-                                roundelay = 1.0f;
-                                Round_Trans = false;
-                                Deathfall = true;
-                                player1.health = 100;
-                                player2.health = 100;
-                                player1.sprite.setColor(Color::White);
-                                player2.sprite.setColor(Color::White);
-                                game(win1, win2, window);
-                                Round_Trans = false;
-                                return;
+                                win2++;
+                                Round_Trans = true;
                             }
-                            else if ((player2.health == 0 && win2 < 2 && win1 == 2) || (player1.health == 0 && win2 == 2 && win1 < 2)) {
-                                Deathindex = 0;
-                                Roundmusic[win1 + win2 - 1].stop();
-                                if (player2.health == 0) {
-                                    player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
-                                    PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
-                                }
-                                else if (player1.health == 0) {
-                                    player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
-                                    PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
-                                }
-                                roundelay = 1.0f;
-                                Round_Trans = false;
-                                Deathfall = true;
-                                player1.health = 100;
-                                player2.health = 100;
-                                player1.sprite.setColor(Color::White);
-                                player2.sprite.setColor(Color::White);
-                                WINNER(window);
-                                Round_Trans = false;
-                                return;
+
+                            hittimer = 0.3f;
+                            arr_index = update_healthbar(player1.health);
+                            if (arr_index != -1)
+                            {
+                                P1_HealthBar_Texture = hp_bar[arr_index];
+                                p1_healthBar.setTexture(&P1_HealthBar_Texture);
                             }
                         }
-                        // player 2 Jumping button
-                        if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting)
-                        {
-                            timer2 = 0;
-                            index2 = 0;
-                            player2.velocity.y = -10;
-                            player2.sprite.move(0, player2.velocity.y - Jumpheight);
-                        }
+                    }
 
-
-                        //Player 2 Attacking button
-                        if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting) {
-                            player2.attackbool = true;
-                            attacktimer2 = 0;
-                            attackindex2 = 0;
-                            //Attacksound.play();
-                            if (intersection(player2.hitbox.attack, player1.hitbox.player) && player2.attackbool) {
-                                if (toucher == false || player1.health == 10) {
-                                    player1.health -= 10;
-                                }
-                                else {
-                                    player1.health -= attackpow2;
-                                }
-                                player1.hitbool = true;
-                                if(player1.health == 0)
-                                {
-                                    win2++;
-                                    Round_Trans = true;
-                                }
-
-                                hittimer = 0.3f;
-                                arr_index = update_healthbar(player1.health);
-                                if (arr_index != -1)
-                                {
-                                    P1_HealthBar_Texture = hp_bar[arr_index];
-                                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
-                                }
-                            }
-                        }
-
-                        // space to stop interacting
-                        if (!interactionwindow1.finishedInteracting)
-                        {
-                            if (e.key.code == Keyboard::Space)
-                                interactionwindow1.abort();
-                        }
-                        if (!interactionWindow2.finishedInteracting)
-                        {
-                            if (e.key.code == Keyboard::Space)
-                                interactionWindow2.abort();
-                        }
+                    // space to stop interacting
+                    if (!interactionwindow1.finishedInteracting)
+                    {
+                        if (e.key.code == Keyboard::Space)
+                            interactionwindow1.abort();
+                    }
+                    if (!interactionWindow2.finishedInteracting)
+                    {
+                        if (e.key.code == Keyboard::Space)
+                            interactionWindow2.abort();
                     }
                 }
+            }
 
+                // START OF POWERUPS
+                if (timerpow.getElapsedTime().asSeconds() >= 10 && win1 + win2 == 0 && powertim)
+                {
+                    cout << "YES C" << endl;
+                    setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1070, 425);
+                    setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 630, 375);
+                    setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 175, 425);
+                    powertim = false;
+                }
+                if (timerpow.getElapsedTime().asSeconds() >= 10 && win1 + win2 == 1 && powertim) {
+                    setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 175, 275);
+                    setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 635, 375);
+                    setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 1075, 275);
+                    powertim = false;
+                }
+            
+                if (level) {
+                    for (int i = 0; i < 3; i++) {
+                        Powers_sp[i].move(0, 5);
+                        cout << Powers_sp[i].getPosition().y << " ";
+                    }
+                    cout << endl;
+                    powgame2(Powers_sp);
+                }
+                //END OF POWERS
+            
                 // Round Transition & Death
                 if (player2.health <= 0 || player1.health <= 0)
                 {
@@ -3631,7 +3770,14 @@ void game(int& win1, int& win2, RenderWindow& window)
                 window.draw(p2_healthBar);
                 window.draw(player1.sprite);
                 window.draw(player2.sprite);
-                if (timerpow.getElapsedTime().asSeconds() >= 10.0f) {
+                if (!level) {
+                    if (timerpow.getElapsedTime().asSeconds() >= 10.0f) {
+                        for (int i = 0; i < 3; i++) {
+                            window.draw(Powers_sp[i]);
+                        }
+                    }
+                }
+                else {
                     for (int i = 0; i < 3; i++) {
                         window.draw(Powers_sp[i]);
                     }
