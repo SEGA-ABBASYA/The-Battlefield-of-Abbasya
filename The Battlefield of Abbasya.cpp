@@ -65,6 +65,8 @@ bool SFX = true;
 bool isPlayingSFX = true;
 int volume_ = 100;
 bool name__ = false;
+bool draw = false;
+bool draw2 = false;
 Sprite vol_arr[11];
 Font menufont;
 
@@ -103,6 +105,7 @@ Texture optionButton;
 Texture optionButton2;
 string arrayOfInteractions[100];
 
+
 //sounds
 Music Roundmusic[3];
 Music MainmenuMusic;
@@ -139,7 +142,7 @@ struct cursor
         sprite.setOrigin(texture.getSize().x / 15, texture.getSize().y / 15);
     }
 
-    void draw(RenderWindow &window)
+    void draw(RenderWindow& window)
     {
         // Set the cursor sprite's position to the mouse position
         sprite.setPosition(Vector2f(Mouse::getPosition(window)));
@@ -156,7 +159,7 @@ struct Hitbox
     RectangleShape player;
 
     // function for setting the properties of a hitbox
-    void sethitbox(Sprite &w, RectangleShape &x, float y, float z, Color l)
+    void sethitbox(Sprite& w, RectangleShape& x, float y, float z, Color l)
     {
         x.setSize(Vector2f(y, z));
         x.setFillColor(l);
@@ -372,15 +375,15 @@ struct FireBall {
             timer -= deltaTime;
         }
     }
-    void position(int i ) {
+    void position(int i) {
 
-        float random0= 10 + (rand() % (int)(350 - 10 + 1));
+        float random0 = 10 + (rand() % (int)(350 - 10 + 1));
         float random1 = 350 + (rand() % (int)(600 - 250 + 1));
         float random2 = 600 + (rand() % (int)(850 - 600 + 1));
         float random3 = 850 + (rand() % (int)(1100 - 850 + 1));
         float random4 = 1100 + (rand() % (int)(1260 - 1100 + 1));
-        if(i==0)
-        theSprite.setPosition(random0,-300);
+        if (i == 0)
+            theSprite.setPosition(random0, -300);
         if (i == 1)
             theSprite.setPosition(random1, -300);
         if (i == 2)
@@ -389,9 +392,11 @@ struct FireBall {
             theSprite.setPosition(random3, -300);
         if (i == 4)
             theSprite.setPosition(random4, -300);
-        
+
     }
 };
+
+
 //powerups
 
 RectangleShape Powers_sp[3];
@@ -510,7 +515,7 @@ public:
         textToBeDisplayed.setScale(1, 1);
 
         // set final scales
-        frameScale = {1, 1};
+        frameScale = { 1, 1 };
 
         arcadeClassic.loadFromFile(path + "Canterbury.ttf");
         textToBeDisplayed.setFont(arcadeClassic);
@@ -618,12 +623,12 @@ public:
             }
         }
     }
-    void draw(RenderWindow &window)
+    void draw(RenderWindow& window)
     {
         if (!finishedInteracting)
         {
             // flutters the press to skip text
-            if(!aborted)
+            if (!aborted)
             {
                 if (flutter_timer <= 0)
                 {
@@ -670,7 +675,7 @@ public:
     // }
 }interactionwindow1,interactionWindow2;
 
-int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
+int cursor_select(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
     Mouse mouse;
     for (int i = 1; i < 6; i++)
@@ -700,7 +705,7 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
 
             if (Mouse::isButtonPressed(Mouse::Left))
             {
-                if(i!=4)
+                if (i != 4)
                     MainmenuMusic.pause();
 
                 Buttonarr[i].setScale(1.f, 1.f);
@@ -725,7 +730,7 @@ int cursor_select(Text *arr, RectangleShape *Buttonarr, RenderWindow &mywindow)
             }
         }
     }
-    
+
     return 0;
 }
 
@@ -748,9 +753,9 @@ int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywi
 
         if (Buttonarr[i].getGlobalBounds().contains(mouse.getPosition(mywindow).x, mouse.getPosition(mywindow).y))
         {
-            arr[i+1].setFillColor(Color::White);
+            arr[i + 1].setFillColor(Color::White);
             Buttonarr[i].setScale(1.1f, 1.1f);
-           
+
             if (Mouse::isButtonPressed(Mouse::Left))
             {
                 Buttonarr[i].setScale(1.f, 1.f);
@@ -761,7 +766,7 @@ int cursor_select_pause(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywi
         else
         {
             Buttonarr[i].setScale(1.f, 1.f);
-            arr[i+1].setFillColor(Color{ 245,176,38 });
+            arr[i + 1].setFillColor(Color{ 245,176,38 });
         }
     }
     //return 0;
@@ -780,7 +785,7 @@ void Controlls(RenderWindow& controllswindow)
     pause.setScale(0.1, 0.1);
     pause.setPosition(1000, 320);
 
-    Texture Jumping,Jumping2,Running2,Running,Attacking,Attacking2,idle1,idle2,frames[2],buttons[9];
+    Texture Jumping, Jumping2, Running2, Running, Attacking, Attacking2, idle1, idle2, frames[2], buttons[9];
 
     frames[0].loadFromFile(path + "Controlls/controlls_banner.png");
     frames[1].loadFromFile(path + "Controlls/controlls_main.png");
@@ -879,7 +884,7 @@ void Controlls(RenderWindow& controllswindow)
     Idle1.setPosition(250, 80);
     Idle2.setScale(0.7, 0.7);
     Idle2.setPosition(650, 70);
-    
+
     Font controllsfont;
     controllsfont.loadFromFile(path + "Canterbury.ttf");
     Text controlls[13];
@@ -888,7 +893,7 @@ void Controlls(RenderWindow& controllswindow)
     controlls[0].setString("Controllers");
     controlls[0].setCharacterSize(45);
     controlls[0].setFillColor(Color{ 255,204,0 });
-    controlls[0].setPosition((controllswindow.getSize().x / 2)-80, 55);
+    controlls[0].setPosition((controllswindow.getSize().x / 2) - 80, 55);
 
     controlls[1].setFont(controllsfont);
     controlls[1].setString("Player 1");
@@ -1073,15 +1078,15 @@ void MainMenu(RenderWindow& mainwindow)
     buttons[5].setPosition(800, 319);
     Sprite controllbutton;
 
-    
+
     controllbutton.setTexture(controll1);
-    controllbutton.setOrigin(40,0);
+    controllbutton.setOrigin(40, 0);
     controllbutton.setPosition(70, 620);
 
     MainmenuMusic.play();
 
     buttons[1].setPosition(470, 319);
-    
+
     buttons[2].setPosition(640, 447);
 
     buttons[3].setPosition(640, 575);
@@ -1107,8 +1112,8 @@ void MainMenu(RenderWindow& mainwindow)
     select[6].setString("Survival!!");
     select[6].setPosition(buttons[5].getPosition().x, buttons[5].getPosition().y);
 
-    for (int i = 1;i < 5;i++) {
-        setTextprop(select[i],48,1);
+    for (int i = 1; i < 5; i++) {
+        setTextprop(select[i], 48, 1);
     }
     setTextprop(select[6], 48, 1);
 
@@ -1162,7 +1167,7 @@ void MainMenu(RenderWindow& mainwindow)
         {
             mainwindow.draw(select[i]);
         }
-        
+
         // Draw the cursor sprite in the struct;
         cur.draw(mainwindow);
 
@@ -1171,7 +1176,7 @@ void MainMenu(RenderWindow& mainwindow)
     }
 }
 
-void credits_text(Text* arr,RenderWindow& textwindow) {
+void credits_text(Text* arr, RenderWindow& textwindow) {
     Mouse mouse;
 
 
@@ -1230,7 +1235,7 @@ void credits_text(Text* arr,RenderWindow& textwindow) {
     else {
         arr[7].setFillColor(Color::Black);
     }
-    
+
 }
 
 void Credits(RenderWindow& creditswindow) {
@@ -1307,7 +1312,7 @@ void Credits(RenderWindow& creditswindow) {
             {
                 creditswindow.close();
             }
-        } 
+        }
         Mouse mouse;
         if (mainframe.getGlobalBounds().contains(mouse.getPosition(creditswindow).x, mouse.getPosition(creditswindow).y))
         {
@@ -1325,10 +1330,10 @@ void Credits(RenderWindow& creditswindow) {
             select[0].setFillColor(Color::Black);
 
         }
-       
-        credits_text(select,creditswindow);
+
+        credits_text(select, creditswindow);
         creditswindow.clear();
-       
+
         creditswindow.draw(pic);
         creditswindow.draw(mainframe);
 
@@ -1337,7 +1342,7 @@ void Credits(RenderWindow& creditswindow) {
         }
 
         cur.draw(creditswindow);
-    
+
         creditswindow.display();
     }
 }
@@ -1598,7 +1603,7 @@ void powgame2(RectangleShape powers[3]) {
     }
 }
 
-void Options(RenderWindow &optionwindow)
+void Options(RenderWindow& optionwindow)
 {
     Font optionfont;
     optionfont.loadFromFile(path + "ArcadeClassic.ttf");
@@ -1606,7 +1611,7 @@ void Options(RenderWindow &optionwindow)
     option.setFont(optionfont);
     option.setString("The Battlefield of Abbasya");
     option.setCharacterSize(60);
-    option.setFillColor(Color{255, 204, 0});
+    option.setFillColor(Color{ 255, 204, 0 });
     option.setPosition(300, 100);
 
     while (optionwindow.isOpen())
@@ -1653,10 +1658,10 @@ void setpropdance(Sprite& x, Texture& y, int z, int l, int m)
     x.setScale(z, 3);
 }
 
-int PauseMenu(RenderWindow &pausewindow)
+int PauseMenu(RenderWindow& pausewindow)
 {
     Font pausefont;
-    
+
     //PAUSE = true;
     pausefont.loadFromFile(path + "Canterbury.ttf");
 
@@ -1682,7 +1687,7 @@ int PauseMenu(RenderWindow &pausewindow)
         buttons[i].setSize(Vector2f(345.f, 81.f));
         buttons[i].setOrigin(buttons[i].getSize() / 2.f);
     }
-    
+
     buttons[0].setPosition(pausewindow.getSize().x / 2.f, 279);
 
     buttons[1].setPosition(pausewindow.getSize().x / 2.f, 389);
@@ -1713,7 +1718,7 @@ int PauseMenu(RenderWindow &pausewindow)
     Pause[4].setString("Exit");
     Pause[4].setPosition(buttons[3].getPosition());
 
-    for (int i = 1;i < 5;i++) {
+    for (int i = 1; i < 5; i++) {
         Pause[i].setFont(pausefont);
         Pause[i].setFillColor(Color{ 245,176,38 });
         Pause[i].setOutlineColor(Color::Black);
@@ -1742,9 +1747,9 @@ int PauseMenu(RenderWindow &pausewindow)
         else if (page == 0) {
             PAUSE = false;
             return 1;
-        }//return 
+        }//return
         else if (page == 2) {
-            for (int i = 0;i < 3;i++) {
+            for (int i = 0; i < 3; i++) {
                 Roundmusic[i].stop();
             }
             Round_Trans = false;
@@ -1773,7 +1778,7 @@ int PauseMenu(RenderWindow &pausewindow)
 
 void name(struct player, RenderWindow& namewindow) {
 
-    string name1,name2;
+    string name1, name2;
     Mouse mouse;
 
     Texture idles[2];
@@ -1839,11 +1844,11 @@ void name(struct player, RenderWindow& namewindow) {
     }
 
 
-    //Enter Your name 
+    //Enter Your name
     frame[2].setTexture(frames[0]);
     frame[2].setOrigin(240, 70);
     frame[2].setPosition(namewindow.getSize().x / 2, 100);
-    
+
     bool name_ = false;
 
     Font font;
@@ -1875,7 +1880,7 @@ void name(struct player, RenderWindow& namewindow) {
     text[3].setCharacterSize(60);
     text[3].setPosition(start[0].getPosition().x, start[0].getPosition().y - 5);
 
-    for (int i = 0;i < 4;i++) {
+    for (int i = 0; i < 4; i++) {
         text[i].setFont(font);
         text[i].setFillColor(Color{ 101,154,171 });
         text[i].setOutlineColor(Color::Black);
@@ -1957,11 +1962,11 @@ void name(struct player, RenderWindow& namewindow) {
                         if (!name1.empty())
                             name1.pop_back();
                     }
-                    
+
                 }
             }
-            if (name_ ) {
-                if ( name2.size() < 12)
+            if (name_) {
+                if (name2.size() < 12)
                 {
                     if (event.type == Event::TextEntered)
                     {
@@ -1975,7 +1980,7 @@ void name(struct player, RenderWindow& namewindow) {
                         if (!name2.empty())
                             name2.pop_back();
                     }
-                 
+
                 }
 
             }
@@ -1991,10 +1996,10 @@ void name(struct player, RenderWindow& namewindow) {
             show_cursor = !show_cursor;
             text_effect_time = Time::Zero;
         }
-        if(!name_)
-        text1.setString(name1 + (show_cursor ? '_' : ' '));
-        if(name_)
-        text2.setString(name2 + (show_cursor ? '_' : ' '));
+        if (!name_)
+            text1.setString(name1 + (show_cursor ? '_' : ' '));
+        if (name_)
+            text2.setString(name2 + (show_cursor ? '_' : ' '));
         //cout << player1.name << endl << endl<<player2.name << endl;
         player1.name = name1;
         player2.name = name2;
@@ -2003,7 +2008,7 @@ void name(struct player, RenderWindow& namewindow) {
         string fullstring = player1.name + ' ' + "wins";
         string fullstring2 = player2.name + ' ' + "wins";
 
-        for (int i = 0;i < 3;i++) {
+        for (int i = 0; i < 3; i++) {
             player1.Round_won[i].setString(fullstring);
             player2.Round_won[i].setString(fullstring2);
         }
@@ -2180,20 +2185,103 @@ void init_health_bar();
 int update_healthbar(int health);
 
 // function for setting setting initial properties to a player
-void setprop(Sprite &, Texture &, int, int, int);
+void setprop(Sprite&, Texture&, int, int, int);
 
 // function for checking the colliding the hitbox of attack with the hitbox of player
-bool intersection(RectangleShape &, RectangleShape &);
+bool intersection(RectangleShape&, RectangleShape&);
 
 // // function for checking the colliding the hitbox of player and the plates
 // bool platecoliode_1(RectangleShape &, RectangleShape &);
 
 Texture hp_bar[12];
 
+// fireprojectiles
+bool onebullet2 = true;
+bool scale2 = true;
+bool movie2 = false;
+bool onebullet = true;
+bool scale = true;
+bool movie = false;
+Sprite firep1;
+Sprite magicp2;
+Texture fire_p1;
+Texture magic_p2;
+
+//player2
+void FIRE(RectangleShape& one, Sprite& player2, Sprite& fire, Texture& tfire) {
+    fire.setTexture(tfire);
+    fire.setTextureRect(IntRect((0 * 64), 0, 64, 64));
+    //fire.setScale(0.5, 0.5);
+    int x1 = one.getPosition().x;
+    int y1 = one.getPosition().y;
+    int x2 = player2.getScale().x;
+    int x3 = x2 / abs(x2);
+    fire.setOrigin(25, 25);
+    fire.setScale(x3*2, 2);
+    fire.setPosition(x1, y1);
+
+}
+int z = 0;
+void move_fire(float deltatime,Sprite& fire) {
+    
+    if (timer <= 0) {
+        z++;
+        z = z % 12;
+        fire.setTextureRect(IntRect((z * 64), 0, 64, 64));
+        timer = delay;
+    }
+    else {
+        timer -= deltatime;
+    }
+
+}
+int direction(Sprite& fire) {
+    int x = fire.getScale().x;
+    int y = x / abs(x);
+    return y;
+}
+
+
+
+
+
+void FIRE2(RectangleShape& one, Sprite& player1, Sprite& fire, Texture& tfire) {
+    fire.setTexture(tfire);
+    fire.setTextureRect(IntRect((0 * 64), 0, 64, 128));
+    
+    int x1 = one.getPosition().x;
+    int y1 = one.getPosition().y;
+    int x2 = player1.getScale().x;
+    int x3 = x2 / abs(x2);
+    fire.setOrigin(55, 55);
+    fire.setScale(x3*5, 5);
+    fire.setPosition(x1, y1);
+
+}
+int a;
+void move_fire2(float deltatime, Sprite& fire) {
+
+    if (timer <= 0) {
+        a++;
+        a = a % 6;
+        fire.setTextureRect(IntRect((a * 64), 0, 64, 128));
+        timer = delay;
+    }
+    else {
+        timer -= deltatime;
+    }
+
+}
+
+//end fireprojectiles
+
 int main()
 {
     RenderWindow get_window(VideoMode(1280, 720), "The Battlefield of Abbasya");
-    
+    fire_p1.loadFromFile("Wizard/Charge.png");
+    firep1.setTexture(fire_p1);
+    magic_p2.loadFromFile("Wanderer/Charge_2.png");
+    magicp2.setTexture(magic_p2);
     ourFont.loadFromFile("ArcadeClassic.ttf");
     Back[0].loadFromFile("Background.jpg");
     Back[1].loadFromFile("background2.jpg");
@@ -2254,7 +2342,7 @@ int main()
 
     while (get_window.isOpen())
     {
-        
+
         MainMenu(get_window);
         if (pagenum == 0)
         {
@@ -2333,7 +2421,7 @@ void init_health_bar()
 
 int update_healthbar(int health)
 {
-    if (health == 100) 
+    if (health == 100)
     {
         return 10;
     }
@@ -2380,7 +2468,7 @@ int update_healthbar(int health)
     return -1;
 }
 
-void setprop(Sprite &x, Texture &y, int z, int l, int m)
+void setprop(Sprite& x, Texture& y, int z, int l, int m)
 {
 
     x.setTexture(y);
@@ -2430,7 +2518,7 @@ bool platecoliode_2(Sprite& player, RectangleShape& player_x, RectangleShape& pl
         player_x.getGlobalBounds().top + player_x.getGlobalBounds().height - 20 < plat_y1.getGlobalBounds().top)
     {
         //cout << plat_y1.getGlobalBounds().top << endl;
-        player_x.setPosition(player_x.getPosition().x, plat_y1.getGlobalBounds().top - player_x.getGlobalBounds().height );
+        player_x.setPosition(player_x.getPosition().x, plat_y1.getGlobalBounds().top - player_x.getGlobalBounds().height);
         return true;
     }
     else
@@ -2467,6 +2555,7 @@ void game(int& win1, int& win2, RenderWindow& window)
     bool toucher2 = false;
     bool toucherhealthp1 = false;
     bool toucherhealthp2 = false;
+    bool fire = false;
     int arr_index = 10;
     // interactionwindow1.finishedInteracting = false;
     // interactionWindow2.finishedInteracting = false;
@@ -2481,7 +2570,7 @@ void game(int& win1, int& win2, RenderWindow& window)
     Texture rain_text;
     rain_text.loadFromFile("fireball.png");
     FireBall fireballs[7];
-    fireballs[0].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 100,-300});
+    fireballs[0].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 100,-300 });
     fireballs[0].theSprite.setTexture(rain_text);
     fireballs[1].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 350,-300 });
     fireballs[1].theSprite.setTexture(rain_text);
@@ -2489,7 +2578,7 @@ void game(int& win1, int& win2, RenderWindow& window)
     fireballs[2].theSprite.setTexture(rain_text);
     fireballs[3].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 850,-300 });
     fireballs[3].theSprite.setTexture(rain_text);
-    fireballs[4].setInitialValues(rain_text, IntRect(0, 0, 150, 150), {1100,-300});
+    fireballs[4].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 1100,-300 });
     fireballs[4].theSprite.setTexture(rain_text);
     /*fireballs[5].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 800,0 });
     fireballs[5].theSprite.setTexture(rain_text);
@@ -2582,7 +2671,7 @@ void game(int& win1, int& win2, RenderWindow& window)
 
     //Players initial prop
     power_draw();
-   
+
     if (win1 + win2 == 0) {
         if (!level)
             setprop(player1.sprite, Idle, 3, 320, 480);
@@ -2651,20 +2740,20 @@ void game(int& win1, int& win2, RenderWindow& window)
     }
 
     // Hitboxes initial prop
-   // if (!level)
-        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
-    //if(!level)
-        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Yellow);
-
+   if (!level)
+    player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
     if(!level)
+    player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Yellow);
+
+    if (!level)
         player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
     else {
-       
+
         player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
         player1.hitbox.player.setOrigin(50 / 2.f, 4);
     }
 
-   if (!level)
+    if (!level)
         player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 50.f, 115.f, Color::Blue);
     else
     {
@@ -2767,177 +2856,253 @@ void game(int& win1, int& win2, RenderWindow& window)
                     }
 
                     //Player 1 Attacking button
-                    if (e.key.code == Keyboard::X && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans && !Round_Interacting) {
-                        player1.attackbool = true;
-                        attacktimer = 0;
-                        attackindex = 0;
+                    if (!level) {
+                        if (e.key.code == Keyboard::X && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans && !Round_Interacting) {
+                            player1.attackbool = true;
+                            attacktimer = 0;
+                            attackindex = 0;
+                            // Attacksound.play();
+                            if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
+                            {
+                                if (toucher2 == false || player2.health == 10) {
+                                    player2.health -= 10;
 
+                                }
+                                else {
+                                    player2.health -= attackpow1;
+                                }
+                                player2.hitbool = true;
+                                if (player2.health == 0)
+                                {
+                                    win1++;
+                                    Round_Trans = true;
+                                }
+                                hittimer2 = 0.3f;
+                                arr_index = update_healthbar(player2.health);
+                                if (arr_index != -1)
+                                {
+                                    P2_HealthBar_Texture = hp_bar[arr_index];
+                                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                                }
+                            }
 
-                        if(SFX && !level)
-                            Attacksound.play();
-                        if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
+                        }
+                    }
+                    else {
+                        if (e.key.code == Keyboard::X && player1.grounded == true && !player1.attackbool && !player1.hitbool && !Round_Trans && !Round_Interacting && onebullet2) {
+                            player1.attackbool = true;
+                            attacktimer = 0;
+                            attackindex = 0;
+                            scale2 = false;
+                            onebullet2 = false;
+                            movie2 = true;
+                            draw2 = true;
+                            if (SFX && !level)
+                                Attacksound.play();
+                            FIRE2(player1.hitbox.player, player1.sprite, magicp2, magic_p2);
+                            // Attacksound.play();
+                            if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
+                            {
+                                if (SFX)
+                                    BeingHit.play();
+                                if (toucher2 == false || player2.health == 10) {
+                                    player2.health -= 10;
+
+                                }
+                                else {
+                                    player2.health -= attackpow1;
+                                }
+                                if (player2.health == 0)
+                                {
+                                    win1++;
+                                    Round_Trans = true;
+                                }
+                                player2.hitbool = true;
+                                hittimer2 = 0.3f;
+                                arr_index = update_healthbar(player2.health);
+                                if (arr_index != -1)
+                                {
+                                    P2_HealthBar_Texture = hp_bar[arr_index];
+                                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                                }
+                            }
+
+                        }
+                        //Death Animation & Round transition
+                        if (roundelay < 0 && e.key.code == Keyboard::Enter)
                         {
-                            if(SFX)
-                                BeingHit.play();
-                            if (toucher2 == false || player2.health == 10) {
-                                player2.health -= 10;
-
-                            }
-                            else {
-                                player2.health -= attackpow1;
-                            }
-                            if (player2.health == 0)
+                            if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
                             {
-                                win1++;
-                                Round_Trans = true;
+                                Deathindex = 0;
+                                Roundmusic[win1 + win2 - 1].stop();
+                                if (player2.health == 0) {
+                                    player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                                    PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                                }
+                                else if (player1.health == 0) {
+                                    player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                                    PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                                }
+                                roundelay = 1.0f;
+                                Round_Trans = false;
+                                Deathfall = true;
+                                player1.health = 100;
+                                player2.health = 100;
+                                player1.sprite.setColor(Color::White);
+                                player2.sprite.setColor(Color::White);
+                                game(win1, win2, window);
+                                Round_Trans = false;
+                                return;
                             }
-                            player2.hitbool = true;
-                            hittimer2 = 0.3f;
-                            arr_index = update_healthbar(player2.health);
-                            if (arr_index != -1)
-                            {
-                                P2_HealthBar_Texture = hp_bar[arr_index];
-                                p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                            else if ((player2.health == 0 && win2 < 2 && win1 == 2) || (player1.health == 0 && win2 == 2 && win1 < 2)) {
+                                Deathindex = 0;
+                                Roundmusic[win1 + win2 - 1].stop();
+                                if (player2.health == 0) {
+                                    player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                                    PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
+                                }
+                                else if (player1.health == 0) {
+                                    player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                                    PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
+                                }
+                                roundelay = 1.0f;
+                                Round_Trans = false;
+                                Deathfall = true;
+                                player1.health = 100;
+                                player2.health = 100;
+                                player1.sprite.setColor(Color::White);
+                                player2.sprite.setColor(Color::White);
+                                WINNER(window);
+                                Round_Trans = false;
+                                return;
                             }
                         }
-
-                    }
-                    //Death Animation & Round transition
-                    if (roundelay < 0 && e.key.code == Keyboard::Enter)
-                    {
-                        if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
+                        // player 2 Jumping button
+                        if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting)
                         {
-                            Deathindex = 0;
-                            Roundmusic[win1 + win2 - 1].stop();
-                            if (player2.health == 0) {
-                                player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
-                                PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
-                            }
-                            else if (player1.health == 0) {
-                                player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
-                                PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
-                            }
-                            roundelay = 1.0f;
-                            Round_Trans = false;
-                            Deathfall = true;
-                            player1.health = 100;
-                            player2.health = 100;
-                            player1.sprite.setColor(Color::White);
-                            player2.sprite.setColor(Color::White);
-                            game(win1, win2, window);
-                            Round_Trans = false;
-                            return;
+                            timer2 = 0;
+                            index2 = 0;
+                            player2.velocity.y = -10;
+                            player2.sprite.move(0, player2.velocity.y - Jumpheight);
                         }
-                        else if ((player2.health == 0 && win2 < 2 && win1 == 2) || (player1.health == 0 && win2 == 2 && win1 < 2)) {
-                            Deathindex = 0;
-                            Roundmusic[win1 + win2 - 1].stop();
-                            if (player2.health == 0) {
-                                player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
-                                PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
-                            }
-                            else if (player1.health == 0) {
-                                player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
-                                PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
-                            }
-                            roundelay = 1.0f;
-                            Round_Trans = false;
-                            Deathfall = true;
-                            player1.health = 100;
-                            player2.health = 100;
-                            player1.sprite.setColor(Color::White);
-                            player2.sprite.setColor(Color::White);
-                            WINNER(window);
-                            Round_Trans = false;
-                            return;
-                        }
-                    }
-                    // player 2 Jumping button
-                    if (e.key.code == Keyboard::Up && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting)
-                    {
-                        timer2 = 0;
-                        index2 = 0;
-                        player2.velocity.y = -10;
-                        player2.sprite.move(0, player2.velocity.y - Jumpheight);
-                    }
 
 
-                    //Player 2 Attacking button
-                    if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting) {
-                        player2.attackbool = true;
-                        attacktimer2 = 0;
-                        attackindex2 = 0;
-                        if(SFX && !level)
-                            Attacksound.play();
-                        if (intersection(player2.hitbox.attack, player1.hitbox.player) && player2.attackbool) {
-                            if(SFX)
-                                BeingHit.play();
-                            if (toucher == false || player1.health == 10) {
-                                player1.health -= 10;
-                            }
-                            else {
-                                player1.health -= attackpow2;
-                            }
-                            player1.hitbool = true;
-                            if (player1.health == 0)
-                            {
-                                win2++;
-                                Round_Trans = true;
-                            }
+                        //Player 2 Attacking button
+                        if (!level) {
+                            if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting) {
+                                player2.attackbool = true;
+                                draw = true;
+                                attacktimer2 = 0;
+                                attackindex2 = 0;
 
-                            hittimer = 0.3f;
-                            arr_index = update_healthbar(player1.health);
-                            if (arr_index != -1)
-                            {
-                                P1_HealthBar_Texture = hp_bar[arr_index];
-                                p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                                if (SFX && !level)
+                                    Attacksound.play();
+                                if (intersection(player2.hitbox.attack, player1.hitbox.player) && player2.attackbool) {
+                                    if (SFX)
+                                        BeingHit.play();
+                                    if (toucher == false || player1.health == 10) {
+                                        player1.health -= 10;
+                                    }
+                                    else {
+                                        player1.health -= attackpow2;
+                                    }
+                                    player1.hitbool = true;
+                                    if (player1.health == 0)
+                                    {
+                                        win2++;
+                                        Round_Trans = true;
+                                    }
+
+                                    hittimer = 0.3f;
+                                    arr_index = update_healthbar(player1.health);
+                                    if (arr_index != -1)
+                                    {
+                                        P1_HealthBar_Texture = hp_bar[arr_index];
+                                        p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                                    }
+                                }
                             }
                         }
-                    }
+                        else {
+                            if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting && onebullet) {
+                                player2.attackbool = true;
+                                scale = false;
+                                onebullet = false;
+                                draw = true;
+                                attacktimer2 = 0;
+                                attackindex2 = 0;
+                                FIRE(player2.hitbox.player, player2.sprite, firep1, fire_p1);
+                                movie = true;
+                                //Attacksound.play();
+                                if (intersection(player2.hitbox.attack, player1.hitbox.player) && player2.attackbool) {
+                                    if (toucher == false || player1.health == 10) {
+                                        player1.health -= 10;
+                                    }
+                                    else {
+                                        player1.health -= attackpow2;
+                                    }
+                                    player1.hitbool = true;
+                                    if (player1.health == 0)
+                                    {
+                                        win2++;
+                                        Round_Trans = true;
+                                    }
 
-                    // space to stop interacting
-                    if (!interactionwindow1.finishedInteracting)
-                    {
-                        if (e.key.code == Keyboard::Space)
-                            interactionwindow1.abort();
-                    }
-                    if (!interactionWindow2.finishedInteracting)
-                    {
-                        if (e.key.code == Keyboard::Space)
-                            interactionWindow2.abort();
+                                    hittimer = 0.3f;
+                                    arr_index = update_healthbar(player1.health);
+                                    if (arr_index != -1)
+                                    {
+                                        P1_HealthBar_Texture = hp_bar[arr_index];
+                                        p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                                    }
+                                }
+                            }
+                        }
+                        // space to stop interacting
+                        if (!interactionwindow1.finishedInteracting)
+                        {
+                            if (e.key.code == Keyboard::Space)
+                                interactionwindow1.abort();
+                        }
+                        if (!interactionWindow2.finishedInteracting)
+                        {
+                            if (e.key.code == Keyboard::Space)
+                                interactionWindow2.abort();
+                        }
                     }
                 }
+            } // Polleventm possible missing token
+            // START OF POWERUPS
+            if (timerpow.getElapsedTime().asSeconds() >= 10 && win1 + win2 == 0 && powertim)
+            {
+                cout << "YES C" << endl;
+                setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1070, 425);
+                setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 630, 375);
+                setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 175, 425);
+                powertim = false;
+            }
+            if (timerpow.getElapsedTime().asSeconds() >= 10 && win1 + win2 == 1 && powertim) {
+                setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 175, 275);
+                setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 635, 375);
+                setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 1075, 275);
+                powertim = false;
             }
 
-                // START OF POWERUPS
-                if (timerpow.getElapsedTime().asSeconds() >= 10 && win1 + win2 == 0 && powertim)
-                {
-                    cout << "YES C" << endl;
-                    setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 1070, 425);
-                    setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 630, 375);
-                    setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 175, 425);
-                    powertim = false;
+            if (level) {
+                for (int i = 0; i < 3; i++) {
+                    Powers_sp[i].move(0, 5);
+                    cout << Powers_sp[i].getPosition().y << " ";
                 }
-                if (timerpow.getElapsedTime().asSeconds() >= 10 && win1 + win2 == 1 && powertim) {
-                    setprop2(Powers_sp[0], Powers_tex[0], 0.5, 0.5, 175, 275);
-                    setprop2(Powers_sp[2], Powers_tex[2], 0.5, 0.5, 635, 375);
-                    setprop2(Powers_sp[1], Powers_tex[1], 0.5, 0.5, 1075, 275);
-                    powertim = false;
-                }
-            
-                if (level) {
-                    for (int i = 0; i < 3; i++) {
-                        Powers_sp[i].move(0, 5);
-                        cout << Powers_sp[i].getPosition().y << " ";
-                    }
-                    cout << endl;
-                    powgame2(Powers_sp);
-                }
-                //END OF POWERS
-            
-                // Round Transition & Death
+                cout << endl;
+                powgame2(Powers_sp);
+            }
+            //END OF POWERS
+
+            // Round Transition & Death
+            if (!level) {
                 if (player2.health <= 0 || player1.health <= 0)
                 {
-                    if(roundelay < -1)
+                    if (roundelay < -1)
                     {
                         if (PressEnter.getPosition().y < window.getSize().y / 4 + 90)
                             PressEnter.move(0, 5);
@@ -2959,21 +3124,21 @@ void game(int& win1, int& win2, RenderWindow& window)
                             else
                                 timer -= deltatime;
                         }
-                        
+
                         else {
                             player1.sprite.setTexture(Death1);
                             player1.sprite.setColor(Color(128, 0, 0));
                             if (timer <= 0) {
-                                if(Deathindex<3)
-                                Deathindex++;
+                                if (Deathindex < 3)
+                                    Deathindex++;
 
                                 Deathindex = Deathindex % 4;
                                 player1.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
-                                timer = delay+0.15;
+                                timer = delay + 0.15;
                             }
                             else
                                 timer -= deltatime;
-                        
+
                         }
                     }
                     if (player2.health <= 0) {
@@ -3009,231 +3174,364 @@ void game(int& win1, int& win2, RenderWindow& window)
                         }
                     }
                 }
-                for (int i = 0; i < 2; i++) {
-                    if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds())) {
-                        toucher2 = true;
-                        attackpow1 = 20;
-                        Powers_sp[i].setPosition(1000, 1000);
-                        cout << attackpow1;
-                    }
-                }
-
-                if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[1].getGlobalBounds())) {
-                    toucherhealthp1 = true;
-                    if (player1.health + 20 <= 100)
-                        player1.health += 20;
-                    else if (player1.health == 90)
-                        player1.health += 10;
-                    arr_index = update_healthbar(player1.health);
-                    if (arr_index != -1)
-                    {
-                        P1_HealthBar_Texture = hp_bar[arr_index];
-                        p1_healthBar.setTexture(&P1_HealthBar_Texture);
-                    }
-                }
-
-                //Power ups intersection Player 2
-                for (int i = 0; i < 2; i++) {
-                    if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds()))
-                    {
-                        toucher = true;
-                        attackpow2 = 20;
-                        Powers_sp[i].setPosition(10000, 10000);
-                        cout << "TOUCH";
-                    }
-                }
-
-                if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
-                    toucherhealthp2 = true;
-                    if (player2.health + 20 <= 100)
-                        player2.health += 20;
-                    else if (player2.health == 90)
-                        player2.health += 10;
-                    Powers_sp[2].setPosition(1000, 1000);
-                    arr_index = update_healthbar(player2.health);
-                    if (arr_index != -1)
-                    {
-                        P2_HealthBar_Texture = hp_bar[arr_index];
-                        p2_healthBar.setTexture(&P2_HealthBar_Texture);
-                    }
-                }
-                if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
-                    toucherhealthp1 = true;
-                    if (player1.health + 20 <= 100)
-                        player1.health += 20;
-                    else if (player1.health == 90)
-                        player1.health += 10;
-                    Powers_sp[2].setPosition(1000, 1000);
-                    arr_index = update_healthbar(player1.health);
-                    if (arr_index != -1)
-                    {
-                        P1_HealthBar_Texture = hp_bar[arr_index];
-                        p1_healthBar.setTexture(&P1_HealthBar_Texture);
-                    }
-                }
-                //PLAYER 1
-
-                //Gravity movement
-                player1.sprite.move(0, player1.velocity.y);
-
-                //Hitboxes live positioning
-                player1.hitbox.player.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
-                player1.hitbox.attack.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
-
-                //Return deafult color
-                if (!player1.hitbool && player1.health > 0)
-                    player1.sprite.setColor(Color::White);
-
-                //Death if Fell
-                if (player1.hitbox.player.getPosition().y > window.getSize().y)
+            }
+            else {
+                if ((player2.health <= 0 && win2 < 2 && win1 < 2) || (player1.health <= 0 && win2 < 2 && win1 < 2))
                 {
-                    if (Deathfall) {
-                        win2++;
-                        Round_Trans = true;
-                        Deathfall = false;
-                    }
-                    player1.health = 0;
-                    arr_index = update_healthbar(player1.health);
-                    if (arr_index != -1)
-                    {
-                        P1_HealthBar_Texture = hp_bar[arr_index];
-                        p1_healthBar.setTexture(&P1_HealthBar_Texture);
-                    }
-                }
-                
-                // Gravity and Plates
-                if (!level) {
-                    if (((platecoliode_1(player1.sprite, player1.hitbox.player, plt1.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt2.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt3.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt4.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt5.platrec)) || player1.hitbox.player.getPosition().y > window.getSize().y) && player1.velocity.y >= 0)
-                    {
-                        player1.timereset = false;
-                        player1.velocity.y = 0;
-                        player1.grounded = true;
-                        if (player1.health > 0 && !player1.attackbool) {
-
-                            player1.sprite.setTexture(Idle);
+                    roundelay -= deltatime;
+                    if (player1.health <= 0) {
+                        if (player2.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
+                            player2.Round_won[win1 + win2].move(0, 5);
+                        if (!level) {
+                            player1.sprite.setTexture(Death);
+                            player1.sprite.setColor(Color(128, 0, 0));
                             if (timer <= 0) {
-                                playerindex++;
-                                playerindex = playerindex % 10;
-                                player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                                if (Deathindex != 9)
+                                    Deathindex++;
+                                Deathindex = Deathindex % 10;
+                                player1.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
                                 timer = delay;
                             }
                             else
                                 timer -= deltatime;
                         }
-                    }
-                    else if (!PAUSE && player1.hitbox.player.getPosition().y <= window.getSize().y) {
-                        if (!player1.timereset) {
-                            player1.timereset = true;
-                            timer = 0;
-                            playerindex = 0;
+
+                        else {
+                            player1.sprite.setTexture(Death1);
+                            player1.sprite.setColor(Color(128, 0, 0));
+                            if (timer <= 0) {
+                                if (Deathindex < 3)
+                                    Deathindex++;
+
+                                Deathindex = Deathindex % 4;
+                                player1.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
+                                timer = delay + 0.15;
+                            }
+                            else
+                                timer -= deltatime;
+
                         }
-                        player1.grounded = false;
-                        player1.velocity.y -= Gravity * deltatime;
                     }
+                    if (player2.health <= 0) {
+                        if (player1.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
+                            player1.Round_won[win1 + win2].move(0, 5);
+                        if (!level) {
+                            player2.sprite.setColor(Color(128, 0, 0));
+                            player2.sprite.setTexture(Death2);
+                            if (timer2 <= 0) {
+                                if (Deathindex != 9)
+                                    Deathindex++;
+                                Deathindex = Deathindex % 10;
+                                player2.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
+                                timer2 = delay2;
+                            }
+                            else
+                                timer2 -= deltatime;
+                        }
+                        else {
+
+                            player2.sprite.setTexture(Death3);
+                            player2.sprite.setColor(Color(128, 0, 0));
+                            if (timer <= 0) {
+                                if (Deathindex < 5)
+                                    Deathindex++;
+
+                                Deathindex = Deathindex % 6;
+                                player2.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
+                                timer = delay + 0.15;
+                            }
+                            else
+                                timer -= deltatime;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < 2; i++) {
+                if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds())) {
+                    toucher2 = true;
+                    attackpow1 = 20;
+                    Powers_sp[i].setPosition(1000, 1000);
+                    cout << attackpow1;
+                }
+            }
+
+           
+
+            if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[1].getGlobalBounds())) {
+                toucherhealthp1 = true;
+                if (player1.health + 20 <= 100)
+                    player1.health += 20;
+                else if (player1.health == 90)
+                    player1.health += 10;
+                arr_index = update_healthbar(player1.health);
+                if (arr_index != -1)
+                {
+                    P1_HealthBar_Texture = hp_bar[arr_index];
+                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                }
+            }
+
+            //Power ups intersection Player 2
+            for (int i = 0; i < 2; i++) {
+                if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds()))
+                {
+                    toucher = true;
+                    attackpow2 = 20;
+                    Powers_sp[i].setPosition(10000, 10000);
+                    cout << "TOUCH";
+                }
+            }
+
+            if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
+                toucherhealthp2 = true;
+                if (player2.health + 20 <= 100)
+                    player2.health += 20;
+                else if (player2.health == 90)
+                    player2.health += 10;
+                Powers_sp[2].setPosition(1000, 1000);
+                arr_index = update_healthbar(player2.health);
+                if (arr_index != -1)
+                {
+                    P2_HealthBar_Texture = hp_bar[arr_index];
+                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                }
+            }
+            if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
+                toucherhealthp1 = true;
+                if (player1.health + 20 <= 100)
+                    player1.health += 20;
+                else if (player1.health == 90)
+                    player1.health += 10;
+                Powers_sp[2].setPosition(1000, 1000);
+                arr_index = update_healthbar(player1.health);
+                if (arr_index != -1)
+                {
+                    P1_HealthBar_Texture = hp_bar[arr_index];
+                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                }
+            }
+            if (player2.hitbox.player.getGlobalBounds().intersects(magicp2.getGlobalBounds()) ) {
+                
+                if (toucher2&&player2.health>10) {
+                    player2.health -= 20;
                 }
                 else {
+                    player2.health -= 10;
+                }
+                
+               magicp2.setPosition(1000, 1000);
+                arr_index = update_healthbar(player2.health);
+                if (arr_index != -1)
+                {
+                    P2_HealthBar_Texture = hp_bar[arr_index];
+                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                }
+                if (player2.health > 0)
+                    player2.hitbool = true;
 
-                    if (((platecoliode_2(player1.sprite, player1.hitbox.player, plt1.platrec)) || (platecoliode_2(player1.sprite, player1.hitbox.player, plt2.platrec)) || (platecoliode_2(player1.sprite, player1.hitbox.player, plt3.platrec)) || (platecoliode_2(player1.sprite, player1.hitbox.player, plt4.platrec)) || (platecoliode_2(player1.sprite, player1.hitbox.player, plt5.platrec)) || player1.hitbox.player.getPosition().y > window.getSize().y) && player1.velocity.y >= 0)
+                onebullet2 = true;
+                scale2 = true;
+
+            }
+            if (magicp2.getPosition().x <= -10 || magicp2.getPosition().x >= 1300) {
+                magicp2.setPosition(1000, 1000);
+                onebullet2 = true;
+                scale2 = true;
+            }
+
+
+            if (player1.hitbox.player.getGlobalBounds().intersects(firep1.getGlobalBounds())
+                ) {
+
+                if (toucher && player1.health > 10) {
+                    player1.health -= 20;
+                }
+                else {
+                    player1.health -= 10;
+                }
+
+                firep1.setPosition(1000, 1000);
+                arr_index = update_healthbar(player1.health);
+                if (arr_index != -1)
+                {
+                    P1_HealthBar_Texture = hp_bar[arr_index];
+                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                }
+                if (player1.health > 0)
+                    player1.hitbool = true;
+
+                onebullet = true;
+                scale = true;
+
+            }
+            if (firep1.getPosition().x <= -10 || firep1.getPosition().x >= 1300) {
+                firep1.setPosition(1000, 1000);
+                onebullet = true;
+                scale = true;
+            }
+            //PLAYER 1
+
+            //Gravity movement
+            player1.sprite.move(0, player1.velocity.y);
+
+            //Hitboxes live positioning
+            player1.hitbox.player.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
+            player1.hitbox.attack.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
+
+            //Return deafult color
+            if (!player1.hitbool && player1.health > 0)
+                player1.sprite.setColor(Color::White);
+
+            //Death if Fell
+            if (player1.hitbox.player.getPosition().y > window.getSize().y)
+            {
+                if (Deathfall) {
+                    win2++;
+                    Round_Trans = true;
+                    Deathfall = false;
+                }
+                player1.health = 0;
+                arr_index = update_healthbar(player1.health);
+                if (arr_index != -1)
+                {
+                    P1_HealthBar_Texture = hp_bar[arr_index];
+                    p1_healthBar.setTexture(&P1_HealthBar_Texture);
+                }
+            }
+
+            // Gravity and Plates
+            if (!level) {
+                if (((platecoliode_1(player1.sprite, player1.hitbox.player, plt1.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt2.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt3.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt4.platrec)) || (platecoliode_1(player1.sprite, player1.hitbox.player, plt5.platrec)) || player1.hitbox.player.getPosition().y > window.getSize().y) && player1.velocity.y >= 0)
+                {
+                    player1.timereset = false;
+                    player1.velocity.y = 0;
+                    player1.grounded = true;
+                    if (player1.health > 0 && !player1.attackbool) {
+
+                        player1.sprite.setTexture(Idle);
+                        if (timer <= 0) {
+                            playerindex++;
+                            playerindex = playerindex % 10;
+                            player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                            timer = delay;
+                        }
+                        else
+                            timer -= deltatime;
+                    }
+                }
+                else if (!PAUSE && player1.hitbox.player.getPosition().y <= window.getSize().y) {
+                    if (!player1.timereset) {
+                        player1.timereset = true;
+                        timer = 0;
+                        playerindex = 0;
+                    }
+                    player1.grounded = false;
+                    player1.velocity.y -= Gravity * deltatime;
+                }
+            }
+            else {
+
+                if (((platecoliode_2(player1.sprite, player1.hitbox.player, plt1.platrec)) || (platecoliode_2(player1.sprite, player1.hitbox.player, plt2.platrec)) || (platecoliode_2(player1.sprite, player1.hitbox.player, plt3.platrec)) || (platecoliode_2(player1.sprite, player1.hitbox.player, plt4.platrec)) || (platecoliode_2(player1.sprite, player1.hitbox.player, plt5.platrec)) || player1.hitbox.player.getPosition().y > window.getSize().y) && player1.velocity.y >= 0)
+                {
+                    player1.timereset = false;
+                    player1.velocity.y = 0;
+                    player1.grounded = true;
+                    if (player1.health > 0 && !player1.attackbool) {
+
+                        player1.sprite.setTexture(Idle1);
+                        if (timer <= 0) {
+                            playerindex++;
+                            playerindex = playerindex % 8;
+                            player1.sprite.setTextureRect(IntRect((playerindex * 128), 0, 128, 128));
+                            timer = delay;
+                        }
+                        else
+                            timer -= deltatime;
+                    }
+                }
+
+
+                else if (!PAUSE && player1.hitbox.player.getPosition().y <= window.getSize().y) {
+                    if (!player1.timereset) {
+                        player1.timereset = true;
+                        timer = 0;
+                        playerindex = 0;
+                    }
+                    player1.grounded = false;
+                    player1.velocity.y -= Gravity * deltatime;
+                }
+
+            }
+
+            //Jumping animation
+            if (player1.velocity.y < 0) {
+                if (!level) {
+                    player1.sprite.setTexture(Jumping);
+                    if (timer <= 0) {
+                        playerindex++;
+                        playerindex = playerindex % 3;
+                        player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                        timer = delay + 0.15f;
+                    }
+                    else
+                        timer -= deltatime;
+                }
+                else {
+                    player1.sprite.setTexture(Jump1);
+                    if (timer <= 0) {
+
+
+                        player1.sprite.setTextureRect(IntRect((4 * 128), 0, 128, 128));
+
+                    }
+                    else
+                        timer -= deltatime;
+
+                }
+            }
+
+            //Falling animation
+            if (player1.velocity.y >= 0 && !player1.grounded) {
+                if (!level) {
+                    player1.sprite.setTexture(Fall);
+                    if (timer <= 0) {
+                        playerindex++;
+                        playerindex = playerindex % 3;
+                        player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                        timer = delay + 0.15f;
+                    }
+                    else
+                        timer -= deltatime;
+                }
+                else {
+                    player1.sprite.setTexture(Jump1);
+                    if (timer <= 0) {
+
+                        player1.sprite.setTextureRect(IntRect((5 * 128), 0, 128, 128));
+
+                    }
+                    else
+                        timer -= deltatime;
+
+                }
+            }
+
+            //Being Hit
+            if (player1.hitbool == true) {
+                if (!level) {
+                    player1.sprite.setTexture(Hit);
+                    player1.sprite.setColor(Color::Red);
+                    player1.sprite.setTextureRect(IntRect(0, 0, 120, 80));
+                    if (hittimer <= 0)
                     {
-                        player1.timereset = false;
-                        player1.velocity.y = 0;
-                        player1.grounded = true;
-                        if (player1.health > 0 && !player1.attackbool) {
-
-                            player1.sprite.setTexture(Idle1);
-                            if (timer <= 0) {
-                                playerindex++;
-                                playerindex = playerindex % 8;
-                                player1.sprite.setTextureRect(IntRect((playerindex * 128), 0, 128, 128));
-                                timer = delay;
-                            }
-                            else
-                                timer -= deltatime;
-                        }
+                        player1.hitbool = false;
                     }
-
-
-                    else if (!PAUSE && player1.hitbox.player.getPosition().y <= window.getSize().y) {
-                        if (!player1.timereset) {
-                            player1.timereset = true;
-                            timer = 0;
-                            playerindex = 0;
-                        }
-                        player1.grounded = false;
-                        player1.velocity.y -= Gravity * deltatime;
-                    }
-
+                    else
+                        hittimer -= deltatime;
                 }
 
-                //Jumping animation
-                if (player1.velocity.y < 0) {
-                    if (!level) {
-                        player1.sprite.setTexture(Jumping);
-                        if (timer <= 0) {
-                            playerindex++;
-                            playerindex = playerindex % 3;
-                            player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                            timer = delay + 0.15f;
-                        }
-                        else
-                            timer -= deltatime;
-                    }
-                    else {
-                        player1.sprite.setTexture(Jump1);
-                        if (timer <= 0) {
-                            
-                           
-                            player1.sprite.setTextureRect(IntRect((4 * 128), 0, 128, 128));
-                            
-                        }
-                        else
-                            timer -= deltatime;
+                else {
 
-                    }
-                }
-
-                //Falling animation
-                if (player1.velocity.y >= 0 && !player1.grounded) {
-                    if (!level) {
-                        player1.sprite.setTexture(Fall);
-                        if (timer <= 0) {
-                            playerindex++;
-                            playerindex = playerindex % 3;
-                            player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                            timer = delay + 0.15f;
-                        }
-                        else
-                            timer -= deltatime;
-                    }
-                    else {
-                        player1.sprite.setTexture(Jump1);
-                        if (timer <= 0) {
-                    
-                            player1.sprite.setTextureRect(IntRect((5 * 128), 0, 128, 128));
-                            
-                        }
-                        else
-                            timer -= deltatime;
-
-                    }
-                }
-
-                //Being Hit
-                if (player1.hitbool == true) {
-                    if (!level) {
-                        player1.sprite.setTexture(Hit);
-                        player1.sprite.setColor(Color::Red);
-                        player1.sprite.setTextureRect(IntRect(0, 0, 120, 80));
-                        if (hittimer <= 0)
-                        {
-                            player1.hitbool = false;
-                        }
-                        else
-                            hittimer -= deltatime;
-                    }
-                    
-                    else {
-                        
                     player1.sprite.setTexture(Hit1);
                     player1.sprite.setColor(Color::Red);
                     player1.sprite.setTextureRect(IntRect(0, 0, 128, 128));
@@ -3248,93 +3546,97 @@ void game(int& win1, int& win2, RenderWindow& window)
                     else
                         hittimer -= deltatime;
 
-                
 
+
+                }
+            }
+
+            //I put everything in else so it cannot be done at the same time
+            else
+            {
+                //Attack & Movement
+                if (player1.attackbool == true) {
+                    if (!level) {
+                        player1.sprite.setTexture(Attacking);
+
+                        //Attacking Animation
+                        if (attacktimer <= 0) {
+                            attackindex++;
+                            attackindex = attackindex % 4;
+                            player1.sprite.setTextureRect(IntRect((attackindex * 120), 0, 120, 80));
+                            attacktimer = attackdelay;
+                            if (attackindex == 0)
+                                player1.attackbool = false;
+                        }
+                        else {
+                            attacktimer -= deltatime;
+                        }
+                    }
+                    else {
+                        player1.sprite.setTexture(Attack1);
+
+                        //Attacking Animation
+                        if (attacktimer <= 0) {
+                            attackindex++;
+                            attackindex = attackindex % 9;
+                            player1.sprite.setTextureRect(IntRect((attackindex * 128), 0, 128, 128));
+                            attacktimer = attackdelay;
+                            if (attackindex == 0)
+                                player1.attackbool = false;
+                        }
+                        else {
+                            attacktimer -= deltatime;
+                        }
                     }
                 }
-
                 //I put everything in else so it cannot be done at the same time
                 else
                 {
-                    //Attack & Movement
-                    if (player1.attackbool == true) {
-                        if (!level) {
-                            player1.sprite.setTexture(Attacking);
+                    //Moving right
+                    if (!level) {
+                        if (Keyboard::isKeyPressed(Keyboard::D) && player1.sprite.getPosition().x < (window.getSize().x - player1.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Interacting) {
 
-                            //Attacking Animation
-                            if (attacktimer <= 0) {
-                                attackindex++;
-                                attackindex = attackindex % 4;
-                                player1.sprite.setTextureRect(IntRect((attackindex * 120), 0, 120, 80));
-                                attacktimer = attackdelay;
-                                if (attackindex == 0)
-                                    player1.attackbool = false;
+                            player1.sprite.setScale(3, 3);
+                            player1.hitbox.attack.setScale(1, 1);
+                            if (player1.grounded == true) {
+                                player1.sprite.setTexture(Running);
+                                if (timer <= 0)
+                                {
+                                    playerindex++;
+                                    playerindex = playerindex % 10;
+                                    player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
+                                    timer = delay - 0.05f;
+                                }
+                                else
+                                    timer -= deltatime;
                             }
-                            else {
-                                attacktimer -= deltatime;
-                            }
-                        }
-                        else {
-                            player1.sprite.setTexture(Attack1);
-
-                            //Attacking Animation
-                            if (attacktimer <= 0) {
-                                attackindex++;
-                                attackindex = attackindex % 9;
-                                player1.sprite.setTextureRect(IntRect((attackindex * 128), 0, 128, 128));
-                                attacktimer = attackdelay;
-                                if (attackindex == 0)
-                                    player1.attackbool = false;
-                            }
-                            else {
-                                attacktimer -= deltatime;
-                            }
+                            player1.sprite.move(500 * deltatime, 0);
                         }
                     }
-                    //I put everything in else so it cannot be done at the same time
-                    else
-                    {
-                        //Moving right
+                    else {
                         if (Keyboard::isKeyPressed(Keyboard::D) && player1.sprite.getPosition().x < (window.getSize().x - player1.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Interacting) {
-                            if (!level) {
-                                player1.sprite.setScale(3, 3);
-                                player1.hitbox.attack.setScale(1, 1);
-                                if (player1.grounded == true) {
-                                    player1.sprite.setTexture(Running);
-                                    if (timer <= 0)
-                                    {
-                                        playerindex++;
-                                        playerindex = playerindex % 10;
-                                        player1.sprite.setTextureRect(IntRect((playerindex * 120), 0, 120, 80));
-                                        timer = delay - 0.05f;
-                                    }
-                                    else
-                                        timer -= deltatime;
+                            player1.sprite.setScale(1.7, 1.7);
+                            player1.hitbox.attack.setScale(1, 1);
+                            if (player1.grounded == true) {
+                                player1.sprite.setTexture(Run1);
+                                if (timer <= 0)
+                                {
+                                    playerindex++;
+                                    playerindex = playerindex % 8;
+                                    player1.sprite.setTextureRect(IntRect((playerindex * 128), 0, 128, 128));
+                                    timer = delay - 0.05f;
                                 }
-                                player1.sprite.move(500 * deltatime, 0);
+                                else
+                                    timer -= deltatime;
                             }
-                            else {
-                                player1.sprite.setScale(1.7, 1.7);
-                                player1.hitbox.attack.setScale(1, 1);
-                                if (player1.grounded == true) {
-                                    player1.sprite.setTexture(Run1);
-                                    if (timer <= 0)
-                                    {
-                                        playerindex++;
-                                        playerindex = playerindex % 8;
-                                        player1.sprite.setTextureRect(IntRect((playerindex * 128), 0, 128, 128));
-                                        timer = delay - 0.05f;
-                                    }
-                                    else
-                                        timer -= deltatime;
-                                }
-                                player1.sprite.move(500 * deltatime, 0);
+                            player1.sprite.move(500 * deltatime, 0);
 
-                            }
                         }
-                        //Moving left
-                        if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0 && !Round_Trans && !Round_Interacting) {
-                            if (!level) { 
+                    }
+                    //Moving left
+                    if (!level) {
+                        if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0 && !Round_Trans && !Round_Interacting && scale2) {
+                            if (!level) {
                                 player1.sprite.setScale(-3, 3);
                                 player1.hitbox.attack.setScale(-1, 1);
 
@@ -3353,354 +3655,372 @@ void game(int& win1, int& win2, RenderWindow& window)
                                 player1.sprite.move(-500 * deltatime, 0);
 
                             }
-                            else
-                            {
-                                player1.sprite.setScale(-1.7, 1.7);
-                                player1.hitbox.attack.setScale(-1, 1);
-                                if (player1.grounded == true) {
-                                    player1.sprite.setTexture(Run1);
-                                    if (timer <= 0)
-                                    {
-                                        playerindex++;
-                                        playerindex = playerindex % 8;
-                                        player1.sprite.setTextureRect(IntRect((playerindex * 128), 0, 128, 128));
-                                        timer = delay - 0.05f;
-                                    }
-                                    else
-                                        timer -= deltatime;
+                        }
+                    }
+                    else
+                    {
+                        if (Keyboard::isKeyPressed(Keyboard::A) && player1.sprite.getPosition().x > 0 && !Round_Trans && !Round_Interacting && scale2) {
+                            player1.sprite.setScale(-1.7, 1.7);
+                            player1.hitbox.attack.setScale(-1, 1);
+                            if (player1.grounded == true) {
+                                player1.sprite.setTexture(Run1);
+                                if (timer <= 0)
+                                {
+                                    playerindex++;
+                                    playerindex = playerindex % 8;
+                                    player1.sprite.setTextureRect(IntRect((playerindex * 128), 0, 128, 128));
+                                    timer = delay - 0.05f;
                                 }
-                                player1.sprite.move(-500 * deltatime, 0);
+                                else
+                                    timer -= deltatime;
                             }
+                            player1.sprite.move(-500 * deltatime, 0);
+                        }
+
+
+                    }
+                }
+            }
+
+
+
+
+            //PLAYER 2
+
+            //Gravity movement
+            player2.sprite.move(0, player2.velocity.y);
+
+            //Hitboxes live positioning
+            player2.hitbox.player.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
+            player2.hitbox.attack.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
+
+            //Return deafult color
+            if (!player2.hitbool && player2.health > 0)
+                player2.sprite.setColor(Color::White);
+
+            //Death if Fell
+            if (player2.hitbox.player.getPosition().y > window.getSize().y)
+            {
+                if (Deathfall) {
+                    Round_Trans = true;
+                    win1++;
+                    Deathfall = false;
+                }
+                player2.health = 0;
+                arr_index = update_healthbar(player2.health);
+                if (arr_index != -1)
+                {
+                    P2_HealthBar_Texture = hp_bar[arr_index];
+                    p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                }
+            }
+
+            //player 2 gravity and plates
+            if (!level) {
+                if (((platecoliode_1(player2.sprite, player2.hitbox.player, plt1.platrec))
+                    || (platecoliode_1(player2.sprite, player2.hitbox.player, plt2.platrec))
+                    || (platecoliode_1(player2.sprite, player2.hitbox.player, plt3.platrec))
+                    || (platecoliode_1(player2.sprite, player2.hitbox.player, plt4.platrec))
+                    || (platecoliode_1(player2.sprite, player2.hitbox.player, plt5.platrec))
+                    || player2.hitbox.player.getPosition().y > window.getSize().y)
+                    && player2.velocity.y >= 0)
+                {
+                    player2.velocity.y = 0;
+                    player2.timereset = false;
+                    player2.grounded = true;
+                    if (player2.health > 00 && !player2.attackbool) {
+                        player2.sprite.setTexture(Idle2);
+                        // animation breath player 2
+                        if (timer2 <= 0) {
+                            index2++;
+                            index2 = index2 % 10;
+                            player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
+                            timer2 = delay;
+                        }
+                        else
+                            timer2 -= deltatime;
+                    }
+                }
+                else if (!PAUSE && player2.hitbox.player.getPosition().y <= window.getSize().y)
+                {
+                    if (!player2.timereset) {
+                        player2.timereset = true;
+                        timer2 = 0;
+                        index2 = 0;
+                    }
+                    player2.grounded = false;
+                    player2.velocity.y -= Gravity * deltatime;
+                }
+            }
+            else {
+                if (((platecoliode_2(player2.sprite, player2.hitbox.player, plt1.platrec))
+                    || (platecoliode_2(player2.sprite, player2.hitbox.player, plt2.platrec))
+                    || (platecoliode_2(player2.sprite, player2.hitbox.player, plt3.platrec))
+                    || (platecoliode_2(player2.sprite, player2.hitbox.player, plt4.platrec))
+                    || (platecoliode_2(player2.sprite, player2.hitbox.player, plt5.platrec))
+                    || player2.hitbox.player.getPosition().y > window.getSize().y)
+                    && player2.velocity.y >= 0)
+                {
+                    player2.velocity.y = 0;
+                    player2.timereset = false;
+                    player2.grounded = true;
+                    if (player2.health > 00 && !player2.attackbool) {
+                        player2.sprite.setTexture(Idle3);
+                        // animation breath player 2
+                        if (timer2 <= 0) {
+                            index2++;
+                            index2 = index2 % 7;
+                            player2.sprite.setTextureRect(IntRect((index2 * 128), 0, 128, 128));
+                            timer2 = delay;
+                        }
+                        else
+                            timer2 -= deltatime;
+                    }
+                }
+                else if (!PAUSE && player2.hitbox.player.getPosition().y <= window.getSize().y)
+                {
+                    if (!player2.timereset) {
+                        player2.timereset = true;
+                        timer2 = 0;
+                        index2 = 0;
+                    }
+                    player2.grounded = false;
+                    player2.velocity.y -= Gravity * deltatime;
+                }
+            }
+            //Jumping animation
+            if (player2.velocity.y < 0) {
+                if (!level) {
+                    player2.sprite.setTexture(Jumping2);
+                    if (timer2 <= 0) {
+                        index2++;
+                        index2 = index2 % 3;
+                        player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
+                        timer2 = delay2 + 0.15;
+                    }
+                    else
+                        timer2 -= deltatime;
+                }
+                else {
+                    player2.sprite.setTexture(Jump3);
+                    if (timer <= 0) {
+
+
+                        player1.sprite.setTextureRect(IntRect((4 * 128), 0, 128, 128));
+
+                    }
+                    else
+                        timer -= deltatime;
+
+                }
+            }
+
+            //Falling animation
+            if (player2.velocity.y >= 0 && !player2.grounded) {
+                if (!level) {
+                    player2.sprite.setTexture(Fall2);
+                    if (timer2 <= 0) {
+                        index2++;
+                        index2 = index2 % 3;
+                        player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
+                        timer2 = delay2 + 0.15;
+                    }
+                    else
+                        timer2 -= deltatime;
+                }
+                else {
+                    player2.sprite.setTexture(Jump3);
+                    if (timer <= 0) {
+
+                        player2.sprite.setTextureRect(IntRect((5 * 128), 0, 128, 128));
+
+                    }
+                    else
+                        timer -= deltatime;
+
+                }
+            }
+
+            //Being hit
+            if (player2.hitbool == true) {
+                if (!level) {
+                    player2.sprite.setTexture(Hit2);
+                    player2.sprite.setColor(Color::Red);
+                    player2.sprite.setTextureRect(IntRect(0, 0, 120, 80));
+                    if (hittimer2 <= 0)
+                    {
+                        player2.hitbool = false;
+                    }
+                    else
+                        hittimer2 -= deltatime;
+                }
+                else {
+                    player2.sprite.setTexture(Hit3);
+                    player2.sprite.setColor(Color::Red);
+                    player2.sprite.setTextureRect(IntRect(0, 0, 128, 128));
+                    if (hittimer <= 0)
+                    {
+                        hitindex3++;
+                        hitindex3 = hitindex3 % 3;
+                        player2.sprite.setTextureRect(IntRect((hitindex3 * 128), 0, 128, 128));
+                        player2.hitbool = false;
+                        hittimer = delay;
+                    }
+                    else
+                        hittimer -= deltatime;
+
+
+                }
+            }
+
+            //I put everything in else so it cannot be done at the same time
+            else
+            {
+                //Attack & Movement
+                if (player2.attackbool == true) {
+                    if (!level) {
+                        player2.sprite.setTexture(Attacking2);
+
+                        //Attacking Animation
+                        if (attacktimer2 <= 0) {
+                            attackindex2++;
+                            attackindex2 = attackindex2 % 4;
+                            player2.sprite.setTextureRect(IntRect((attackindex2 * 120), 0, 120, 80));
+                            attacktimer2 = attackdelay2;
+                            if (attackindex2 == 0) {
+                                player2.attackbool = false;
+                            }
+                        }
+                        else {
+                            attacktimer2 -= deltatime;
+                        }
+                    }
+                    else {
+                        player2.sprite.setTexture(Attack3);
+
+                        //Attacking Animation
+                        if (attacktimer2 <= 0) {
+                            attackindex2++;
+                            attackindex2 = attackindex2 % 8;
+                            player2.sprite.setTextureRect(IntRect((attackindex2 * 128), 0, 128, 128));
+                            attacktimer2 = attackdelay2;
+                            if (attackindex2 == 0) {
+                                player2.attackbool = false;
+                            }
+                        }
+                        else {
+                            attacktimer2 -= deltatime;
+                        }
+                    }
+                }
+                //I put everything in else so it cannot be done at the same time
+                else
+                {
+                    //Moving right
+                    if (!level) {
+                        if (Keyboard::isKeyPressed(Keyboard::Right) && player2.sprite.getPosition().x < (window.getSize().x - player2.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Interacting) {
+
+                            player2.sprite.setScale(3, 3);
+                            player2.hitbox.attack.setScale(1, 1);
+                            if (player2.grounded == true) {
+                                player2.sprite.setTexture(Running2);
+                                if (timer2 <= 0)
+                                {
+                                    index2++;
+                                    index2 = index2 % 10;
+                                    player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
+                                    timer2 = delay2 - 0.05f;
+                                }
+                                else
+                                    timer2 -= deltatime;
+                            }
+                            player2.sprite.move(500 * deltatime, 0);
+                        }
+                    }
+                    else {
+                        if (Keyboard::isKeyPressed(Keyboard::Right) && player2.sprite.getPosition().x < (window.getSize().x - player2.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Interacting&&scale) {
+
+
+                            player2.sprite.setScale(1.7, 1.7);
+                            player2.hitbox.attack.setScale(1, 1);
+                            if (player2.grounded == true) {
+                                player2.sprite.setTexture(Run3);
+                                if (timer2 <= 0)
+                                {
+                                    index2++;
+                                    index2 = index2 % 8;
+                                    player2.sprite.setTextureRect(IntRect((index2 * 128), 0, 128, 128));
+                                    timer2 = delay2 - 0.05f;
+                                }
+                                else
+                                    timer2 -= deltatime;
+                            }
+                            player2.sprite.move(500 * deltatime, 0);
+
+                        }
+                    }
+                    //Moving left
+                    if (!level) {
+                        if (Keyboard::isKeyPressed(Keyboard::Left) && player2.sprite.getPosition().x > 0 && !Round_Trans && !Round_Interacting) {
+
+                            player2.sprite.setScale(-3, 3);
+                            player2.hitbox.attack.setScale(-1, 1);
+                            if (player2.grounded == true) {
+                                player2.sprite.setTexture(Running2);
+                                if (timer2 <= 0)
+                                {
+                                    index2++;
+                                    index2 = index2 % 10;
+                                    player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
+                                    timer2 = delay2 - 0.05f;
+                                }
+                                else
+                                    timer2 -= deltatime;
+                            }
+                            player2.sprite.move(-500 * deltatime, 0);
+                        }
+                    }
+                    if (level) {
+                        
+                        
+                        if (Keyboard::isKeyPressed(Keyboard::Left) && player2.sprite.getPosition().x > 0 && !Round_Trans && !Round_Interacting&&scale) {
+                            
+                            player2.sprite.setScale(-1.7, 1.7);
+                            player2.hitbox.attack.setScale(-1, 1);
+                            if (player2.grounded == true) {
+                                player2.sprite.setTexture(Run3);
+                                if (timer2 <= 0)
+                                {
+                                    index2++;
+                                    index2 = index2 % 8;
+                                    player2.sprite.setTextureRect(IntRect((index2 * 128), 0, 128, 128));
+                                    timer2 = delay2 - 0.05f;
+                                }
+                                else
+                                    timer2 -= deltatime;
+                            }
+                            player2.sprite.move(-500 * deltatime, 0);
+
+                                    
+                                
                             
                         }
                     }
                 }
-
-
-
-
-                //PLAYER 2
-
-                //Gravity movement
-                player2.sprite.move(0, player2.velocity.y);
-
-                //Hitboxes live positioning
-                player2.hitbox.player.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
-                player2.hitbox.attack.setPosition(player2.sprite.getPosition().x, player2.sprite.getPosition().y);
-
-                //Return deafult color
-                if (!player2.hitbool && player2.health > 0)
-                    player2.sprite.setColor(Color::White);
-
-                //Death if Fell
-                if (player2.hitbox.player.getPosition().y > window.getSize().y)
-                {
-                    if (Deathfall) {
-                        Round_Trans = true;
-                        win1++;
-                        Deathfall = false;
+            }
+            if (level) {
+                for (int i = 0; i < 7; i++) {
+                    if (fireballs[i].theSprite.getGlobalBounds().intersects(plt1.platrec.getGlobalBounds())
+                        || fireballs[i].theSprite.getGlobalBounds().intersects(plt2.platrec.getGlobalBounds())
+                        || fireballs[i].theSprite.getGlobalBounds().intersects(plt3.platrec.getGlobalBounds()) ||
+                        fireballs[i].theSprite.getGlobalBounds().intersects(plt4.platrec.getGlobalBounds()) ||
+                        fireballs[i].theSprite.getGlobalBounds().intersects(plt5.platrec.getGlobalBounds()) ||
+                        fireballs[i].theSprite.getGlobalBounds().intersects(fire_reload.getGlobalBounds())) {
+                        fireballs[i].velocity.y = 0;
+                        fireballs[i].position(i);
                     }
-                    player2.health = 0;
-                    arr_index = update_healthbar(player2.health);
-                    if (arr_index != -1)
-                    {
-                        P2_HealthBar_Texture = hp_bar[arr_index];
-                        p2_healthBar.setTexture(&P2_HealthBar_Texture);
-                    }
-                }
-
-                //player 2 gravity and plates
-                if (!level) {
-                    if (((platecoliode_1(player2.sprite, player2.hitbox.player, plt1.platrec))
-                        || (platecoliode_1(player2.sprite, player2.hitbox.player, plt2.platrec))
-                        || (platecoliode_1(player2.sprite, player2.hitbox.player, plt3.platrec))
-                        || (platecoliode_1(player2.sprite, player2.hitbox.player, plt4.platrec))
-                        || (platecoliode_1(player2.sprite, player2.hitbox.player, plt5.platrec))
-                        || player2.hitbox.player.getPosition().y > window.getSize().y)
-                        && player2.velocity.y >= 0)
-                    {
-                        player2.velocity.y = 0;
-                        player2.timereset = false;
-                        player2.grounded = true;
-                        if (player2.health > 00 && !player2.attackbool) {
-                            player2.sprite.setTexture(Idle2);
-                            // animation breath player 2
-                            if (timer2 <= 0) {
-                                index2++;
-                                index2 = index2 % 10;
-                                player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
-                                timer2 = delay;
-                            }
-                            else
-                                timer2 -= deltatime;
-                        }
-                    }
-                    else if (!PAUSE && player2.hitbox.player.getPosition().y <= window.getSize().y)
-                    {
-                        if (!player2.timereset) {
-                            player2.timereset = true;
-                            timer2 = 0;
-                            index2 = 0;
-                        }
-                        player2.grounded = false;
-                        player2.velocity.y -= Gravity * deltatime;
-                    }
-                }
-                else {
-                    if (((platecoliode_2(player2.sprite, player2.hitbox.player, plt1.platrec))
-                        || (platecoliode_2(player2.sprite, player2.hitbox.player, plt2.platrec))
-                        || (platecoliode_2(player2.sprite, player2.hitbox.player, plt3.platrec))
-                        || (platecoliode_2(player2.sprite, player2.hitbox.player, plt4.platrec))
-                        || (platecoliode_2(player2.sprite, player2.hitbox.player, plt5.platrec))
-                        || player2.hitbox.player.getPosition().y > window.getSize().y)
-                        && player2.velocity.y >= 0)
-                    {
-                        player2.velocity.y = 0;
-                        player2.timereset = false;
-                        player2.grounded = true;
-                        if (player2.health > 00 && !player2.attackbool) {
-                            player2.sprite.setTexture(Idle3);
-                            // animation breath player 2
-                            if (timer2 <= 0) {
-                                index2++;
-                                index2 = index2 % 7;
-                                player2.sprite.setTextureRect(IntRect((index2 * 128), 0, 128, 128));
-                                timer2 = delay;
-                            }
-                            else
-                                timer2 -= deltatime;
-                        }
-                    }
-                    else if (!PAUSE && player2.hitbox.player.getPosition().y <= window.getSize().y)
-                    {
-                        if (!player2.timereset) {
-                            player2.timereset = true;
-                            timer2 = 0;
-                            index2 = 0;
-                        }
-                        player2.grounded = false;
-                        player2.velocity.y -= Gravity * deltatime;
-                    }
-                }
-                //Jumping animation
-                if (player2.velocity.y < 0) {
-                    if (!level) {
-                        player2.sprite.setTexture(Jumping2);
-                        if (timer2 <= 0) {
-                            index2++;
-                            index2 = index2 % 3;
-                            player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
-                            timer2 = delay2 + 0.15;
-                        }
-                        else
-                            timer2 -= deltatime;
-                    }
-                    else {
-                        player2.sprite.setTexture(Jump3);
-                        if (timer <= 0) {
-
-
-                            player1.sprite.setTextureRect(IntRect((4 * 128), 0, 128, 128));
-
-                        }
-                        else
-                            timer -= deltatime;
-
-                    }
-                }
-
-                //Falling animation
-                if (player2.velocity.y >= 0 && !player2.grounded) {
-                    if (!level) {
-                        player2.sprite.setTexture(Fall2);
-                        if (timer2 <= 0) {
-                            index2++;
-                            index2 = index2 % 3;
-                            player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
-                            timer2 = delay2 + 0.15;
-                        }
-                        else
-                            timer2 -= deltatime;
-                    }
-                    else {
-                        player2.sprite.setTexture(Jump3);
-                        if (timer <= 0) {
-
-                            player2.sprite.setTextureRect(IntRect((5 * 128), 0, 128, 128));
-
-                        }
-                        else
-                            timer -= deltatime;
-
-                    }
-                }
-
-                //Being hit
-                if (player2.hitbool == true) {
-                    if (!level) {
-                        player2.sprite.setTexture(Hit2);
-                        player2.sprite.setColor(Color::Red);
-                        player2.sprite.setTextureRect(IntRect(0, 0, 120, 80));
-                        if (hittimer2 <= 0)
-                        {
-                            player2.hitbool = false;
-                        }
-                        else
-                            hittimer2 -= deltatime;
-                    }
-                    else {
-                        player2.sprite.setTexture(Hit3);
-                        player2.sprite.setColor(Color::Red);
-                        player2.sprite.setTextureRect(IntRect(0, 0, 128, 128));
-                        if (hittimer <= 0)
-                        {
-                            hitindex3++;
-                            hitindex3 = hitindex3 % 3;
-                            player2.sprite.setTextureRect(IntRect((hitindex3 * 128), 0, 128, 128));
-                            player2.hitbool = false;
-                            hittimer = delay;
-                        }
-                        else
-                            hittimer -= deltatime;
-
-
-                    }
-                }
-
-                //I put everything in else so it cannot be done at the same time
-                else
-                {
-                    //Attack & Movement
-                    if (player2.attackbool == true) {
-                        if (!level) {
-                            player2.sprite.setTexture(Attacking2);
-
-                            //Attacking Animation
-                            if (attacktimer2 <= 0) {
-                                attackindex2++;
-                                attackindex2 = attackindex2 % 4;
-                                player2.sprite.setTextureRect(IntRect((attackindex2 * 120), 0, 120, 80));
-                                attacktimer2 = attackdelay2;
-                                if (attackindex2 == 0) {
-                                    player2.attackbool = false;
-                                }
-                            }
-                            else {
-                                attacktimer2 -= deltatime;
-                            }
-                        }
-                        else {
-                            player2.sprite.setTexture(Attack3);
-
-                            //Attacking Animation
-                            if (attacktimer2 <= 0) {
-                                attackindex2++;
-                                attackindex2 = attackindex2 % 8;
-                                player2.sprite.setTextureRect(IntRect((attackindex2 * 128), 0, 128, 128));
-                                attacktimer2 = attackdelay2;
-                                if (attackindex2 == 0) {
-                                    player2.attackbool = false;
-                                }
-                            }
-                            else {
-                                attacktimer2 -= deltatime;
-                            }
-                        }
-                    }
-                    //I put everything in else so it cannot be done at the same time
-                    else
-                    {
-                        //Moving right
-                        if (Keyboard::isKeyPressed(Keyboard::Right) && player2.sprite.getPosition().x < (window.getSize().x - player2.sprite.getGlobalBounds().width / 100) && !Round_Trans && !Round_Interacting) {
-                            if (!level) {
-                                player2.sprite.setScale(3, 3);
-                                player2.hitbox.attack.setScale(1, 1);
-                                if (player2.grounded == true) {
-                                    player2.sprite.setTexture(Running2);
-                                    if (timer2 <= 0)
-                                    {
-                                        index2++;
-                                        index2 = index2 % 10;
-                                        player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
-                                        timer2 = delay2 - 0.05f;
-                                    }
-                                    else
-                                        timer2 -= deltatime;
-                                }
-                                player2.sprite.move(500 * deltatime, 0);
-                            }
-                            else {
-                                player2.sprite.setScale(1.7, 1.7);
-                                player2.hitbox.attack.setScale(1, 1);
-                                if (player2.grounded == true) {
-                                    player2.sprite.setTexture(Run3);
-                                    if (timer2 <= 0)
-                                    {
-                                        index2++;
-                                        index2 = index2 % 8;
-                                        player2.sprite.setTextureRect(IntRect((index2 * 128), 0, 128, 128));
-                                        timer2 = delay2 - 0.05f;
-                                    }
-                                    else
-                                        timer2 -= deltatime;
-                                }
-                                player2.sprite.move(500 * deltatime, 0);
-
-                            }
-                        }
-                        //Moving left
-                        if (Keyboard::isKeyPressed(Keyboard::Left) && player2.sprite.getPosition().x > 0 && !Round_Trans && !Round_Interacting) {
-                            if (!level) {
-                                player2.sprite.setScale(-3, 3);
-                                player2.hitbox.attack.setScale(-1, 1);
-                                if (player2.grounded == true) {
-                                    player2.sprite.setTexture(Running2);
-                                    if (timer2 <= 0)
-                                    {
-                                        index2++;
-                                        index2 = index2 % 10;
-                                        player2.sprite.setTextureRect(IntRect((index2 * 120), 0, 120, 80));
-                                        timer2 = delay2 - 0.05f;
-                                    }
-                                    else
-                                        timer2 -= deltatime;
-                                }
-                                player2.sprite.move(-500 * deltatime, 0);
-                            }
-                            else {
-                                player2.sprite.setScale(-1.7, 1.7);
-                                player2.hitbox.attack.setScale(-1, 1);
-                                if (player2.grounded == true) {
-                                    player2.sprite.setTexture(Run3);
-                                    if (timer2 <= 0)
-                                    {
-                                        index2++;
-                                        index2 = index2 % 8;
-                                        player2.sprite.setTextureRect(IntRect((index2 * 128), 0, 128, 128));
-                                        timer2 = delay2 - 0.05f;
-                                    }
-                                    else
-                                        timer2 -= deltatime;
-                                }
-                                player2.sprite.move(-500 * deltatime, 0);
-
-                            }
-                        }
-                    }
-                }
-                if (level) {
-                    for (int i = 0; i < 7; i++) {
-                        if (fireballs[i].theSprite.getGlobalBounds().intersects(plt1.platrec.getGlobalBounds())
-                            || fireballs[i].theSprite.getGlobalBounds().intersects(plt2.platrec.getGlobalBounds())
-                            || fireballs[i].theSprite.getGlobalBounds().intersects(plt3.platrec.getGlobalBounds()) ||
-                            fireballs[i].theSprite.getGlobalBounds().intersects(plt4.platrec.getGlobalBounds()) ||
-                            fireballs[i].theSprite.getGlobalBounds().intersects(plt5.platrec.getGlobalBounds())||
-                            fireballs[i].theSprite.getGlobalBounds().intersects(fire_reload.getGlobalBounds())) {
-                            fireballs[i].velocity.y = 0;
-                            fireballs[i].position(i);
-                        }
-                        else if (fireballs[i].theSprite.getGlobalBounds().intersects(player1.hitbox.player.getGlobalBounds()) && !Round_Interacting) {
-                           if(player1.health>0)
+                    else if (fireballs[i].theSprite.getGlobalBounds().intersects(player1.hitbox.player.getGlobalBounds()) && !Round_Interacting) {
+                        if (player1.health > 0)
                             player1.hitbool = true;
 
                                 player1.health -= 10;
@@ -3750,6 +4070,27 @@ void game(int& win1, int& win2, RenderWindow& window)
                             fireballs[i].theSprite.move(fireballs[i].velocity);
                         }
                     }
+                if (movie) {
+                    int y;
+                    move_fire(deltatime, firep1);
+
+                    y = direction(player2.sprite);
+
+
+                    firep1.move(700 * deltatime * y, 0);
+                }
+                if (movie2) {
+
+                    int y;
+                    move_fire2(deltatime, magicp2);
+
+                    y = direction(player1.sprite);
+
+
+                    magicp2.move(700 * deltatime * y, 0);
+
+
+                }
                 }
                 window.clear();
                 window.draw(fire_reload);
@@ -3770,6 +4111,11 @@ void game(int& win1, int& win2, RenderWindow& window)
                 window.draw(p2_healthBar);
                 window.draw(player1.sprite);
                 window.draw(player2.sprite);
+                if (level && draw) {
+                    window.draw(firep1);
+                }
+                if (level && draw2)
+                    window.draw(magicp2);
                 if (!level) {
                     if (timerpow.getElapsedTime().asSeconds() >= 10.0f) {
                         for (int i = 0; i < 3; i++) {
@@ -3786,19 +4132,19 @@ void game(int& win1, int& win2, RenderWindow& window)
                     for (int i = 0; i < 7; i++) {
                         window.draw(fireballs[i].theSprite);
 
-                    }
                 }
-                interactionwindow1.draw(window);
-                interactionWindow2.draw(window);
-                for (int i = 0;i < 3;i++)
-                {
-                    window.draw(player1.Round_won[i]);
-                    window.draw(player2.Round_won[i]);
-                }
-                window.draw(PressEnter);
-                window.display();
-                deltatime = gameclock.getElapsedTime().asSeconds();
-         
+            }
+            interactionwindow1.draw(window);
+            interactionWindow2.draw(window);
+            for (int i = 0; i < 3; i++)
+            {
+                window.draw(player1.Round_won[i]);
+                window.draw(player2.Round_won[i]);
+            }
+            window.draw(PressEnter);
+            window.display();
+            deltatime = gameclock.getElapsedTime().asSeconds();
+
         }
     }
 }
