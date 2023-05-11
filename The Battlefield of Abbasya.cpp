@@ -115,6 +115,10 @@ Sound Hover;
 Sound Click;
 Sound Attacksound;
 Sound BeingHit;
+Sound Magicball;
+Sound Burn;
+SoundBuffer MajesticArrow;
+SoundBuffer Osama;
 SoundBuffer Clicker;
 SoundBuffer Hoverer;
 SoundBuffer Attacksoundd;
@@ -2207,6 +2211,11 @@ Sprite magicp2;
 Texture fire_p1;
 Texture magic_p2;
 
+void Initial(Sprite& p1proj, Sprite& p2proj) {
+    p1proj.setPosition(1000, 1000);
+    p2proj.setPosition(1000, 1000);
+}
+
 //player2
 void FIRE(RectangleShape& one, Sprite& player2, Sprite& fire, Texture& tfire) {
     fire.setTexture(tfire);
@@ -2247,13 +2256,13 @@ int direction(Sprite& fire) {
 
 void FIRE2(RectangleShape& one, Sprite& player1, Sprite& fire, Texture& tfire) {
     fire.setTexture(tfire);
-    fire.setTextureRect(IntRect((0 * 64), 0, 64, 128));
+    fire.setTextureRect(IntRect((0 * 64), 0, 64, 51));
     
     int x1 = one.getPosition().x;
     int y1 = one.getPosition().y;
     int x2 = player1.getScale().x;
     int x3 = x2 / abs(x2);
-    fire.setOrigin(55, 55);
+    fire.setOrigin(55, 20);
     fire.setScale(x3*5, 5);
     fire.setPosition(x1, y1);
 
@@ -2264,7 +2273,7 @@ void move_fire2(float deltatime, Sprite& fire) {
     if (timer <= 0) {
         a++;
         a = a % 6;
-        fire.setTextureRect(IntRect((a * 64), 0, 64, 128));
+        fire.setTextureRect(IntRect((a * 64), 0, 64, 51));
         timer = delay;
     }
     else {
@@ -2327,7 +2336,11 @@ int main()
     BeingHitt.loadFromFile("Sounds/Realistic-Hit-Sound-Effect-128.wav");
     Clicker.loadFromFile("Sounds/zapsplat_multimedia_button_press_plastic_click_001_36868.wav");
     Hoverer.loadFromFile("Sounds/zapsplat_multimedia_button_click_bright_002_92099.wav");
+    MajesticArrow.loadFromFile("Sounds/The-Elder-Scrolls-V-Skyrim-Ice-Spike-Spell-_Sound-Effect_-128-2.wav");
+    Osama.loadFromFile("Sounds/cartoon_fireball_sound_effect_-_128.wav");
 
+    Magicball.setBuffer(MajesticArrow);
+    Burn.setBuffer(Osama);
     Click.setBuffer(Clicker);
     Hover.setBuffer(Hoverer);
     Attacksound.setBuffer(Attacksoundd);
@@ -2561,7 +2574,7 @@ void game(int& win1, int& win2, RenderWindow& window)
     // interactionWindow2.finishedInteracting = false;
     srand(time(0));
 
-    
+    Initial(firep1, magicp2);
 
 
     // call init_health_bar once in the beginning of the game
@@ -2570,16 +2583,19 @@ void game(int& win1, int& win2, RenderWindow& window)
     Texture rain_text;
     rain_text.loadFromFile("fireball.png");
     FireBall fireballs[7];
-    fireballs[0].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 100,-300 });
-    fireballs[0].theSprite.setTexture(rain_text);
-    fireballs[1].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 350,-300 });
-    fireballs[1].theSprite.setTexture(rain_text);
-    fireballs[2].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 600,-300 });
-    fireballs[2].theSprite.setTexture(rain_text);
-    fireballs[3].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 850,-300 });
-    fireballs[3].theSprite.setTexture(rain_text);
-    fireballs[4].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 1100,-300 });
-    fireballs[4].theSprite.setTexture(rain_text);
+    if (level)
+    {
+        fireballs[0].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 100,-300 });
+        fireballs[0].theSprite.setTexture(rain_text);
+        fireballs[1].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 350,-300 });
+        fireballs[1].theSprite.setTexture(rain_text);
+        fireballs[2].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 600,-300 });
+        fireballs[2].theSprite.setTexture(rain_text);
+        fireballs[3].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 850,-300 });
+        fireballs[3].theSprite.setTexture(rain_text);
+        fireballs[4].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 1100,-300 });
+        fireballs[4].theSprite.setTexture(rain_text);
+    }
     /*fireballs[5].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 800,0 });
     fireballs[5].theSprite.setTexture(rain_text);
     fireballs[6].setInitialValues(rain_text, IntRect(0, 0, 150, 150), { 950,0 });
@@ -2609,6 +2625,7 @@ void game(int& win1, int& win2, RenderWindow& window)
             plt3.plat_set(plateform_r1, plt3.platrec, 150, 50, 100, 450, 1, 1);
             plt5.plat_set(plateform_r1, plt5.platrec, 150, 50, 1000, 300, 0, 0);
             plt4.plat_set(plateform_r1, plt4.platrec, 1280, 50, 0, 680, 1, 1);
+
         }
         Roundmusic[0].play();
         Roundmusic[0].setLoop(true);
@@ -2758,7 +2775,7 @@ void game(int& win1, int& win2, RenderWindow& window)
     else
     {
         player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 50.f, 115.f, Color::Blue);
-        player2.hitbox.player.setOrigin(64 / 2.f, 4);
+        player2.hitbox.player.setOrigin(43 / 2.f, 4);
     }
     player1.hitbox.attack.setOrigin(0, 0);
     player2.hitbox.attack.setOrigin(0, 0);
@@ -2861,9 +2878,12 @@ void game(int& win1, int& win2, RenderWindow& window)
                             player1.attackbool = true;
                             attacktimer = 0;
                             attackindex = 0;
-                            // Attacksound.play();
+                            if (SFX && !level)
+                                Attacksound.play();
                             if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
                             {
+                                if (SFX)
+                                    BeingHit.play();
                                 if (toucher2 == false || player2.health == 10) {
                                     player2.health -= 10;
 
@@ -2872,7 +2892,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                                     player2.health -= attackpow1;
                                 }
                                 player2.hitbool = true;
-                                if (player2.health == 0)
+                                if (player2.health <= 0)
                                 {
                                     win1++;
                                     Round_Trans = true;
@@ -2897,8 +2917,8 @@ void game(int& win1, int& win2, RenderWindow& window)
                             onebullet2 = false;
                             movie2 = true;
                             draw2 = true;
-                            if (SFX && !level)
-                                Attacksound.play();
+                            if (SFX)
+                                Magicball.play();
                             FIRE2(player1.hitbox.player, player1.sprite, magicp2, magic_p2);
                             // Attacksound.play();
                             if (intersection(player1.hitbox.attack, player2.hitbox.player) && player1.attackbool && !player1.hitbool)
@@ -2912,7 +2932,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                                 else {
                                     player2.health -= attackpow1;
                                 }
-                                if (player2.health == 0)
+                                if (player2.health <= 0)
                                 {
                                     win1++;
                                     Round_Trans = true;
@@ -2928,18 +2948,19 @@ void game(int& win1, int& win2, RenderWindow& window)
                             }
 
                         }
+                    }
                         //Death Animation & Round transition
                         if (roundelay < 0 && e.key.code == Keyboard::Enter)
                         {
-                            if ((player2.health == 0 && win2 < 2 && win1 < 2) || (player1.health == 0 && win2 < 2 && win1 < 2))
+                            if ((player2.health <= 0 && win2 < 2 && win1 < 2) || (player1.health <= 0 && win2 < 2 && win1 < 2))
                             {
                                 Deathindex = 0;
                                 Roundmusic[win1 + win2 - 1].stop();
-                                if (player2.health == 0) {
+                                if (player2.health <= 0) {
                                     player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
                                     PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
                                 }
-                                else if (player1.health == 0) {
+                                else if (player1.health <= 0) {
                                     player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
                                     PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
                                 }
@@ -2954,14 +2975,14 @@ void game(int& win1, int& win2, RenderWindow& window)
                                 Round_Trans = false;
                                 return;
                             }
-                            else if ((player2.health == 0 && win2 < 2 && win1 == 2) || (player1.health == 0 && win2 == 2 && win1 < 2)) {
+                            else if ((player2.health <= 0 && win2 < 2 && win1 == 2) || (player1.health <= 0 && win2 == 2 && win1 < 2)) {
                                 Deathindex = 0;
                                 Roundmusic[win1 + win2 - 1].stop();
                                 if (player2.health == 0) {
                                     player1.Round_won[win1 + win2 - 1].setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
                                     PressEnter.setPosition(player2.Round_won[win1 + win2 - 1].getPosition());
                                 }
-                                else if (player1.health == 0) {
+                                else if (player1.health <= 0) {
                                     player2.Round_won[win1 + win2 - 1].setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
                                     PressEnter.setPosition(player1.Round_won[win1 + win2 - 1].getPosition());
                                 }
@@ -2991,7 +3012,6 @@ void game(int& win1, int& win2, RenderWindow& window)
                         if (!level) {
                             if (e.key.code == Keyboard::J && player2.grounded == true && !player2.attackbool && !player2.hitbool && !Round_Trans && !Round_Interacting) {
                                 player2.attackbool = true;
-                                draw = true;
                                 attacktimer2 = 0;
                                 attackindex2 = 0;
 
@@ -3007,7 +3027,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                                         player1.health -= attackpow2;
                                     }
                                     player1.hitbool = true;
-                                    if (player1.health == 0)
+                                    if (player1.health <= 0)
                                     {
                                         win2++;
                                         Round_Trans = true;
@@ -3031,9 +3051,12 @@ void game(int& win1, int& win2, RenderWindow& window)
                                 draw = true;
                                 attacktimer2 = 0;
                                 attackindex2 = 0;
+                                if (SFX) {
+                                    Burn.play();
+                                }
                                 FIRE(player2.hitbox.player, player2.sprite, firep1, fire_p1);
                                 movie = true;
-                                //Attacksound.play();
+                                
                                 if (intersection(player2.hitbox.attack, player1.hitbox.player) && player2.attackbool) {
                                     if (toucher == false || player1.health == 10) {
                                         player1.health -= 10;
@@ -3042,7 +3065,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                                         player1.health -= attackpow2;
                                     }
                                     player1.hitbool = true;
-                                    if (player1.health == 0)
+                                    if (player1.health <= 0)
                                     {
                                         win2++;
                                         Round_Trans = true;
@@ -3071,7 +3094,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                         }
                     }
                 }
-            } // Polleventm possible missing token
+            // Polleventm possible missing token
             // START OF POWERUPS
             if (timerpow.getElapsedTime().asSeconds() >= 10 && win1 + win2 == 0 && powertim)
             {
@@ -3090,162 +3113,101 @@ void game(int& win1, int& win2, RenderWindow& window)
 
             if (level) {
                 for (int i = 0; i < 3; i++) {
-                    Powers_sp[i].move(0, 5);
-                    cout << Powers_sp[i].getPosition().y << " ";
+                    if (!Round_Interacting){
+                        Powers_sp[i].move(0, 5);
+                    }
+                    //cout << Powers_sp[i].getPosition().y << " ";
                 }
-                cout << endl;
+                //cout << endl;
                 powgame2(Powers_sp);
             }
             //END OF POWERS
 
+            //Plates moving
+            if (win1 + win2 == 0 && !Round_Trans) {
+                plt1.updateHorizontal(900, 1050, 70, deltatime, player1, player2);
+                plt3.updateHorizontal(50, 250, 70, deltatime, player1, player2);
+                plt2.updateHorizontal(300, 550, 70, deltatime, player1, player2);
+            }
+
             // Round Transition & Death
-            if (!level) {
-                if (player2.health <= 0 || player1.health <= 0)
+  
+            if (player2.health <= 0 || player1.health <= 0)
+            {
+                if (roundelay < -1)
                 {
-                    if (roundelay < -1)
-                    {
-                        if (PressEnter.getPosition().y < window.getSize().y / 4 + 90)
-                            PressEnter.move(0, 5);
+                    if (PressEnter.getPosition().y < window.getSize().y / 4 + 90)
+                        PressEnter.move(0, 5);
+                }
+                roundelay -= deltatime;
+                if (player1.health <= 0) {
+                    if (player2.Round_won[win1 + win2 - 1].getPosition().y < window.getSize().y / 4)
+                        player2.Round_won[win1 + win2 - 1].move(0, 5);
+                    if (!level) {
+                        player1.sprite.setTexture(Death);
+                        player1.sprite.setColor(Color(128, 0, 0));
+                        if (timer <= 0) {
+                            if (Deathindex != 9)
+                                Deathindex++;
+                            Deathindex = Deathindex % 10;
+                            player1.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
+                            timer = delay;
+                        }
+                        else
+                            timer -= deltatime;
                     }
-                    roundelay -= deltatime;
-                    if (player1.health <= 0) {
-                        if (player2.Round_won[win1 + win2 - 1].getPosition().y < window.getSize().y / 4)
-                            player2.Round_won[win1 + win2 - 1].move(0, 5);
-                        if (!level) {
-                            player1.sprite.setTexture(Death);
-                            player1.sprite.setColor(Color(128, 0, 0));
-                            if (timer <= 0) {
-                                if (Deathindex != 9)
-                                    Deathindex++;
-                                Deathindex = Deathindex % 10;
-                                player1.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
-                                timer = delay;
-                            }
-                            else
-                                timer -= deltatime;
+
+                    else {
+                        player1.sprite.setTexture(Death1);
+                        player1.sprite.setColor(Color(128, 0, 0));
+                        if (timer <= 0) {
+                            if (Deathindex < 3)
+                                Deathindex++;
+
+                            Deathindex = Deathindex % 4;
+                            player1.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
+                            timer = delay + 0.15;
                         }
+                        else
+                            timer -= deltatime;
 
-                        else {
-                            player1.sprite.setTexture(Death1);
-                            player1.sprite.setColor(Color(128, 0, 0));
-                            if (timer <= 0) {
-                                if (Deathindex < 3)
-                                    Deathindex++;
-
-                                Deathindex = Deathindex % 4;
-                                player1.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
-                                timer = delay + 0.15;
-                            }
-                            else
-                                timer -= deltatime;
-
-                        }
                     }
-                    if (player2.health <= 0) {
-                        if (player1.Round_won[win1 + win2 - 1].getPosition().y < window.getSize().y / 4)
-                            player1.Round_won[win1 + win2 - 1].move(0, 5);
-                        if (!level) {
-                            player2.sprite.setColor(Color(128, 0, 0));
-                            player2.sprite.setTexture(Death2);
-                            if (timer2 <= 0) {
-                                if (Deathindex != 9)
-                                    Deathindex++;
-                                Deathindex = Deathindex % 10;
-                                player2.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
-                                timer2 = delay2;
-                            }
-                            else
-                                timer2 -= deltatime;
+                }
+                if (player2.health <= 0) {
+                    if (player1.Round_won[win1 + win2 - 1].getPosition().y < window.getSize().y / 4)
+                        player1.Round_won[win1 + win2 - 1].move(0, 5);
+                    if (!level) {
+                        player2.sprite.setColor(Color(128, 0, 0));
+                        player2.sprite.setTexture(Death2);
+                        if (timer2 <= 0) {
+                            if (Deathindex != 9)
+                                Deathindex++;
+                            Deathindex = Deathindex % 10;
+                            player2.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
+                            timer2 = delay2;
                         }
-                        else {
+                        else
+                            timer2 -= deltatime;
+                    }
+                    else {
 
-                            player2.sprite.setTexture(Death3);
-                            player2.sprite.setColor(Color(128, 0, 0));
-                            if (timer <= 0) {
-                                if (Deathindex < 5)
-                                    Deathindex++;
+                        player2.sprite.setTexture(Death3);
+                        player2.sprite.setColor(Color(128, 0, 0));
+                        if (timer <= 0) {
+                            if (Deathindex < 5)
+                                Deathindex++;
 
-                                Deathindex = Deathindex % 6;
-                                player2.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
-                                timer = delay + 0.15;
-                            }
-                            else
-                                timer -= deltatime;
+                            Deathindex = Deathindex % 6;
+                            player2.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
+                            timer = delay + 0.15;
                         }
+                        else
+                            timer -= deltatime;
                     }
                 }
             }
-            else {
-                if ((player2.health <= 0 && win2 < 2 && win1 < 2) || (player1.health <= 0 && win2 < 2 && win1 < 2))
-                {
-                    roundelay -= deltatime;
-                    if (player1.health <= 0) {
-                        if (player2.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
-                            player2.Round_won[win1 + win2].move(0, 5);
-                        if (!level) {
-                            player1.sprite.setTexture(Death);
-                            player1.sprite.setColor(Color(128, 0, 0));
-                            if (timer <= 0) {
-                                if (Deathindex != 9)
-                                    Deathindex++;
-                                Deathindex = Deathindex % 10;
-                                player1.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
-                                timer = delay;
-                            }
-                            else
-                                timer -= deltatime;
-                        }
-
-                        else {
-                            player1.sprite.setTexture(Death1);
-                            player1.sprite.setColor(Color(128, 0, 0));
-                            if (timer <= 0) {
-                                if (Deathindex < 3)
-                                    Deathindex++;
-
-                                Deathindex = Deathindex % 4;
-                                player1.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
-                                timer = delay + 0.15;
-                            }
-                            else
-                                timer -= deltatime;
-
-                        }
-                    }
-                    if (player2.health <= 0) {
-                        if (player1.Round_won[win1 + win2].getPosition().y < window.getSize().y / 4)
-                            player1.Round_won[win1 + win2].move(0, 5);
-                        if (!level) {
-                            player2.sprite.setColor(Color(128, 0, 0));
-                            player2.sprite.setTexture(Death2);
-                            if (timer2 <= 0) {
-                                if (Deathindex != 9)
-                                    Deathindex++;
-                                Deathindex = Deathindex % 10;
-                                player2.sprite.setTextureRect(IntRect((Deathindex * 120), 0, 120, 80));
-                                timer2 = delay2;
-                            }
-                            else
-                                timer2 -= deltatime;
-                        }
-                        else {
-
-                            player2.sprite.setTexture(Death3);
-                            player2.sprite.setColor(Color(128, 0, 0));
-                            if (timer <= 0) {
-                                if (Deathindex < 5)
-                                    Deathindex++;
-
-                                Deathindex = Deathindex % 6;
-                                player2.sprite.setTextureRect(IntRect((Deathindex * 128), 0, 128, 128));
-                                timer = delay + 0.15;
-                            }
-                            else
-                                timer -= deltatime;
-                        }
-                    }
-                }
-            }
+            
+            
             for (int i = 0; i < 2; i++) {
                 if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[i].getGlobalBounds())) {
                     toucher2 = true;
@@ -3311,12 +3273,17 @@ void game(int& win1, int& win2, RenderWindow& window)
                 }
             }
             if (player2.hitbox.player.getGlobalBounds().intersects(magicp2.getGlobalBounds()) ) {
-                
+                if (SFX)
+                    BeingHit.play();
                 if (toucher2&&player2.health>10) {
                     player2.health -= 20;
                 }
                 else {
                     player2.health -= 10;
+                }
+                if (player2.health <= 0) {
+                    Round_Trans = true;
+                    win1++;
                 }
                 
                magicp2.setPosition(1000, 1000);
@@ -3340,16 +3307,20 @@ void game(int& win1, int& win2, RenderWindow& window)
             }
 
 
-            if (player1.hitbox.player.getGlobalBounds().intersects(firep1.getGlobalBounds())
-                ) {
-
+            if (player1.hitbox.player.getGlobalBounds().intersects(firep1.getGlobalBounds())) 
+            {
+                if (SFX)
+                    BeingHit.play();
                 if (toucher && player1.health > 10) {
                     player1.health -= 20;
                 }
                 else {
                     player1.health -= 10;
                 }
-
+                if (player1.health <= 0) {
+                    Round_Trans = true;
+                    win2++;
+                }
                 firep1.setPosition(1000, 1000);
                 arr_index = update_healthbar(player1.health);
                 if (arr_index != -1)
@@ -3753,6 +3724,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                 }
             }
             else {
+                
                 if (((platecoliode_2(player2.sprite, player2.hitbox.player, plt1.platrec))
                     || (platecoliode_2(player2.sprite, player2.hitbox.player, plt2.platrec))
                     || (platecoliode_2(player2.sprite, player2.hitbox.player, plt3.platrec))
@@ -4023,53 +3995,53 @@ void game(int& win1, int& win2, RenderWindow& window)
                         if (player1.health > 0)
                             player1.hitbool = true;
 
-                                player1.health -= 10;
-                           
-                            arr_index = update_healthbar(player1.health);
-                            if (arr_index != -1)
-                            {
-                                P1_HealthBar_Texture = hp_bar[arr_index];
-                                p1_healthBar.setTexture(&P1_HealthBar_Texture);
-                            }
-                            fireballs[i].position(i);
-                            //fireballs[i].theSprite.setPosition(fireballs[i].theSprite.getPosition().x, 0);
-                            fireballs[i].velocity.y = 0;
-                            if (player1.health <= 0)
-                            {
-                                win2++;
-                                Round_Trans = true;
+                        player1.health -= 10;
 
-                            }
+                        arr_index = update_healthbar(player1.health);
+                        if (arr_index != -1)
+                        {
+                            P1_HealthBar_Texture = hp_bar[arr_index];
+                            p1_healthBar.setTexture(&P1_HealthBar_Texture);
                         }
-                        else if (fireballs[i].theSprite.getGlobalBounds().intersects(player2.hitbox.player.getGlobalBounds())&&!Round_Interacting) {
-                            if (player2.health > 0)
-                            player2.hitbool = true;
-                                player2.health -= 10;
-                         
-                            arr_index = update_healthbar(player2.health);
-                            if (arr_index != -1)
-                            {
-                                P2_HealthBar_Texture = hp_bar[arr_index];
-                                p2_healthBar.setTexture(&P2_HealthBar_Texture);
-                            }
-                            fireballs[i].position(i);
-                            //fireballs[i].theSprite.setPosition(fireballs[i].theSprite.getPosition().x, 0);
-                            fireballs[i].velocity.y = 0;
-                            if (player2.health <= 0)
-                            {
-                                win1++;
-                                Round_Trans = true;
-                            }
-                        }
-                        else {
-                            if(!Round_Interacting)
-                            fireballs[i].velocity.y += fire_gravity*deltatime;
-                        }
-                        if (!Round_Interacting && player1.health > 0 && player2.health > 0) {
-                            fireballs[i].moveSprite(deltatime);
-                            fireballs[i].theSprite.move(fireballs[i].velocity);
+                        fireballs[i].position(i);
+                        //fireballs[i].theSprite.setPosition(fireballs[i].theSprite.getPosition().x, 0);
+                        fireballs[i].velocity.y = 0;
+                        if (player1.health <= 0)
+                        {
+                            win2++;
+                            Round_Trans = true;
+
                         }
                     }
+                    else if (fireballs[i].theSprite.getGlobalBounds().intersects(player2.hitbox.player.getGlobalBounds()) && !Round_Interacting) {
+                        if (player2.health > 0)
+                            player2.hitbool = true;
+                        player2.health -= 10;
+
+                        arr_index = update_healthbar(player2.health);
+                        if (arr_index != -1)
+                        {
+                            P2_HealthBar_Texture = hp_bar[arr_index];
+                            p2_healthBar.setTexture(&P2_HealthBar_Texture);
+                        }
+                        fireballs[i].position(i);
+                        //fireballs[i].theSprite.setPosition(fireballs[i].theSprite.getPosition().x, 0);
+                        fireballs[i].velocity.y = 0;
+                        if (player2.health <= 0)
+                        {
+                            win1++;
+                            Round_Trans = true;
+                        }
+                    }
+                    else {
+                        if (!Round_Interacting)
+                            fireballs[i].velocity.y += fire_gravity * deltatime;
+                    }
+                    if (!Round_Interacting && player1.health > 0 && player2.health > 0) {
+                        fireballs[i].moveSprite(deltatime);
+                        fireballs[i].theSprite.move(fireballs[i].velocity);
+                    }
+                }
                 if (movie) {
                     int y;
                     move_fire(deltatime, firep1);
@@ -4091,7 +4063,7 @@ void game(int& win1, int& win2, RenderWindow& window)
 
 
                 }
-                }
+            }
                 window.clear();
                 window.draw(fire_reload);
                 window.draw(player1.hitbox.player);
@@ -4112,7 +4084,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                 window.draw(player1.sprite);
                 window.draw(player2.sprite);
                 if (level && draw) {
-                    window.draw(firep1);
+                  window.draw(firep1);
                 }
                 if (level && draw2)
                     window.draw(magicp2);
