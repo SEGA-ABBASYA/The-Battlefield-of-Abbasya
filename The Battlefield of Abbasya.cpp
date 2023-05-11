@@ -40,6 +40,8 @@ float attacktimer = 0.0f;
 float attackdelay = 0.1f;
 float hittimer = 0.0f;
 
+
+
 int index2 = 0;
 float timer2 = 0.0f;
 float delay2 = 0.15f;
@@ -119,6 +121,7 @@ Sound Magicball;
 Sound Burn;
 SoundBuffer MajesticArrow;
 SoundBuffer Osama;
+SoundBuffer Explosion;
 SoundBuffer Clicker;
 SoundBuffer Hoverer;
 SoundBuffer Attacksoundd;
@@ -2338,6 +2341,7 @@ int main()
     Hoverer.loadFromFile("Sounds/zapsplat_multimedia_button_click_bright_002_92099.wav");
     MajesticArrow.loadFromFile("Sounds/The-Elder-Scrolls-V-Skyrim-Ice-Spike-Spell-_Sound-Effect_-128-2.wav");
     Osama.loadFromFile("Sounds/cartoon_fireball_sound_effect_-_128.wav");
+    Explosion.loadFromFile("Sounds/Megumin_explosion_sound_effect_[Reupload].wav");
 
     Magicball.setBuffer(MajesticArrow);
     Burn.setBuffer(Osama);
@@ -2804,6 +2808,10 @@ void game(int& win1, int& win2, RenderWindow& window)
             interactionWindow2.interactionSetProp(arrayOfInteractions,player2.name, 1000, 200);
             // interactionwindow1.setName(player1.name);
             // interactionWindow2.setName(player2.name);
+            if (player2.name == "Megumin")
+                Burn.setBuffer(Explosion);
+            else
+                Burn.setBuffer(Osama);
 
             for (int i = 0;i < 3;i++)
             {
