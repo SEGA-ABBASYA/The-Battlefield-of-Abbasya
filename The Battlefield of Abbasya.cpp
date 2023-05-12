@@ -40,7 +40,8 @@ float attacktimer = 0.0f;
 float attackdelay = 0.1f;
 float hittimer = 0.0f;
 
-
+float Spelltimer = 0.5f;
+float Spelltimer2 = 0.5f;
 
 int index2 = 0;
 float timer2 = 0.0f;
@@ -119,7 +120,9 @@ Sound Attacksound;
 Sound BeingHit;
 Sound Magicball;
 Sound Burn;
+Sound jumpSound;
 SoundBuffer MajesticArrow;
+SoundBuffer JumpingSoundBuffer;
 SoundBuffer Osama;
 SoundBuffer Explosion;
 SoundBuffer Clicker;
@@ -466,15 +469,15 @@ private:
     bool aborted = false;
     void setInteractions(string arr[])
     {
-        arr[0] = "el salamo 3alekom wa \nrahmat allah w barakato";
+        arr[0] = "Get ready to be slayed";
         arr[1] = "Aboos Edak Er7mny";
         arr[2] = "I am delighted to be here";
         arr[3] = "You may not indure the \nslays of my mighty sword";
         arr[4] = "May the odds be in your \nfavor";
         arr[5] = "I'm not a king \nI'm not a god \nI AM WORSE";
-        arr[6] = "";
-        arr[7] = "";
-        arr[8] = "";
+        arr[6] = "Shall the most \npowerful be victorious";
+        arr[7] = "I am inevitable";
+        arr[8] = "I'm the storm that is \nApproaching";
         arr[9] = "";
         arr[10] = "";
         arr[11] = "";
@@ -2045,6 +2048,8 @@ void WINNER(RenderWindow& mainwindow) {
     Texture idle1;
     Texture idle2;
 
+    Texture idles[2];
+
     Sprite Player1;
     Sprite Player2;
 
@@ -2058,15 +2063,33 @@ void WINNER(RenderWindow& mainwindow) {
 
     idle1.loadFromFile("Name Entry/_Idle1 1.png");
     idle2.loadFromFile("Name Entry/_Idle2 1.png");
+    idles[0].loadFromFile(path + "Name Entry/Idle3 1.png");
+    idles[1].loadFromFile(path + "Name Entry/Idle4 1.png");
 
-    Player1.setTexture(idle1);
-    Player2.setTexture(idle2);
+    if (!level) {
+        Player1.setTexture(idle1);
+    }
+    else {
+        Player1.setTexture(idles[0]);
+    }
+    if (!level) {
+        Player2.setTexture(idle2);
+    }
+    else {
+        Player2.setTexture(idles[1]);
+    }
 
     Player1.setOrigin(112, 147.5);
     Player2.setOrigin(112, 147.5);
-
+    if(!level)
     Player1.setPosition(mainwindow.getSize().x / 2, 500);
+    else
+        Player1.setPosition(mainwindow.getSize().x / 2+50, 600);
+
+    if(!level)
     Player2.setPosition(mainwindow.getSize().x / 2, 500);
+    else
+        Player2.setPosition(mainwindow.getSize().x / 2+25, 600);
 
     string WinnP1;
     string WinnP2;
@@ -2342,7 +2365,9 @@ int main()
     MajesticArrow.loadFromFile("Sounds/The-Elder-Scrolls-V-Skyrim-Ice-Spike-Spell-_Sound-Effect_-128-2.wav");
     Osama.loadFromFile("Sounds/cartoon_fireball_sound_effect_-_128.wav");
     Explosion.loadFromFile("Sounds/Megumin_explosion_sound_effect_[Reupload].wav");
+    JumpingSoundBuffer.loadFromFile("Sounds/land2-43790.wav");
 
+    jumpSound.setBuffer(JumpingSoundBuffer);
     Magicball.setBuffer(MajesticArrow);
     Burn.setBuffer(Osama);
     Click.setBuffer(Clicker);
@@ -2878,6 +2903,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                         playerindex = 0;
                         player1.velocity.y = -10;
                         player1.sprite.move(0, player1.velocity.y - Jumpheight);
+                        jumpSound.play();
                     }
 
                     //Player 1 Attacking button
@@ -3011,6 +3037,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                         {
                             timer2 = 0;
                             index2 = 0;
+                            jumpSound.play();
                             player2.velocity.y = -10;
                             player2.sprite.move(0, player2.velocity.y - Jumpheight);
                         }
@@ -3132,7 +3159,7 @@ void game(int& win1, int& win2, RenderWindow& window)
             //END OF POWERS
 
             //Plates moving
-            if (win1 + win2 == 0 && !Round_Trans) {
+            if (win1 + win2 == 0 && !Round_Trans && level) {
                 plt1.updateHorizontal(900, 1050, 70, deltatime, player1, player2);
                 plt3.updateHorizontal(50, 250, 70, deltatime, player1, player2);
                 plt2.updateHorizontal(300, 550, 70, deltatime, player1, player2);
@@ -3283,6 +3310,7 @@ void game(int& win1, int& win2, RenderWindow& window)
             if (player2.hitbox.player.getGlobalBounds().intersects(magicp2.getGlobalBounds()) ) {
                 if (SFX)
                     BeingHit.play();
+                Spelltimer2 = 0.5f;
                 if (toucher2&&player2.health>10) {
                     player2.health -= 20;
                 }
@@ -3310,6 +3338,7 @@ void game(int& win1, int& win2, RenderWindow& window)
             }
             if (magicp2.getPosition().x <= -10 || magicp2.getPosition().x >= 1300) {
                 magicp2.setPosition(1000, 1000);
+                Spelltimer2 = 0.5f;
                 onebullet2 = true;
                 scale2 = true;
             }
@@ -3317,6 +3346,7 @@ void game(int& win1, int& win2, RenderWindow& window)
 
             if (player1.hitbox.player.getGlobalBounds().intersects(firep1.getGlobalBounds())) 
             {
+                Spelltimer = 0.5f;
                 if (SFX)
                     BeingHit.play();
                 if (toucher && player1.health > 10) {
@@ -3345,6 +3375,7 @@ void game(int& win1, int& win2, RenderWindow& window)
             }
             if (firep1.getPosition().x <= -10 || firep1.getPosition().x >= 1300) {
                 firep1.setPosition(1000, 1000);
+                Spelltimer = 0.5f;
                 onebullet = true;
                 scale = true;
             }
@@ -3441,6 +3472,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                 }
 
             }
+
 
             //Jumping animation
             if (player1.velocity.y < 0) {
@@ -3553,7 +3585,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                     }
                     else {
                         player1.sprite.setTexture(Attack1);
-
+                        Spelltimer2 -= deltatime;
                         //Attacking Animation
                         if (attacktimer <= 0) {
                             attackindex++;
@@ -3877,6 +3909,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                     }
                     else {
                         player2.sprite.setTexture(Attack3);
+                        Spelltimer -= deltatime;
 
                         //Attacking Animation
                         if (attacktimer2 <= 0) {
@@ -4051,34 +4084,39 @@ void game(int& win1, int& win2, RenderWindow& window)
                     }
                 }
                 if (movie) {
-                    int y;
-                    move_fire(deltatime, firep1);
+                    if (Spelltimer <= 0)
+                    {
+                        int y;
+                        move_fire(deltatime, firep1);
 
-                    y = direction(player2.sprite);
+                        y = direction(player2.sprite);
 
 
-                    firep1.move(700 * deltatime * y, 0);
+                        firep1.move(700 * deltatime * y, 0);
+                    }
                 }
                 if (movie2) {
+                    if (Spelltimer2 <= 0)
+                    {
+                        int y;
+                        move_fire2(deltatime, magicp2);
 
-                    int y;
-                    move_fire2(deltatime, magicp2);
-
-                    y = direction(player1.sprite);
+                        y = direction(player1.sprite);
 
 
-                    magicp2.move(700 * deltatime * y, 0);
-
+                        magicp2.move(700 * deltatime * y, 0);
+                    }
 
                 }
             }
                 window.clear();
+
                 window.draw(fire_reload);
                 window.draw(player1.hitbox.player);
                 window.draw(player2.hitbox.player);
                 window.draw(player1.hitbox.attack);
                 window.draw(player2.hitbox.attack);
-                if(!level)
+                if (!level)
                     window.draw(background);
                 else
                     window.draw(background1);
