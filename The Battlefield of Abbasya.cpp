@@ -2786,10 +2786,15 @@ void game(int& win1, int& win2, RenderWindow& window)
     }
 
     // Hitboxes initial prop
-   if (!level)
-    player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
-    if(!level)
-    player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Yellow);
+    if (!level)
+        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
+    else
+        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 0.f, 0.f, Color::Yellow);
+
+    if (!level)
+        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Yellow);
+    else
+        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 0.f, 0.f, Color::Yellow);
 
     if (!level)
         player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
