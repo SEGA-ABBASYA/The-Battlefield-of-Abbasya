@@ -2893,7 +2893,10 @@ void game(int& win1, int& win2, RenderWindow& window)
                         playerindex = 0;
                         player1.velocity.y = -10;
                         player1.sprite.move(0, player1.velocity.y - Jumpheight);
-                        jumpSound.play();
+                        if (SFX)
+                        {
+                            jumpSound.play();
+                        }
                     }
 
                     //Player 1 Attacking button
@@ -3027,7 +3030,8 @@ void game(int& win1, int& win2, RenderWindow& window)
                         {
                             timer2 = 0;
                             index2 = 0;
-                            jumpSound.play();
+                            if(SFX)
+                                jumpSound.play();
                             player2.velocity.y = -10;
                             player2.sprite.move(0, player2.velocity.y - Jumpheight);
                         }
