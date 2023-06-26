@@ -788,17 +788,11 @@ void Controlls(RenderWindow& controllswindow)
     controll_back.loadFromFile(path + "controlls back.png");
     Sprite back;
     back.setTexture(controll_back);
-    Texture Pause;
-    Pause.loadFromFile(path + "Controlls/pause.png");
-    Sprite pause;
-    pause.setTexture(Pause);
-    pause.setScale(0.1, 0.1);
-    pause.setPosition(1000, 320);
 
     Texture Jumping, Jumping2, Running2, Running, Attacking, Attacking2, idle1, idle2, frames[2], buttons[9];
 
-    frames[0].loadFromFile(path + "Controlls/controlls_banner.png");
-    frames[1].loadFromFile(path + "Controlls/controlls_main.png");
+    frames[0].loadFromFile(path + "Pause Menu/Logo Frame.png");
+    frames[1].loadFromFile(path + "Pause Menu/Gold Button.png");
     idle1.loadFromFile(path + "Name Entry/_Idle1 1.png");
     idle2.loadFromFile(path + "Name Entry/_Idle2 1.png");
     buttons[0].loadFromFile(path + "Controlls/A.png");
@@ -819,7 +813,7 @@ void Controlls(RenderWindow& controllswindow)
 
     Sprite jumping1, attacking1, running1r, jumping2, attacking2, running2r, running2l, running1l, Idle1, Idle2;
     Sprite button[9];
-    Sprite frame[2];
+    RectangleShape frame[2];
     Mouse mouse;
 
     Idle1.setTexture(idle1);
@@ -832,8 +826,8 @@ void Controlls(RenderWindow& controllswindow)
     attacking2.setTexture(Attacking2);
     running2r.setTexture(Running2);
     running2l.setTexture(Running2);
-    frame[0].setTexture(frames[0]);
-    frame[1].setTexture(frames[1]);
+    frame[0].setTexture(&frames[0]);
+    frame[1].setTexture(&frames[1]);
     for (int i = 0; i < 9; i++) {
         button[i].setTexture(buttons[i]);
     }
@@ -846,32 +840,43 @@ void Controlls(RenderWindow& controllswindow)
     running2r.setTextureRect(IntRect(0, 0, 120, 80));
     running2l.setTextureRect(IntRect(0, 0, 120, 80));
 
-    frame[0].setOrigin(204, 0);
-    frame[0].setPosition(controllswindow.getSize().x / 2, 0);
+    frame[0].setSize(Vector2f(420.f, 150.f));
+    frame[0].setOrigin(frame[0].getSize().x / 2, frame[0].getSize().y / 2);
+    frame[0].setPosition(controllswindow.getSize().x / 2, 100);
     frame[0].setScale(0.8, 0.8);
-    frame[1].setOrigin(201, 0);
-    frame[1].setPosition(1150, 500);
-    frame[1].setScale(0.75, 0.75);
+
+    frame[1].setSize(Vector2f(375.f, 125.f));
+    frame[1].setOrigin(frame[1].getSize().x / 2, frame[1].getSize().y / 2);
+    frame[1].setPosition(1075, controllswindow.getSize().y / 2);
+    frame[1].setScale(0.8, 0.8);
 
 
     button[0].setScale(3.5, 3.5);
     button[0].setPosition(290, 450);
+
     button[1].setScale(3.5, 3.5);
     button[1].setPosition(290, 360);
+
     button[2].setScale(3.5, 3.5);
     button[2].setPosition(290, 540);
+    
     button[3].setScale(3.5, 3.5);
     button[3].setPosition(290, 650);
+    
     button[4].setScale(3.5, 3.5);
     button[4].setPosition(710, 540);
+    
     button[5].setScale(3.5, 3.5);
     button[5].setPosition(710, 650);
+    
     button[6].setScale(3.5, 3.5);
     button[6].setPosition(710, 360);
+    
     button[7].setScale(3.5, 3.5);
     button[7].setPosition(710, 450);
-    button[8].setScale(3.5, 3.5);
-    button[8].setPosition(1140, 345);
+    
+    //button[8].setScale(3.5, 3.5);
+    //button[8].setPosition(1140, 345);
 
 
     jumping1.setScale(2, 2);
@@ -899,83 +904,64 @@ void Controlls(RenderWindow& controllswindow)
     controllsfont.loadFromFile(path + "Canterbury.ttf");
     Text controlls[13];
 
-    controlls[0].setFont(controllsfont);
-    controlls[0].setString("Controllers");
-    controlls[0].setCharacterSize(45);
-    controlls[0].setFillColor(Color{ 255,204,0 });
-    controlls[0].setPosition((controllswindow.getSize().x / 2) - 80, 55);
+    for (int i = 0; i < 13; i++)
+    {
+        controlls[i].setFont(controllsfont);
+        controlls[i].setFillColor(Color{ 255,204,0 });
+        controlls[i].setOutlineThickness(2);
+        controlls[i].setOutlineColor(Color::Black);
+    }
 
-    controlls[1].setFont(controllsfont);
+    controlls[0].setString("Controls");
+    controlls[0].setCharacterSize(45);
+    controlls[0].setOrigin(controlls[0].getLocalBounds().left + controlls[0].getLocalBounds().width / 2, controlls[0].getLocalBounds().top + controlls[0].getLocalBounds().height / 2);
+    controlls[0].setPosition(frame[0].getPosition());
+
     controlls[1].setString("Player 1");
     controlls[1].setCharacterSize(60);
-    controlls[1].setFillColor(Color{ 255,204,0 });
     controlls[1].setPosition(30, 200);
 
-    controlls[2].setFont(controllsfont);
     controlls[2].setString("Player 2");
     controlls[2].setCharacterSize(60);
-    controlls[2].setFillColor(Color{ 255,204,0 });
     controlls[2].setPosition(450, 200);
 
-    controlls[3].setFont(controllsfont);
     controlls[3].setString("Right");
     controlls[3].setCharacterSize(50);
-    controlls[3].setFillColor(Color{ 255,204,0 });
     controlls[3].setPosition(30, 350);
 
-    controlls[4].setFont(controllsfont);
     controlls[4].setString("Left");
     controlls[4].setCharacterSize(50);
-    controlls[4].setFillColor(Color{ 255,204,0 });
     controlls[4].setPosition(30, 450);
 
-    controlls[5].setFont(controllsfont);
     controlls[5].setString("Jump");
     controlls[5].setCharacterSize(50);
-    controlls[5].setFillColor(Color{ 255,204,0 });
     controlls[5].setPosition(30, 550);
 
-    controlls[6].setFont(controllsfont);
     controlls[6].setString("Attack");
     controlls[6].setCharacterSize(50);
-    controlls[6].setFillColor(Color{ 255,204,0 });
     controlls[6].setPosition(30, 650);
 
-    controlls[7].setFont(controllsfont);
     controlls[7].setString("Right");
     controlls[7].setCharacterSize(50);
-    controlls[7].setFillColor(Color{ 255,204,0 });
     controlls[7].setPosition(450, 350);
 
-    controlls[8].setFont(controllsfont);
     controlls[8].setString("Left");
     controlls[8].setCharacterSize(50);
-    controlls[8].setFillColor(Color{ 255,204,0 });
     controlls[8].setPosition(450, 450);
 
-    controlls[9].setFont(controllsfont);
     controlls[9].setString("Jump");
     controlls[9].setCharacterSize(50);
-    controlls[9].setFillColor(Color{ 255,204,0 });
     controlls[9].setPosition(450, 550);
 
-    controlls[10].setFont(controllsfont);
     controlls[10].setString("Attack");
     controlls[10].setCharacterSize(50);
-    controlls[10].setFillColor(Color{ 255,204,0 });
     controlls[10].setPosition(450, 650);
 
-    controlls[11].setFont(controllsfont);
-    controlls[11].setString("Pause");
-    controlls[11].setCharacterSize(60);
-    controlls[11].setFillColor(Color{ 255,204,0 });
-    controlls[11].setPosition(1000, 200);
-
-    controlls[12].setFont(controllsfont);
     controlls[12].setString("Main Menu");
     controlls[12].setCharacterSize(40);
-    controlls[12].setFillColor(Color{ 255,204,0 });
-    controlls[12].setPosition(1055, 520);
+    controlls[12].setOrigin(controlls[12].getLocalBounds().left + controlls[12].getLocalBounds().width / 2, controlls[12].getLocalBounds().top + controlls[12].getLocalBounds().height / 2);
+    controlls[12].setPosition(frame[1].getPosition());
+
 
 
     while (controllswindow.isOpen())
@@ -993,10 +979,9 @@ void Controlls(RenderWindow& controllswindow)
 
         if (frame[1].getGlobalBounds().contains(mouse.getPosition(controllswindow).x, mouse.getPosition(controllswindow).y)) {
 
-            frame[1].setOrigin(201, 0);
             frame[1].setScale(0.85, 0.85);
             controlls[12].setFillColor(Color::White);
-
+            controlls[12].setScale(1.1, 1.1);
             if (Mouse::isButtonPressed(Mouse::Left))
             {
                 return;
@@ -1004,7 +989,8 @@ void Controlls(RenderWindow& controllswindow)
         }
         else
         {
-            frame[1].setScale(0.75, 0.75);
+            frame[1].setScale(0.8, 0.8);
+            controlls[12].setScale(1, 1);
             controlls[12].setFillColor(Color{ 255,204,0 });
 
         }
@@ -1013,7 +999,6 @@ void Controlls(RenderWindow& controllswindow)
         controllswindow.draw(back);
         controllswindow.draw(frame[0]);
         controllswindow.draw(frame[1]);
-        controllswindow.draw(pause);
         controllswindow.draw(Idle1);
         controllswindow.draw(Idle2);
         controllswindow.draw(attacking1);
@@ -1027,7 +1012,7 @@ void Controlls(RenderWindow& controllswindow)
         for (int i = 0; i < 13; i++) {
             controllswindow.draw(controlls[i]);
         }
-        for (int j = 0; j < 9; j++) {
+        for (int j = 0; j < 8; j++) {
             controllswindow.draw(button[j]);
         }
 
