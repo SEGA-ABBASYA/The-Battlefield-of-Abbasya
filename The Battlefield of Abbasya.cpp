@@ -121,6 +121,7 @@ Sound BeingHit;
 Sound Magicball;
 Sound Burn;
 Sound jumpSound;
+Sound Powerups;
 SoundBuffer MajesticArrow;
 SoundBuffer JumpingSoundBuffer;
 SoundBuffer Osama;
@@ -129,7 +130,7 @@ SoundBuffer Clicker;
 SoundBuffer Hoverer;
 SoundBuffer Attacksoundd;
 SoundBuffer BeingHitt;
-
+SoundBuffer Powerupping;
 
 // function for checking the colliding the hitbox of player and the plates
 //bool platecoliode_1(RectangleShape &, RectangleShape &);
@@ -2351,6 +2352,7 @@ int main()
     Osama.loadFromFile("Sounds/cartoon_fireball_sound_effect_-_128.wav");
     Explosion.loadFromFile("Sounds/Megumin_explosion_sound_effect_[Reupload].wav");
     JumpingSoundBuffer.loadFromFile("Sounds/land2-43790.wav");
+    Powerupping.loadFromFile("Sounds/powerups.wav");
 
     jumpSound.setBuffer(JumpingSoundBuffer);
     Magicball.setBuffer(MajesticArrow);
@@ -2359,6 +2361,7 @@ int main()
     Hover.setBuffer(Hoverer);
     Attacksound.setBuffer(Attacksoundd);
     BeingHit.setBuffer(BeingHitt);
+    Powerups.setBuffer(Powerupping);
 
     get_window.setFramerateLimit(60);
     timerpow.restart();
@@ -2594,6 +2597,9 @@ void game(int& win1, int& win2, RenderWindow& window)
     // call init_health_bar once in the beginning of the game
     init_health_bar();
     
+    Hitbox magichitbox;
+
+
     Texture rain_text;
     rain_text.loadFromFile("fireball.png");
     FireBall fireballs[7];
@@ -2784,7 +2790,7 @@ void game(int& win1, int& win2, RenderWindow& window)
     if (!level)
         player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
     else {
-
+        magichitbox.sethitbox(magicp2, magichitbox.attack, 100, 10, Color::Green);
         player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
         player1.hitbox.player.setOrigin(50 / 2.f, 4);
     }
@@ -2860,6 +2866,7 @@ void game(int& win1, int& win2, RenderWindow& window)
             //plt3.updateCircular(30, 360, 200, 1, deltatime, player1, player2);
             //plt2.updateCircular(400, 400, 200, 1, deltatime, player1, player2);
             //plt2.updateVertical(50, 600, 100, deltatime, player1, player2);
+
                 
             while (window.pollEvent(e))
             {
@@ -3243,6 +3250,8 @@ void game(int& win1, int& win2, RenderWindow& window)
                     attackpow1 = 20;
                     Powers_sp[i].setPosition(1000, 1000);
                     cout << attackpow1;
+                    if (SFX)
+                        Powerups.play();
                 }
             }
 
@@ -3250,6 +3259,8 @@ void game(int& win1, int& win2, RenderWindow& window)
 
             if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[1].getGlobalBounds())) {
                 toucherhealthp1 = true;
+                if (SFX)
+                    Powerups.play();
                 if (player1.health + 20 <= 100)
                     player1.health += 20;
                 else if (player1.health == 90)
@@ -3270,11 +3281,17 @@ void game(int& win1, int& win2, RenderWindow& window)
                     attackpow2 = 20;
                     Powers_sp[i].setPosition(10000, 10000);
                     cout << "TOUCH";
+                    if (SFX)
+                        Powerups.play();
+
+                
                 }
             }
 
             if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
                 toucherhealthp2 = true;
+                if (SFX)
+                    Powerups.play();
                 if (player2.health + 20 <= 100)
                     player2.health += 20;
                 else if (player2.health == 90)
@@ -3289,6 +3306,8 @@ void game(int& win1, int& win2, RenderWindow& window)
             }
             if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
                 toucherhealthp1 = true;
+                if (SFX)
+                    Powerups.play();
                 if (player1.health + 20 <= 100)
                     player1.health += 20;
                 else if (player1.health == 90)
@@ -3301,7 +3320,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                     p1_healthBar.setTexture(&P1_HealthBar_Texture);
                 }
             }
-            if (player2.hitbox.player.getGlobalBounds().intersects(magicp2.getGlobalBounds()) ) {
+            if (player2.hitbox.player.getGlobalBounds().intersects(magichitbox.attack.getGlobalBounds()) ) {
                 if (SFX)
                     BeingHit.play();
                 Spelltimer2 = 0.5f;
@@ -3381,6 +3400,7 @@ void game(int& win1, int& win2, RenderWindow& window)
             //Hitboxes live positioning
             player1.hitbox.player.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
             player1.hitbox.attack.setPosition(player1.sprite.getPosition().x, player1.sprite.getPosition().y);
+            magichitbox.attack.setPosition(magicp2.getPosition().x-75,magicp2.getPosition().y-10);
 
             //Return deafult color
             if (!player1.hitbool && player1.health > 0)
@@ -4113,7 +4133,10 @@ void game(int& win1, int& win2, RenderWindow& window)
                 if (!level)
                     window.draw(background);
                 else
+                {
+                    window.draw(magichitbox.attack);
                     window.draw(background1);
+                }
                 window.draw(plt1.platrec);
                 window.draw(plt2.platrec);
                 window.draw(plt3.platrec);
