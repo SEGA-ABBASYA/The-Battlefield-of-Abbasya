@@ -4212,7 +4212,6 @@ void game(int& win1, int& win2, RenderWindow& window)
                     window.draw(background);
                 else
                 {
-                    window.draw(magichitbox.attack);
                     window.draw(background1);
                 }
                 window.draw(plt1.platrec);
