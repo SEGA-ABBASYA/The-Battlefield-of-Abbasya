@@ -112,8 +112,10 @@ string arrayOfInteractions[100];
 //sounds
 Music Roundmusic[3];
 Music MainmenuMusic;
+Music Hitler;
 Music Winning;
 Music NameEntry;
+Music credits;
 Sound Hover;
 Sound Click;
 Sound Attacksound;
@@ -131,6 +133,7 @@ SoundBuffer Hoverer;
 SoundBuffer Attacksoundd;
 SoundBuffer BeingHitt;
 SoundBuffer Powerupping;
+
 
 // function for checking the colliding the hitbox of player and the plates
 //bool platecoliode_1(RectangleShape &, RectangleShape &);
@@ -1023,6 +1026,90 @@ void Controlls(RenderWindow& controllswindow)
     }
 }
 
+void Release(RenderWindow& optionwindow)
+{
+    bool released=false;
+    Font optionfont;
+    optionfont.loadFromFile(path + "Canterbury.ttf");
+    Text option;
+    option.setFont(optionfont);
+    option.setString("The Battlefield of Abbasya");
+    option.setCharacterSize(60);
+    option.setFillColor(Color::Black);
+    option.setPosition(350, 50);
+    Text option2;
+    option2.setFont(optionfont);
+    option2.setString("Are You Ready ?! ");
+    option2.setCharacterSize(70);
+    option2.setFillColor(Color::Black);
+    option2.setPosition(400, 300);
+    
+    Texture back;
+    back.loadFromFile("release.png");
+    Texture Qr;
+    Qr.loadFromFile("qrcode_github 1.png");
+    Sprite Back;
+    Back.setTexture(back);
+    Sprite qr;
+    qr.setTexture(Qr);
+    qr.setPosition(360, 150);
+    //Hitler.openFromFile("Hitler_the_cat.wav");
+    Hitler.openFromFile("Sounds/Ludum Dare 38 - Track 4.wav");
+    Hitler.setLoop(true);
+    
+    
+    while (optionwindow.isOpen())
+    {
+
+        sf::Event event;
+        while (optionwindow.pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+            {
+                optionwindow.close();
+
+            }
+            if (event.type == Event::KeyPressed)
+            {
+                if (event.key.code == Keyboard::Escape)
+                {
+                    Hitler.stop();
+                    MainmenuMusic.play();
+                   return;
+                }
+                if (event.key.code == Keyboard::H)
+                {
+                    
+                    if (!released) {
+                        MainmenuMusic.pause();
+                        Hitler.play();
+                        released = true;
+                    }
+
+                    else {
+                        released = false;
+                        MainmenuMusic.play();
+                        Hitler.pause();
+                    }
+                }
+            }
+            
+        }
+        
+        optionwindow.clear();
+
+        optionwindow.draw(Back);
+       
+        optionwindow.draw(option);
+        optionwindow.draw(option2);
+        if (released)
+            optionwindow.draw(qr);
+        
+
+        optionwindow.display();
+    }
+}
+
 void MainMenu(RenderWindow& mainwindow)
 {
     // Create the menu items
@@ -1042,7 +1129,7 @@ void MainMenu(RenderWindow& mainwindow)
     controll2.loadFromFile("Main Menu/controller_grey.png");
     MainmenuMusic.openFromFile("Sounds/Round Robin Inn (LOOP).wav");
     MainmenuMusic.setLoop(true);
-
+    
 
 
     Text select[7];
@@ -1078,9 +1165,10 @@ void MainMenu(RenderWindow& mainwindow)
     controllbutton.setTexture(controll1);
     controllbutton.setOrigin(40, 0);
     controllbutton.setPosition(70, 620);
-
-    MainmenuMusic.play();
-
+    
+        MainmenuMusic.play();
+        
+    
     buttons[1].setPosition(470, 319);
 
     buttons[2].setPosition(640, 447);
@@ -1122,6 +1210,13 @@ void MainMenu(RenderWindow& mainwindow)
             if (event.type == sf::Event::Closed)
             {
                 mainwindow.close();
+            }
+            if (event.type == Event::KeyPressed)
+            {
+                if (event.key.code == Keyboard::R)
+                {
+                    Release(mainwindow);
+                }
             }
         }
 
@@ -1195,7 +1290,7 @@ void credits_text(Text* arr, RenderWindow& textwindow) {
 
     if (arr[3].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
     {
-        arr[3].setFillColor(Color::Magenta);
+        arr[3].setFillColor(Color(187, 220, 244));
     }
     else {
         arr[3].setFillColor(Color::White);
@@ -1226,7 +1321,7 @@ void credits_text(Text* arr, RenderWindow& textwindow) {
     }
     if (arr[7].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
     {
-        arr[7].setFillColor(Color(187, 220, 244));
+        arr[7].setFillColor(Color::Magenta);
     }
     else {
         arr[7].setFillColor(Color::White);
@@ -1234,13 +1329,16 @@ void credits_text(Text* arr, RenderWindow& textwindow) {
 
 }
 
+
 void Credits(RenderWindow& creditswindow) {
     Font Credits;
     Credits.loadFromFile(path + "Canterbury.ttf");
-
-    float pos = 80;
+    credits.openFromFile("credits.wav");
+    float pos = 30;
     float downs = 50;
-
+    credits.setVolume(200);
+    MainmenuMusic.pause();
+    credits.play();
     Texture group;
     group.loadFromFile(path + "credits1.png");
     Sprite pic;
@@ -1264,43 +1362,43 @@ void Credits(RenderWindow& creditswindow) {
     select[1].setString("Abd ElRahman Mustafa");
     select[1].setCharacterSize(40);
     select[1].setFillColor(Color::White);
-    select[1].setPosition(140 + pos + downs, 0 + pos + downs);
+    select[1].setPosition(385 + pos + downs, 20);
 
     select[2].setFont(Credits);
     select[2].setFillColor(Color::White);
     select[2].setString("Abd ElRahman Osama");
     select[2].setCharacterSize(40);
-    select[2].setPosition(600 + pos + downs, 0 + pos + downs);
+    select[2].setPosition(385 + pos + downs, 120);
 
     select[3].setFont(Credits);
     select[3].setFillColor(Color::White);
-    select[3].setString("Mahmoud Emad");
+    select[3].setString("Ziad Khaled Shraf");
     select[3].setCharacterSize(40);
-    select[3].setPosition(155 + pos + downs, 380 + pos + downs);
+    select[3].setPosition(385 + pos + downs, 220);
 
     select[4].setFont(Credits);
     select[4].setFillColor(Color::White);
     select[4].setString("Yousef Ashraf");
     select[4].setCharacterSize(40);
-    select[4].setPosition(385 + pos + downs, 200 + pos + downs);
+    select[4].setPosition(385 + pos + downs, 320);
 
     select[5].setFont(Credits);
     select[5].setFillColor(Color::White);
     select[5].setString("Yousef Ahmed");
     select[5].setCharacterSize(40);
-    select[5].setPosition(760 + pos + downs, 200 + pos + downs);
+    select[5].setPosition(385 + pos + downs, 420);
 
     select[6].setFont(Credits);
     select[6].setFillColor(Color::White);
     select[6].setString("Yousef Khataan");
     select[6].setCharacterSize(40);
-    select[6].setPosition(585 + pos + downs, 380 + pos + downs);
+    select[6].setPosition(385 + pos + downs, 520);
 
     select[7].setFont(Credits);
     select[7].setFillColor(Color::White);
-    select[7].setString("Ziad Khaled Shraf");
+    select[7].setString("Mahmoud Emad");
     select[7].setCharacterSize(40);
-    select[7].setPosition(-20 + pos + downs, 200 + pos + downs);
+    select[7].setPosition(385 + pos + downs, 620);
 
 
     while (creditswindow.isOpen())
@@ -1315,6 +1413,8 @@ void Credits(RenderWindow& creditswindow) {
         }
         Mouse mouse;
         if (Keyboard::isKeyPressed(Keyboard::Escape) || Keyboard::isKeyPressed(Keyboard::Enter)) {
+            credits.stop();
+            MainmenuMusic.play();
             return;
         }
         if (mainframe.getGlobalBounds().contains(mouse.getPosition(creditswindow).x, mouse.getPosition(creditswindow).y))
@@ -1333,6 +1433,18 @@ void Credits(RenderWindow& creditswindow) {
             select[0].setFillColor(Color::White);
 
         }
+        for (int i = 0; i < 8; ++i) {
+            select[i].move(0, 1.2);
+            if (select[1].getPosition().y > 720) {
+                select[1].setPosition(385 + pos + downs, 20 - 700);
+                select[2].setPosition(385 + pos + downs, 120 - 700);
+                select[3].setPosition(385 + pos + downs, 220 - 700);
+                select[4].setPosition(385 + pos + downs, 320 - 700);
+                select[5].setPosition(385 + pos + downs, 420 - 700);
+                select[6].setPosition(385 + pos + downs, 520 - 700);
+                select[7].setPosition(385 + pos + downs, 620 - 700);
+            }
+        }
 
         credits_text(select, creditswindow);
         creditswindow.clear();
@@ -1349,6 +1461,7 @@ void Credits(RenderWindow& creditswindow) {
         creditswindow.display();
     }
 }
+
 
 
 void game(int& win1, int& win2, RenderWindow& window);
@@ -1607,50 +1720,6 @@ void powgame2(RectangleShape powers[3]) {
     }
 }
 
-void Options(RenderWindow& optionwindow)
-{
-    Font optionfont;
-    optionfont.loadFromFile(path + "ArcadeClassic.ttf");
-    Text option;
-    option.setFont(optionfont);
-    option.setString("The Battlefield of Abbasya");
-    option.setCharacterSize(60);
-    option.setFillColor(Color{ 255, 204, 0 });
-    option.setPosition(300, 100);
-
-    while (optionwindow.isOpen())
-    {
-
-        // Handle events
-        sf::Event event;
-        while (optionwindow.pollEvent(event))
-        {
-            if (event.type == Event::Closed)
-            {
-                optionwindow.close();
-            }
-        }
-
-        // select which window
-        // pagenum = cursor_select(select, optionwindow);
-
-        if (pagenum != 2)
-        {
-            return;
-        }
-
-        // Clear the window
-        optionwindow.clear();
-
-        // Draw the menu items
-        optionwindow.draw(option);
-        // Draw the cursor sprite in the struct;
-        cur.draw(optionwindow);
-
-        // Display the window
-        optionwindow.display();
-    }
-}
 
 void setpropdance(Sprite& x, Texture& y, int z, int l, int m)
 {
@@ -2786,28 +2855,27 @@ void game(int& win1, int& win2, RenderWindow& window)
 
     // Hitboxes initial prop
     if (!level)
-        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Yellow);
+        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 150.f, 40.f, Color::Transparent);
     else
-        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 0.f, 0.f, Color::Yellow);
+        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.attack, 0.f, 0.f, Color::Transparent);
 
     if (!level)
-        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Yellow);
+        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 150.f, 40.f, Color::Transparent);
     else
-        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 0.f, 0.f, Color::Yellow);
+        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.attack, 0.f, 0.f, Color::Transparent);
 
     if (!level)
-        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
+        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Transparent);
     else {
-        magichitbox.sethitbox(magicp2, magichitbox.attack, 100, 10, Color::Green);
-        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Blue);
+        player1.hitbox.sethitbox(player1.sprite, player1.hitbox.player, 50.f, 115.f, Color::Transparent);
         player1.hitbox.player.setOrigin(50 / 2.f, 4);
     }
 
     if (!level)
-        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 50.f, 115.f, Color::Blue);
+        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 50.f, 115.f, Color::Transparent);
     else
     {
-        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 50.f, 115.f, Color::Blue);
+        player2.hitbox.sethitbox(player2.sprite, player2.hitbox.player, 50.f, 115.f, Color::Transparent);
         player2.hitbox.player.setOrigin(43 / 2.f, 4);
     }
     player1.hitbox.attack.setOrigin(0, 0);
@@ -3296,7 +3364,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                 }
             }
 
-            if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
+            if (player2.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())&&player1.health>0&&player2.health>0) {
                 toucherhealthp2 = true;
                 if (SFX)
                     Powerups.play();
@@ -3312,7 +3380,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                     p2_healthBar.setTexture(&P2_HealthBar_Texture);
                 }
             }
-            if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds())) {
+            if (player1.hitbox.player.getGlobalBounds().intersects(Powers_sp[2].getGlobalBounds()) && player1.health > 0 && player2.health > 0) {
                 toucherhealthp1 = true;
                 if (SFX)
                     Powerups.play();
@@ -3365,7 +3433,7 @@ void game(int& win1, int& win2, RenderWindow& window)
             }
 
 
-            if (player1.hitbox.player.getGlobalBounds().intersects(firep1.getGlobalBounds())) 
+            if (player1.hitbox.player.getGlobalBounds().intersects(firep1.getGlobalBounds())&&player1.health>0&&player2.health>0 && player1.health > 0 && player2.health > 0)
             {
                 Spelltimer = 0.5f;
                 if (SFX)
@@ -3415,7 +3483,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                 player1.sprite.setColor(Color::White);
 
             //Death if Fell
-            if (player1.hitbox.player.getPosition().y > window.getSize().y)
+            if (player1.hitbox.player.getPosition().y > window.getSize().y && player1.health > 0 && player2.health > 0)
             {
                 if (Deathfall) {
                     win2++;
@@ -3732,7 +3800,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                 player2.sprite.setColor(Color::White);
 
             //Death if Fell
-            if (player2.hitbox.player.getPosition().y > window.getSize().y)
+            if (player2.hitbox.player.getPosition().y > window.getSize().y && player1.health > 0 && player2.health > 0)
             {
                 if (Deathfall) {
                     Round_Trans = true;
@@ -4054,11 +4122,12 @@ void game(int& win1, int& win2, RenderWindow& window)
                         fireballs[i].velocity.y = 0;
                         fireballs[i].position(i);
                     }
-                    else if (fireballs[i].theSprite.getGlobalBounds().intersects(player1.hitbox.player.getGlobalBounds()) && !Round_Interacting) {
-                        if (player1.health > 0)
+                    else if (fireballs[i].theSprite.getGlobalBounds().intersects(player1.hitbox.player.getGlobalBounds()) && !Round_Interacting && player1.health > 0 && player2.health > 0) {
+                        if (player1.health > 0) {
                             player1.hitbool = true;
 
-                        player1.health -= 10;
+                            player1.health -= 10;
+                        }
 
                         arr_index = update_healthbar(player1.health);
                         if (arr_index != -1)
@@ -4076,10 +4145,11 @@ void game(int& win1, int& win2, RenderWindow& window)
 
                         }
                     }
-                    else if (fireballs[i].theSprite.getGlobalBounds().intersects(player2.hitbox.player.getGlobalBounds()) && !Round_Interacting) {
-                        if (player2.health > 0)
+                    else if (fireballs[i].theSprite.getGlobalBounds().intersects(player2.hitbox.player.getGlobalBounds()) && !Round_Interacting && player1.health > 0 && player2.health > 0) {
+                        if (player2.health > 0) {
                             player2.hitbool = true;
-                        player2.health -= 10;
+                            player2.health -= 10;
+                        }
 
                         arr_index = update_healthbar(player2.health);
                         if (arr_index != -1)
