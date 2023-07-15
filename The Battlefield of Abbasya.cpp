@@ -1181,7 +1181,7 @@ void credits_text(Text* arr, RenderWindow& textwindow) {
         arr[1].setFillColor(Color::Blue);
     }
     else {
-        arr[1].setFillColor(Color::Black);
+        arr[1].setFillColor(Color::White);
     }
 
 
@@ -1190,7 +1190,7 @@ void credits_text(Text* arr, RenderWindow& textwindow) {
         arr[2].setFillColor(Color::Cyan);
     }
     else {
-        arr[2].setFillColor(Color::Black);
+        arr[2].setFillColor(Color::White);
     }
 
     if (arr[3].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
@@ -1198,7 +1198,7 @@ void credits_text(Text* arr, RenderWindow& textwindow) {
         arr[3].setFillColor(Color::Magenta);
     }
     else {
-        arr[3].setFillColor(Color::Black);
+        arr[3].setFillColor(Color::White);
     }
 
     if (arr[4].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
@@ -1206,7 +1206,7 @@ void credits_text(Text* arr, RenderWindow& textwindow) {
         arr[4].setFillColor(Color::Yellow);
     }
     else {
-        arr[4].setFillColor(Color::Black);
+        arr[4].setFillColor(Color::White);
     }
 
     if (arr[5].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
@@ -1214,7 +1214,7 @@ void credits_text(Text* arr, RenderWindow& textwindow) {
         arr[5].setFillColor(Color::Green);
     }
     else {
-        arr[5].setFillColor(Color::Black);
+        arr[5].setFillColor(Color::White);
     }
 
     if (arr[6].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
@@ -1222,14 +1222,14 @@ void credits_text(Text* arr, RenderWindow& textwindow) {
         arr[6].setFillColor(Color{ 255,204,0 });
     }
     else {
-        arr[6].setFillColor(Color::Black);
+        arr[6].setFillColor(Color::White);
     }
     if (arr[7].getGlobalBounds().contains(mouse.getPosition(textwindow).x, mouse.getPosition(textwindow).y))
     {
         arr[7].setFillColor(Color(187, 220, 244));
     }
     else {
-        arr[7].setFillColor(Color::Black);
+        arr[7].setFillColor(Color::White);
     }
 
 }
@@ -1238,8 +1238,11 @@ void Credits(RenderWindow& creditswindow) {
     Font Credits;
     Credits.loadFromFile(path + "Canterbury.ttf");
 
+    float pos = 80;
+    float downs = 50;
+
     Texture group;
-    group.loadFromFile(path + "credit_pic1 1.png");
+    group.loadFromFile(path + "credits1.png");
     Sprite pic;
     pic.setTexture(group);
 
@@ -1249,55 +1252,56 @@ void Credits(RenderWindow& creditswindow) {
     mainframe.setTexture(frame);
 
     mainframe.setOrigin(180, 0);
-    mainframe.setPosition(1050, 30);
+    mainframe.setPosition(10950, 30);
     Text select[8];
     select[0].setFont(Credits);
-    select[0].setFillColor(Color::Black);
+    select[0].setFillColor(Color::White);
     select[0].setString("Main Menu");
     select[0].setCharacterSize(60);
-    select[0].setPosition(925, 30);
+    select[0].setPosition(9925, 30);
 
     select[1].setFont(Credits);
     select[1].setString("Abd ElRahman Mustafa");
     select[1].setCharacterSize(40);
-    select[1].setFillColor(Color::Black);
-    select[1].setPosition(155, 10);
+    select[1].setFillColor(Color::White);
+    select[1].setPosition(140 + pos + downs, 0 + pos + downs);
 
     select[2].setFont(Credits);
-    select[2].setFillColor(Color::Black);
+    select[2].setFillColor(Color::White);
     select[2].setString("Abd ElRahman Osama");
     select[2].setCharacterSize(40);
-    select[2].setPosition(155, 65);
+    select[2].setPosition(600 + pos + downs, 0 + pos + downs);
 
     select[3].setFont(Credits);
-    select[3].setFillColor(Color::Black);
+    select[3].setFillColor(Color::White);
     select[3].setString("Mahmoud Emad");
     select[3].setCharacterSize(40);
-    select[3].setPosition(170, 180);
+    select[3].setPosition(155 + pos + downs, 380 + pos + downs);
 
     select[4].setFont(Credits);
-    select[4].setFillColor(Color::Black);
+    select[4].setFillColor(Color::White);
     select[4].setString("Yousef Ashraf");
     select[4].setCharacterSize(40);
-    select[4].setPosition(600, 10);
+    select[4].setPosition(385 + pos + downs, 200 + pos + downs);
 
     select[5].setFont(Credits);
-    select[5].setFillColor(Color::Black);
+    select[5].setFillColor(Color::White);
     select[5].setString("Yousef Ahmed");
     select[5].setCharacterSize(40);
-    select[5].setPosition(600, 125);
+    select[5].setPosition(760 + pos + downs, 200 + pos + downs);
 
     select[6].setFont(Credits);
-    select[6].setFillColor(Color::Black);
+    select[6].setFillColor(Color::White);
     select[6].setString("Yousef Khataan");
     select[6].setCharacterSize(40);
-    select[6].setPosition(600, 65);
+    select[6].setPosition(585 + pos + downs, 380 + pos + downs);
 
     select[7].setFont(Credits);
-    select[7].setFillColor(Color::Black);
+    select[7].setFillColor(Color::White);
     select[7].setString("Ziad Khaled Shraf");
     select[7].setCharacterSize(40);
-    select[7].setPosition(155, 125);
+    select[7].setPosition(-20 + pos + downs, 200 + pos + downs);
+
 
     while (creditswindow.isOpen())
     {
@@ -1310,6 +1314,9 @@ void Credits(RenderWindow& creditswindow) {
             }
         }
         Mouse mouse;
+        if (Keyboard::isKeyPressed(Keyboard::Escape) || Keyboard::isKeyPressed(Keyboard::Enter)) {
+            return;
+        }
         if (mainframe.getGlobalBounds().contains(mouse.getPosition(creditswindow).x, mouse.getPosition(creditswindow).y))
         {
             mainframe.setOrigin(180, 0);
@@ -1323,7 +1330,7 @@ void Credits(RenderWindow& creditswindow) {
         else {
             mainframe.setOrigin(180, 0);
             mainframe.setScale(1, 1);
-            select[0].setFillColor(Color::Black);
+            select[0].setFillColor(Color::White);
 
         }
 
@@ -1342,6 +1349,7 @@ void Credits(RenderWindow& creditswindow) {
         creditswindow.display();
     }
 }
+
 
 void game(int& win1, int& win2, RenderWindow& window);
 
@@ -3320,7 +3328,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                     p1_healthBar.setTexture(&P1_HealthBar_Texture);
                 }
             }
-            if (player2.hitbox.player.getGlobalBounds().intersects(magichitbox.attack.getGlobalBounds()) ) {
+            if (player2.hitbox.player.getGlobalBounds().intersects(magicp2.getGlobalBounds()) ) {
                 if (SFX)
                     BeingHit.play();
                 Spelltimer2 = 0.5f;
@@ -4134,7 +4142,7 @@ void game(int& win1, int& win2, RenderWindow& window)
                     window.draw(background);
                 else
                 {
-                    window.draw(magichitbox.attack);
+
                     window.draw(background1);
                 }
                 window.draw(plt1.platrec);
