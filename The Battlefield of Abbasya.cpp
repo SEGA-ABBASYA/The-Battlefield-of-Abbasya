@@ -237,7 +237,6 @@ public:
         if(playerStandingOnPlate(player1))
         {   
             player1.isOnPlate = true;
-            cout<< "player on plate\n";
         }
         else
             player1.isOnPlate = false;
@@ -245,7 +244,7 @@ public:
         if(playerStandingOnPlate(player2))
         {
             player2.isOnPlate = true;
-            cout << "player on plate\n";
+           
         }
         else    
             player1.isOnPlate = false;
@@ -265,7 +264,6 @@ public:
         // if reached end 
         if((platrec.getPosition().x > endX or platrec.getPosition().x < startX ) and !reversedHorz)
         {
-            cout << "reversed\n";
             reversedHorz = true;
             reverseHorz();
             platrec.move(speed * directionHorz * deltatime, 0);
@@ -281,7 +279,6 @@ public:
         if(playerStandingOnPlate(player1))
         {   
             player1.grounded = true;
-            cout<< "player on plate\n";
             player1.sprite.move(speed * directionHorz * deltatime, 0);
             // player1.sprite.setPosition(player1.sprite.getPosition().x + speed * directionHorz * deltatime, 0);
             // player1.sprite.setPosition(platrec.getPosition().x, player1.sprite.getPosition().y);
@@ -289,7 +286,6 @@ public:
         if(playerStandingOnPlate(player2))
         {
             player2.grounded = true;
-            cout << "player on plate\n";
             player2.sprite.move(speed * directionHorz * deltatime, 0);
         }
     }
@@ -311,7 +307,6 @@ public:
             // player1.sprite.move(player2.sprite.getPosition().x - radius * cos(theta) * deltatime, 0);
             // player1.sprite.setPosition(platrec.getPosition().x + abs(platrec.getPosition().x - player1.sprite.getPosition().x), player1.sprite.getPosition().y);
             player1.isOnPlate = true;
-            cout << "player on plate\n";
         }
         else
             player1.isOnPlate = true;
@@ -324,7 +319,6 @@ public:
             //player2.sprite.setPosition(platrec.getPosition().x, player2.sprite.getPosition().y);
             // player2.sprite.setPosition(platrec.getPosition().x + abs(platrec.getPosition().x - player2.sprite.getPosition().x), player2.sprite.getPosition().y);
             player2.isOnPlate = true;
-            cout << "player on plate\n";
         }
         else 
             player1.isOnPlate = true;
@@ -474,13 +468,13 @@ private:
     void setInteractions(string arr[])
     {
         arr[0] = "Get ready to be slayed";
-        arr[1] = "Aboos Edak Er7mny";
+        arr[1] = "Let's fight fair and square";
         arr[2] = "I am delighted to be here";
         arr[3] = "You may not indure the \nslays of my mighty sword";
         arr[4] = "May the odds be in your \nfavor";
-        arr[5] = "I'm not a king \nI'm not a god \nI AM WORSE";
-        arr[6] = "Shall the most \npowerful be victorious";
-        arr[7] = "I am inevitable";
+        arr[5] = "Let's do it";
+        arr[6] = "Shall the most powerful be \nvictorious";
+        arr[7] = "Finally, some fun";
         arr[8] = "I'm the storm that is \nApproaching";
         arr[9] = "";
         arr[10] = "";
@@ -488,7 +482,7 @@ private:
     }
 
 public:
-    int no_of_interactions = 6;
+    int no_of_interactions = 9;
     // int max_letters_per_line = 27;
     float timer_per_letter = 0.1;
 
@@ -1053,8 +1047,8 @@ void Release(RenderWindow& optionwindow)
     Sprite qr;
     qr.setTexture(Qr);
     qr.setPosition(360, 150);
-    //Hitler.openFromFile("Hitler_the_cat.wav");
-    Hitler.openFromFile("Sounds/Ludum Dare 38 - Track 4.wav");
+    Hitler.openFromFile("Hitler_the_cat.wav");
+    //Hitler.openFromFile("Sounds/Ludum Dare 38 - Track 4.wav");
     Hitler.setLoop(true);
     
     
@@ -2887,13 +2881,6 @@ void game(int& win1, int& win2, RenderWindow& window)
     setTextprop(PressEnter, 64, 2);
     PressEnter.setPosition(window.getSize().x / 2, -70);
     power_draw();
-
-    if(interactionwindow1.finishedInteracting)
-        cout << "not interacting\n";
-    else 
-        cout << "interacting\n";
-
-    cout << "entered\n";
 
     while (window.isOpen())
     {
