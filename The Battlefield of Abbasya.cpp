@@ -552,7 +552,7 @@ private:
     string inter_arr[100];
 
 public:
-    // update functions: gradually scales window, then gradually scales icon, then gradually shows text
+    // update functions: gradually scales window, then gradually scales icon, then gradually shows textfsdf
     void update(float deltatime, RenderWindow &window)
     {
         // cout << "update of interaction got called\n";
