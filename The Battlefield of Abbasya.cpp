@@ -683,6 +683,14 @@ public:
     // }
 }interactionwindow1,interactionWindow2;
 
+/// <summary>
+/// guigiguig
+/// </summary>
+/// <param name="arr"></param>
+/// <param name="Buttonarr"></param>
+/// <param name="mywindow"></param>
+/// <returns></returns>
+
 int cursor_select(Text* arr, RectangleShape* Buttonarr, RenderWindow& mywindow)
 {
     Mouse mouse;
