@@ -1,39 +1,90 @@
-[![SFML logo](https://www.sfml-dev.org/images/logo.png)](https://www.sfml-dev.org)
+# The Battlefield of Abbasya ⚔️
 
-# SFML — Simple and Fast Multimedia Library
+**A 2D multi-level 1v1 fighting game built in C++ and SFML.**
 
-SFML is a simple, fast, cross-platform and object-oriented multimedia API. It provides access to windowing, graphics, audio and network. It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
+🏆 Ranked **5th out of 150 projects** in the IBM-sponsored competition.
 
-## Authors
+---
 
-  - Laurent Gomila — main developer (laurent@sfml-dev.org)
-  - Marco Antognini — OS X developer (hiura@sfml-dev.org)
-  - Jonathan De Wachter — Android developer (dewachter.jonathan@gmail.com)
-  - Jan Haller (bromeon@sfml-dev.org)
-  - Stefan Schindler (tank@sfml-dev.org)
-  - Lukas Dürrenberger (eXpl0it3r@sfml-dev.org)
-  - binary1248 (binary1248@hotmail.com)
-  - Artur Moreira (artturmoreira@gmail.com)
-  - Mario Liebisch (mario@sfml-dev.org)
-  - And many other members of the SFML community
+## 📖 Overview
 
-## Download
+The Battlefield of Abbasya is a local two-player fighting game where players choose from distinct character classes and battle across multiple levels/rounds. Built from scratch in C++ using the SFML multimedia library for rendering, input handling, and audio.
 
-You can get the latest official release on [SFML's website](https://www.sfml-dev.org/download.php). You can also get the current development version from the [Git repository](https://github.com/SFML/SFML).
+## ✨ Key Features
 
-## Install
+| Capability | Description |
+|---|---|
+| ⚔️ **1v1 Local Combat** | Two-player battles with dedicated input handling per player |
+| 🧙 **Multiple Character Classes** | Playable characters including Wanderer and Wizard, each with distinct abilities (e.g., fireball, healing) |
+| ❤️ **Health System** | Real-time health bar tracking for both players across game modes |
+| 🎮 **Full Game Flow** | Main menu, name entry, pause menu, volume controls, and round-based progression |
+| 🖼️ **Multi-Round Levels** | Multiple backgrounds/rounds with distinct visuals per stage |
+| 🔊 **Audio & Music** | Sound effects and background music integrated via SFML audio |
 
-Follow the instructions of the [tutorials](https://www.sfml-dev.org/tutorials/), there is one for each platform/compiler that SFML supports.
+## 🛠️ Tech Stack
 
-## Learn
+- **Language:** C++
+- **Graphics/Audio/Input:** [SFML](https://www.sfml-dev.org/) (Simple and Fast Multimedia Library)
+- **Build:** CMake / Visual Studio (.sln, .vcxproj)
 
-There are several places to learn SFML:
+## 📂 Repository Structure
 
-  * The [official tutorials](https://www.sfml-dev.org/tutorials/)
-  * The [online API documentation](https://www.sfml-dev.org/documentation/)
-  * The [community wiki](https://github.com/SFML/SFML/wiki/)
-  * The [community forum](https://en.sfml-dev.org/forums/) ([French](https://fr.sfml-dev.org/forums/))
+```
+The-Battlefield-of-Abbasya/
+├── Main Menu/          # Main menu screen logic and assets
+├── Name Entry/         # Player name entry screen
+├── Pause Menu/         # In-game pause menu
+├── Volume Bar/         # Audio volume controls
+├── Controlls/          # Input handling
+├── Player 1/            # Player 1 character logic
+├── Player 2/            # Player 2 character logic
+├── Wanderer/            # Wanderer character class
+├── Wizard/              # Wizard character class
+├── Plates/              # Game plates/platforms
+├── health_bar/          # Health bar (mode 1)
+├── health_bar_mode2/    # Health bar (mode 2)
+├── Sounds/               # Audio assets
+├── include/SFML/         # SFML headers
+├── lib/                  # SFML libraries
+└── The Battlefield of Abbasya.cpp   # Main entry point
+```
 
-## Contribute
+## 🚀 Getting Started
 
-SFML is an open-source project, and it needs your help to go on growing and improving. If you want to get involved and suggest some additional features, file a bug report or submit a patch, please have a look at the [contribution guidelines](https://www.sfml-dev.org/contribute.php).
+### Prerequisites
+
+- C++ compiler (Visual Studio / MSVC recommended, given the included `.sln`/`.vcxproj` files)
+- [SFML](https://www.sfml-dev.org/download.php) (included under `include/SFML` and `lib/`)
+
+### Building
+
+**Visual Studio (Windows):**
+1. Open `The Battlefield of Abbasya.sln`
+2. Build and run the solution (ensure SFML `.dll` files are alongside the executable)
+
+**CMake:**
+```bash
+mkdir build && cd build
+cmake ..
+cmake --build .
+```
+
+## 🎮 Controls
+
+> Player 1 and Player 2 each have dedicated control schemes (see `Controlls/`) — update this section with the actual key bindings.
+
+## 🏆 Recognition
+
+Ranked **5th out of 150 projects** in the IBM-sponsored programming competition.
+
+## 👥 Team
+
+Developed by students of the Computer Science Department, Faculty of Computer & Information Sciences, Ain Shams University.
+
+## 📄 License
+
+See [license.md](./license.md).
+
+---
+
+Made with ⚔️ by the SEGA-ABBASYA team — Cairo, 2023
